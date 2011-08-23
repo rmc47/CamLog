@@ -3,15 +3,38 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 22, 2009 at 11:30 PM
+-- Generation Time: Aug 23, 2011 at 10:16 PM
 -- Server version: 5.1.36
 -- PHP Version: 5.3.0
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 --
--- Database: `vhfnfd`
+-- Database: `ukac0823`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `frequencies`
+--
+
+CREATE TABLE IF NOT EXISTS `frequencies` (
+  `station` varchar(15) NOT NULL,
+  `frequency` int(11) NOT NULL,
+  PRIMARY KEY (`station`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `knowncalls`
+--
+
+CREATE TABLE IF NOT EXISTS `knowncalls` (
+  `callsign` varchar(15) NOT NULL,
+  PRIMARY KEY (`callsign`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -21,24 +44,26 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 CREATE TABLE IF NOT EXISTS `log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sourceId` bigint(20) NOT NULL,
   `lastModified` datetime NOT NULL,
-  `time` datetime NOT NULL,
+  `startTime` datetime NOT NULL,
+  `endTime` datetime NOT NULL,
   `callsign` varchar(20) NOT NULL,
-  `reportSent` varchar(10) NOT NULL,
-  `reportReceived` varchar(10) NOT NULL,
-  `serialSent` int(11) NOT NULL,
-  `serialReceived` int(11) NOT NULL,
-  `locatorReceived` varchar(10) DEFAULT NULL,
-  `notes` varchar(1024) NOT NULL,
+  `station` varchar(20) NOT NULL,
   `operator` varchar(20) NOT NULL,
-  `band` varchar(10) NOT NULL,
-  `mode` varchar(10) NOT NULL,
-  `points` int(11) NOT NULL,
-  `iotaRef` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `callsign` (`callsign`),
-  KEY `callsign_2` (`callsign`,`band`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+  `band` varchar(10) DEFAULT NULL,
+  `mode` varchar(10) DEFAULT NULL,
+  `frequency` bigint(20) DEFAULT NULL,
+  `reportTx` varchar(10) DEFAULT NULL,
+  `reportRx` varchar(10) DEFAULT NULL,
+  `locator` varchar(10) DEFAULT NULL,
+  `powerRx` int(11) DEFAULT NULL,
+  `antennaGainRx` int(11) DEFAULT NULL,
+  `notes` varchar(255) DEFAULT NULL,
+  `serialSent` varchar(10) NOT NULL,
+  `serialReceived` varchar(10) NOT NULL,
+  PRIMARY KEY (`id`,`sourceId`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1945 ;
 
 -- --------------------------------------------------------
 
@@ -50,4 +75,16 @@ CREATE TABLE IF NOT EXISTS `serials` (
   `band` varchar(10) NOT NULL,
   `nextSerial` int(11) NOT NULL,
   PRIMARY KEY (`band`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setup`
+--
+
+CREATE TABLE IF NOT EXISTS `setup` (
+  `key` varchar(255) NOT NULL,
+  `val` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

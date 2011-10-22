@@ -28,8 +28,8 @@ namespace Engine
         private string m_IotaRef;        
         private int m_Points;
 
-        private DateTime m_QslRxDate;
-        private DateTime m_QslTxDate;
+        private DateTime? m_QslRxDate;
+        private DateTime? m_QslTxDate;
         private string m_QslMethod;
 
         public Contact()
@@ -150,6 +150,24 @@ namespace Engine
         {
             get { return m_Station; }
             set { m_Station = value; }
+        }
+
+        public DateTime? QslRxDate
+        {
+            get { return m_QslRxDate; }
+            set { m_QslRxDate = value; }
+        }
+
+        public DateTime? QslTxDate
+        {
+            get { return m_QslTxDate; }
+            set { m_QslTxDate = value; }
+        }
+
+        public string QslMethod
+        {
+            get { return m_QslMethod;}
+            set { m_QslMethod = value; }
         }
 
         public override string ToString()

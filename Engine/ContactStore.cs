@@ -152,6 +152,9 @@ namespace Engine
                         int.TryParse(reader["serialSent"] as string, out serialSent);
                         c.SerialReceived = serialReceived;
                         c.SerialSent = serialSent;
+                        c.QslRxDate = reader.GetDateTimeNullable("qslRxDate");
+                        c.QslTxDate = reader.GetDateTimeNullable("qslTxDate");
+                        c.QslMethod = reader["qslMethod"] as string;
 
                         // Optional stuff below here...
                         string locatorString = reader["locator"] as string;

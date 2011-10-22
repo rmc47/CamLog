@@ -252,6 +252,7 @@ namespace UI
                 {
                     m_ContactStore = new ContactStore(lf.Server, lf.Database, lf.Username, lf.Password);
 
+                    m_RedrawTimer.Enabled = true;
                     m_SerialSent.Text = m_ContactStore.GetSerial(Band.Unknown).ToString().PadLeft(3, '0');
                     if (!string.IsNullOrEmpty(lf.CivSerialPort))
                     {

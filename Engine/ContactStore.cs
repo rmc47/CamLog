@@ -12,16 +12,94 @@ namespace Engine
         private int m_SourceId;
         private CallsignLookup m_CallsignLookup = new CallsignLookup("cty.xml");
 
+        public static ContactStore Create(string server, string database, string username, string password)
+        {
+            MySqlConnectionStringBuilder csb = new MySqlConnectionStringBuilder();
+            csb.Server = server;
+            //csb.Database = database;
+            csb.UserID = username;
+            csb.Password = password;
+
+            try
+            {
+                using (MySqlConnection dbSetupConnection = new MySqlConnection(csb.ConnectionString))
+                {
+                    dbSetupConnection.Open();
+
+                    // Check whether the DB already exists
+                    using (MySqlCommand cmd = dbSetupConnection.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT schema_name FROM information_schema.schemata WHERE schema_name=?dbName;";
+                        cmd.Parameters.AddWithValue("?dbName", database);
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                            if (reader.Read())
+                                throw new DatabaseAlreadyExistsException();
+                    }
+
+                    using (MySqlCommand cmd = dbSetupConnection.CreateCommand())
+                    {
+                        // TODO: Should escape / sanitise / something the DB parameter. Can't use a parameterised query here unfortunately.
+                        cmd.CommandText = string.Format("CREATE DATABASE {0};", database);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                csb.Database = database;
+                using (MySqlConnection schemaSetupConnection = new MySqlConnection(csb.ConnectionString))
+                {
+                    schemaSetupConnection.Open();
+                    using (MySqlCommand cmd = schemaSetupConnection.CreateCommand())
+                    {
+                        using (StreamReader reader = new StreamReader(System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Engine.DBSchema.sql")))
+                        {
+                            string dbSchema = reader.ReadToEnd();
+                            cmd.CommandText = dbSchema;
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CannotCreateDatabaseException(ex.Message, ex.InnerException);
+            }
+            return new ContactStore(server, database, username, password);
+        }
+
+        public sealed class CannotCreateDatabaseException : Exception
+        {
+            public CannotCreateDatabaseException(string message, Exception innerException) : base(message, innerException)
+            {
+            }
+        }
+        public sealed class DatabaseAlreadyExistsException : Exception { }
+        public sealed class DatabaseNotFoundException : Exception { }
+
         public ContactStore(string server, string database, string username, string password)
         {
             MySqlConnectionStringBuilder csb = new MySqlConnectionStringBuilder();
             csb.Server = server;
-            csb.Database = database;
             csb.UserID = username;
             csb.Password = password;
+
+            // Log in using the default DB, and check if the store exists
+            using (MySqlConnection testConnection = new MySqlConnection(csb.ConnectionString))
+            {
+                testConnection.Open();
+                using (MySqlCommand cmd = testConnection.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT schema_name FROM information_schema.schemata WHERE schema_name=?dbName;";
+                    cmd.Parameters.AddWithValue("?dbName", database);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                        if (!reader.Read())
+                            throw new DatabaseNotFoundException();
+                }
+            }
+
+            // Now we know it exists, do something sensible with it!
+            csb.Database = database;
             m_Connection = new MySqlConnection(csb.ConnectionString);
             m_Connection.Open();
-
+            
             using (MySqlCommand cmd = m_Connection.CreateCommand())
             {
                 cmd.CommandText = "SELECT val FROM setup WHERE `key`='sourceId';";

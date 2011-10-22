@@ -28,6 +28,10 @@ namespace Engine
         private string m_IotaRef;        
         private int m_Points;
 
+        private DateTime m_QslRxDate;
+        private DateTime m_QslTxDate;
+        private string m_QslMethod;
+
         public Contact()
         {
             m_Id = -1;

@@ -85,7 +85,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DBSchema.sql" />
+    <EmbeddedResource Include="DBSchema.sql" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

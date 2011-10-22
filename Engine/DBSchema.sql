@@ -3,15 +3,40 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 23, 2011 at 10:16 PM
+-- Generation Time: Oct 22, 2011 at 08:18 PM
 -- Server version: 5.1.36
 -- PHP Version: 5.3.0
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 --
--- Database: `ukac0823`
+-- Database: `arran2011`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bandmodestats`
+--
+
+CREATE TABLE IF NOT EXISTS `bandmodestats` (
+  `band` varchar(15) NOT NULL,
+  `mode` varchar(15) NOT NULL,
+  `cnt` int(11) NOT NULL,
+  PRIMARY KEY (`band`,`mode`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bandorder`
+--
+
+CREATE TABLE IF NOT EXISTS `bandorder` (
+  `order` int(11) NOT NULL,
+  `band` varchar(15) NOT NULL,
+  PRIMARY KEY (`order`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -62,8 +87,35 @@ CREATE TABLE IF NOT EXISTS `log` (
   `notes` varchar(255) DEFAULT NULL,
   `serialSent` varchar(10) NOT NULL,
   `serialReceived` varchar(10) NOT NULL,
+  `qslRxDate` datetime DEFAULT NULL,
+  `qslTxDate` datetime DEFAULT NULL,
+  `qslMethod` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`,`sourceId`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1945 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9054 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `modemap`
+--
+
+CREATE TABLE IF NOT EXISTS `modemap` (
+  `sourceText` varchar(15) NOT NULL,
+  `displayText` varchar(15) NOT NULL,
+  PRIMARY KEY (`sourceText`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `modeorder`
+--
+
+CREATE TABLE IF NOT EXISTS `modeorder` (
+  `order` int(11) NOT NULL,
+  `mode` varchar(15) NOT NULL,
+  PRIMARY KEY (`order`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 

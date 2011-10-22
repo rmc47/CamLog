@@ -461,8 +461,8 @@ namespace UI
             this.m_Callsign.TabIndex = 2;
             this.m_Callsign.Text = "GB100CAM/P";
             this.m_Callsign.TextChanged += new System.EventHandler(this.m_Callsign_TextChanged);
-            this.m_Callsign.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ContactControls_PreviewKeyDown);
             this.m_Callsign.Leave += new System.EventHandler(this.m_Callsign_Leave);
+            this.m_Callsign.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ContactControls_PreviewKeyDown);
             // 
             // m_RstSent
             // 
@@ -500,8 +500,8 @@ namespace UI
             this.m_Locator.TabIndex = 7;
             this.m_Locator.Text = "AB12CD";
             this.m_Locator.TextChanged += new System.EventHandler(this.m_Locator_TextChanged);
-            this.m_Locator.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ContactControls_PreviewKeyDown);
             this.m_Locator.KeyUp += new System.Windows.Forms.KeyEventHandler(this.m_Locator_KeyUp);
+            this.m_Locator.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ContactControls_PreviewKeyDown);
             // 
             // m_SerialReceived
             // 
@@ -605,7 +605,6 @@ namespace UI
             // 
             // m_RedrawTimer
             // 
-            this.m_RedrawTimer.Enabled = true;
             this.m_RedrawTimer.Interval = 2500;
             this.m_RedrawTimer.Tick += new System.EventHandler(this.m_RedrawTimer_Tick);
             // 
@@ -613,7 +612,7 @@ namespace UI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(804, 409);
+            this.ClientSize = new System.Drawing.Size(796, 398);
             this.Controls.Add(this.m_ContactTable);
             this.Controls.Add(groupBox2);
             this.Controls.Add(this.m_Notes);

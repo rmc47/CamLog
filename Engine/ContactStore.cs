@@ -182,12 +182,13 @@ namespace Engine
                     if (c.Id > 0)
                         cmd.CommandText = @"UPDATE log SET lastModified=?lastModified, startTime=?startTime, endTime=?endTime,
                             callsign=?callsign, station=?station, operator=?operator, band=?band, mode=?mode, frequency=?frequency,
-                            reportTx=?reportTx, reportRx=?reportRx, locator=?locatorReceived, notes=?notes, serialSent=?serialSent, serialReceived=?serialReceived WHERE id=?id AND sourceId=?sourceId;";
+                            reportTx=?reportTx, reportRx=?reportRx, locator=?locatorReceived, notes=?notes, serialSent=?serialSent, serialReceived=?serialReceived, qslRxDate=?qslRxDate, 
+                            qslTxDate=?qslTxDate, qslMethod=?qslMethod WHERE id=?id AND sourceId=?sourceId;";
                     else
                         cmd.CommandText = @"INSERT INTO log (sourceId, lastModified, startTime, endTime, callsign, station, 
-                            operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent, serialReceived) VALUES 
+                            operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent, serialReceived, qslRxDate, qslTxDate, qslMethod) VALUES 
                             (?sourceId, ?lastModified, ?startTime, ?endTime, ?callsign, ?station, ?operator, ?band, ?mode, ?frequency,
-                            ?reportTx, ?reportRx, ?locatorReceived, ?notes, ?serialSent, ?serialReceived);";
+                            ?reportTx, ?reportRx, ?locatorReceived, ?notes, ?serialSent, ?serialReceived, ?qslRxDate, ?qslTxDate, ?qslMethod);";
 
                     cmd.Parameters.AddWithValue("?sourceId", c.SourceId);
                     cmd.Parameters.AddWithValue("?lastModified", DateTime.Now); c.LastModified = DateTime.Now;
@@ -205,7 +206,9 @@ namespace Engine
                     cmd.Parameters.AddWithValue("?notes", c.Notes);
                     cmd.Parameters.AddWithValue("?serialSent", c.SerialSent.ToString());
                     cmd.Parameters.AddWithValue("?serialReceived", c.SerialReceived.ToString());
-                    
+                    cmd.Parameters.AddWithValue("?qslRxDate", c.QslRxDate);
+                    cmd.Parameters.AddWithValue("?qslTxDate", c.QslTxDate);
+                    cmd.Parameters.AddWithValue("?qslMethod", c.QslMethod);
                     //cmd.Parameters.AddWithValue("?points", c.Points);
                     //cmd.Parameters.AddWithValue("?serialReceived", c.SerialReceived);
                     //cmd.Parameters.AddWithValue("?serialSent", c.SerialSent);

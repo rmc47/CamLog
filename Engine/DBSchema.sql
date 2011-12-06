@@ -58,10 +58,9 @@ CREATE TABLE IF NOT EXISTS `frequencies` (
 
 CREATE TABLE IF NOT EXISTS `knowncalls` (
   `callsign` varchar(15) NOT NULL,
+  `locator` varchar(10) NOT NULL DEFAULT '',
   PRIMARY KEY (`callsign`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `log`

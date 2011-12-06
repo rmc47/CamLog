@@ -79,6 +79,7 @@
     <Compile Include="QrzServer.cs" />
     <Compile Include="Reg1TestExporter.cs" />
     <Compile Include="Reg1TestHeader.cs" />
+    <Compile Include="Registry.cs" />
     <Compile Include="SerialProvider.cs" />
   </ItemGroup>
   <ItemGroup>

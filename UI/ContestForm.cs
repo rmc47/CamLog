@@ -379,6 +379,7 @@ namespace UI
 
         private void PopulateFrequenciesBox()
         {
+            return;
             try
             {
                 m_MatchesKnownCalls.Items.Clear();
@@ -435,9 +436,9 @@ namespace UI
             // Populate the lists of partial callsign matches
             if (m_Callsign.TextLength > 0)
             {
-                //m_MatchesKnownCalls.Items.Clear();
+                m_MatchesKnownCalls.Items.Clear();
                 m_MatchesThisContest.Items.Clear();
-                //m_MatchesKnownCalls.Items.AddRange(m_ContactStore.GetPartialMatchesKnownCalls(m_Callsign.Text).ToArray());
+                m_MatchesKnownCalls.Items.AddRange(m_ContactStore.GetPartialMatchesKnownCalls(m_Callsign.Text).ToArray());
                 m_MatchesThisContest.Items.AddRange(m_ContactStore.GetPartialMatchesThisContest(m_Callsign.Text).ToArray());
             }
 

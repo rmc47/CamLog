@@ -31,7 +31,6 @@
             this.m_TxtCallsign = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.m_ContactsGrid = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
             this.QSL = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Callsign = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Date = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -41,6 +40,7 @@
             this.QSLRX = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.QSLTX = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.QSLMethod = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.m_ContactsGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -82,15 +82,6 @@
             this.m_ContactsGrid.Name = "m_ContactsGrid";
             this.m_ContactsGrid.Size = new System.Drawing.Size(670, 404);
             this.m_ContactsGrid.TabIndex = 3;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(170, 10);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
             // 
             // QSL
             // 
@@ -162,6 +153,16 @@
             this.QSLMethod.Name = "QSLMethod";
             this.QSLMethod.ReadOnly = true;
             this.QSLMethod.Width = 92;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(170, 10);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // MainForm
             // 

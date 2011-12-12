@@ -24,7 +24,7 @@ namespace QslEngine
             table.AddCell(PopulateCell(qsos)); table.AddCell(PopulateCell(qsos)); table.AddCell(PopulateCell(qsos));
             table.AddCell(PopulateCell(qsos)); table.AddCell(PopulateCell(qsos)); table.AddCell(PopulateCell(qsos));
 
-            using (FileStream fs = new FileStream(@"d:\temp\pdf.pdf", FileMode.Create))
+            using (FileStream fs = new FileStream(@"C:\temp\pdf.pdf", FileMode.Create))
             {
                 using (PdfWriter writer = PdfWriter.GetInstance(doc, fs))
                 {

@@ -18,7 +18,7 @@ namespace QslManager
         public MainForm()
         {
             InitializeComponent();
-            m_ContactStore = new ContactStore("localhost", "arran2011", "root", "g3pyeflossie");
+            m_ContactStore = new ContactStore("aluminium", "arran2011", "root", "g3pyeflossie");
         }
 
         private void button1_Click(object sender, EventArgs e)

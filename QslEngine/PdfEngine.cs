@@ -20,7 +20,7 @@ namespace QslEngine
             table.SetWidths(new[] { 1, 1, 1 });
 
             TableEntry qso = new TableEntry { Band = "160m", Callsign = "MM0MMM/M", Mode = "PSK31", Rst = "599", UtcTime = DateTime.UtcNow, MyCall = "GS3PYE/P" };
-            TableEntry[] qsos = new[] { qso, qso, qso, qso, qso, qso };
+            TableEntry[] qsos = new[] { qso, qso, qso, qso };
             table.AddCell(PopulateCell(qsos)); table.AddCell(PopulateCell(qsos)); table.AddCell(PopulateCell(qsos));
             table.AddCell(PopulateCell(qsos)); table.AddCell(PopulateCell(qsos)); table.AddCell(PopulateCell(qsos));
 
@@ -30,7 +30,6 @@ namespace QslEngine
                 {
                     doc.Open();
                     doc.Add(table);
-                    //doc.Add(new Paragraph("bar"));
                     doc.Close();
                 }
             }
@@ -38,7 +37,7 @@ namespace QslEngine
 
         private static PdfPCell GetCell()
         {
-            PdfPCell cell = new PdfPCell(new Phrase("Hello cell"));
+            PdfPCell cell = new PdfPCell();
             cell.FixedHeight = mm2p(38.1);
             cell.Border = 0;
             return cell;
@@ -60,7 +59,9 @@ namespace QslEngine
 
             Phrase titlePhrase = new Phrase();
             titlePhrase.Add(new Chunk(entries[0].MyCall, s_MyCallFont));
-            titlePhrase.Add(new Chunk(" confirms the following QSO(s):", s_TitleTextFont));
+            titlePhrase.Add(new Chunk(" confirms the following QSO(s) with ", s_TitleTextFont));
+            titlePhrase.Add(new Chunk(entries[0].Callsign, s_MyCallFont));
+            titlePhrase.Add(new Chunk(":", s_TitleTextFont));
             cell.AddElement(titlePhrase);
             foreach (TableEntry qso in entries)
             {
@@ -84,7 +85,7 @@ namespace QslEngine
 
         private static readonly Font s_HeaderFont = new Font(Font.FontFamily.TIMES_ROMAN, 9, Font.ITALIC);
         private static readonly Font s_TableFont = new Font(Font.FontFamily.TIMES_ROMAN, 9, Font.NORMAL);
-        private static readonly Font s_MyCallFont = new Font(Font.FontFamily.TIMES_ROMAN, 11, Font.NORMAL);
+        private static readonly Font s_MyCallFont = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
         private static readonly Font s_TitleTextFont = new Font(Font.FontFamily.TIMES_ROMAN, 9, Font.NORMAL);
 
         public static float mm2p(double mm)

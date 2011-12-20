@@ -5,7 +5,7 @@ using System.Text;
 
 namespace QslEngine
 {
-    internal sealed class TableEntry
+    public sealed class TableEntry
     {
         public string Callsign { get; set; }
         public string MyCall { get; set; }

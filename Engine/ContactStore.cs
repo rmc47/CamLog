@@ -124,8 +124,9 @@ namespace Engine
             {
                 using (MySqlCommand cmd = m_Connection.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT * FROM log WHERE id=?id;";
+                    cmd.CommandText = "SELECT * FROM log WHERE id=?id AND sourceId=?sourceId;";
                     cmd.Parameters.AddWithValue("?id", id);
+                    cmd.Parameters.AddWithValue("?sourceId", sourceId);
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (!reader.Read())
@@ -160,12 +161,6 @@ namespace Engine
                         string locatorString = reader["locator"] as string;
                         if (locatorString != null)
                             c.LocatorReceived = new Locator(locatorString);
-                        
-#warning reintroduce serials and points
-                        //c.Points = (int)reader["points"];
-                        //c.SerialReceived = (int)reader["serialReceived"];
-                        //c.SerialSent = (int)reader["serialSent"];
-                        //c.IotaRef = reader["iotaRef"] as string;
 
                         return c;
                     }

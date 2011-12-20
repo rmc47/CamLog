@@ -14,6 +14,7 @@ namespace QslManager
     public partial class MainForm : Form
     {
         public ContactStore m_ContactStore;
+        private List<Contact> m_VisibleContacts;
 
         public MainForm()
         {
@@ -23,7 +24,21 @@ namespace QslManager
 
         private void button1_Click(object sender, EventArgs e)
         {
-            PdfEngine.Test();
+            PdfEngine engine = new PdfEngine("FP/M0VFC");
+            
+            engine.AddQSOs(m_VisibleContacts);
+            engine.AddQSOs(m_VisibleContacts);
+            engine.AddQSOs(m_VisibleContacts);
+            engine.AddQSOs(m_VisibleContacts);
+            engine.AddQSOs(m_VisibleContacts);
+            engine.AddQSOs(m_VisibleContacts);
+            engine.AddQSOs(m_VisibleContacts);
+            engine.AddQSOs(m_VisibleContacts);
+            engine.AddQSOs(m_VisibleContacts);
+            engine.AddQSOs(m_VisibleContacts);
+            engine.AddQSOs(m_VisibleContacts);
+
+            engine.PrintDocument(@"C:\Temp\test.pdf");
         }
 
         private void m_TxtCallsign_TextChanged(object sender, EventArgs e)
@@ -32,10 +47,10 @@ namespace QslManager
             if (m_TxtCallsign.TextLength < 3)
                 return;
 
-            List<Contact> contacts = m_ContactStore.GetPreviousContacts(m_TxtCallsign.Text);
+            m_VisibleContacts = m_ContactStore.GetPreviousContacts(m_TxtCallsign.Text);
             m_ContactsGrid.Rows.Clear();
 
-            foreach (Contact c in contacts)
+            foreach (Contact c in m_VisibleContacts)
             {
                 m_ContactsGrid.Rows.Add(new object[] { 
                     c.QslTxDate == null, 

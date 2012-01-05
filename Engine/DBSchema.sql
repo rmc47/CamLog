@@ -1,17 +1,10 @@
--- phpMyAdmin SQL Dump
--- version 3.2.0.1
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Generation Time: Oct 22, 2011 at 08:18 PM
--- Server version: 5.1.36
--- PHP Version: 5.3.0
+-- -------------------------------------------------------------------------------
+-- Basic DB schema creation script - creates a V1 schema, which then gets upgraded
+-- By running a set of migrations on top of that. Therefore:
+--     **** DO NOT ADD NEW SCHEMA TO THIS FILE ****
+-- -------------------------------------------------------------------------------
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
---
--- Database: `arran2011`
---
 
 -- --------------------------------------------------------
 
@@ -60,6 +53,19 @@ CREATE TABLE IF NOT EXISTS `knowncalls` (
   `callsign` varchar(15) NOT NULL,
   `locator` varchar(10) NOT NULL DEFAULT '',
   PRIMARY KEY (`callsign`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sources`
+--
+
+CREATE TABLE IF NOT EXISTS `sources` (
+  `id` int(11) NOT NULL,
+  `callsign` varchar(20) NOT NULL,
+  `default` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -139,3 +145,5 @@ CREATE TABLE IF NOT EXISTS `setup` (
   `val` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO setup (`key`, `val`) VALUES (`schemaVersion`, `1`);

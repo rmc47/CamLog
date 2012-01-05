@@ -99,15 +99,19 @@ namespace Engine
             csb.Database = database;
             m_Connection = new MySqlConnection(csb.ConnectionString);
             m_Connection.Open();
-            
+
+            return;
+
             using (MySqlCommand cmd = m_Connection.CreateCommand())
             {
-                cmd.CommandText = "SELECT val FROM setup WHERE `key`='sourceId';";
+                cmd.CommandText = "SELECT id FROM sources WHERE default=1;";
                 object sourceId = cmd.ExecuteScalar();
                 if (!int.TryParse(sourceId as string, out m_SourceId))
                 {
                     m_SourceId = new Random().Next();
-                    cmd.CommandText = "INSERT INTO setup (`key`, val) VALUES ('sourceId', " + m_SourceId + ");";
+                    cmd.CommandText = "INSERT INTO sources (id, callsign, default) VALUES (?id, ?callsign, 1);";
+                    cmd.Parameters.AddWithValue("?id", m_SourceId);
+                    cmd.Parameters.AddWithValue("?callsign", m_SourceId.ToString()); // TODO: should really ask the user for this
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -659,6 +663,28 @@ namespace Engine
                 string.Empty /* new DXCC */,
                 string.Empty /* dupe */);
             return thisEntry;
+        }
+
+        public Dictionary<int, string> GetSources()
+        {
+            lock (m_Connection)
+            {
+                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT id, callsign FROM sources;";
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        Dictionary<int, string> sources = new Dictionary<int, string>();
+                        while (reader.Read())
+                        {
+                            int source = reader.GetInt32(reader.GetOrdinal("id"));
+                            string callsign = reader.GetString(reader.GetOrdinal("callsign"));
+                            sources.Add(source, callsign);
+                        }
+                        return sources;
+                    }
+                }
+            }
         }
 
         public void Dispose()

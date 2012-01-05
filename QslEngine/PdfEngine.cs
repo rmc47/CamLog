@@ -14,6 +14,14 @@ namespace QslEngine
         private const int c_QsoPerLabel = 4;
         private const int c_Columns = 2;
         private const double c_LabelHeight = 33.9;
+        private const double c_PageVerticalMargin = 13;
+        private const double c_PageHorizontalMargin = 5;
+        private const double c_LabelPaddingHorizontal = 5;
+
+        /// <summary>
+        /// For some reason, the horizontal margins are actually bigger than specified. This value corrects for that.
+        /// </summary>
+        private const double c_HorizontalMarginFudge = -26;
 
         private static readonly Font s_HeaderFont = new Font(Font.FontFamily.TIMES_ROMAN, 9, Font.ITALIC);
         private static readonly Font s_TableFont = new Font(Font.FontFamily.TIMES_ROMAN, 9, Font.NORMAL);
@@ -74,7 +82,7 @@ namespace QslEngine
                 using (PdfWriter writer = PdfWriter.GetInstance(doc, fs))
                 {
                     bool result = doc.SetPageSize(new Rectangle(0, 0, mm2p(210), mm2p(297), 0));
-                    result = doc.SetMargins(mm2p(-20), mm2p(-20), mm2p(0), mm2p(0));
+                    result = doc.SetMargins(mm2p(c_PageHorizontalMargin + c_HorizontalMarginFudge), mm2p(c_PageHorizontalMargin + c_HorizontalMarginFudge), mm2p(c_PageVerticalMargin), mm2p(c_PageVerticalMargin + c_HorizontalMarginFudge));
                     doc.Open();
                     doc.NewPage();
                     doc.Add(m_MainTable);
@@ -87,7 +95,10 @@ namespace QslEngine
         {
             PdfPCell cell = new PdfPCell();
             cell.FixedHeight = mm2p(c_LabelHeight);
-            cell.Border = 1;
+            cell.Border = 0;
+            //cell.BackgroundColor = BaseColor.RED;
+            cell.PaddingLeft = mm2p(c_LabelPaddingHorizontal);
+            cell.PaddingRight = mm2p(c_LabelPaddingHorizontal);
             return cell;
         }
 
@@ -101,7 +112,7 @@ namespace QslEngine
             
             AddCell(qsoTable, s_HeaderFont, "Date");
             AddCell(qsoTable, s_HeaderFont, "UTC");
-            AddCell(qsoTable, s_HeaderFont, "Band");
+            AddCell(qsoTable, s_HeaderFont, "MHz");
             AddCell(qsoTable, s_HeaderFont, "RST");
             AddCell(qsoTable, s_HeaderFont, "Mode");
 

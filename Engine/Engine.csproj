@@ -69,6 +69,8 @@
     <Compile Include="CivServer.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="ContactStore.cs" />
+    <Compile Include="DatabaseType.cs" />
+    <Compile Include="DBMigrations\DbMigrator.cs" />
     <Compile Include="FrequencyHelper.cs" />
     <Compile Include="Geographics.cs" />
     <Compile Include="Locator.cs" />
@@ -86,6 +88,7 @@
     <Content Include="cty.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="DBMigrations\MySQL\2.sql" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="DBSchema.sql" />

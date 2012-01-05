@@ -15,17 +15,38 @@ namespace QslManager
     {
         public ContactStore m_ContactStore;
         private List<Contact> m_VisibleContacts;
+        private Dictionary<int, string> m_SourceIdCallsigns;
+        private int m_SelectedSource;
 
         public MainForm()
         {
             InitializeComponent();
             m_ContactStore = new ContactStore("aluminium", "arran2011", "root", "g3pyeflossie");
+            m_SourceIdCallsigns = m_ContactStore.GetSources();
+
+            foreach (var kvp in m_SourceIdCallsigns)
+                if (kvp.Value == "GS3PYE/P")
+                    m_SelectedSource = kvp.Key;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            PdfEngine engine = new PdfEngine("FP/M0VFC");
+            string selectedCallsign;
+            if (!m_SourceIdCallsigns.TryGetValue(m_SelectedSource, out selectedCallsign))
+            {
+                MessageBox.Show("No source selected");
+                return;
+            }
+
+            PdfEngine engine = new PdfEngine(selectedCallsign);
             
+            engine.AddQSOs(m_VisibleContacts);
+            engine.AddQSOs(m_VisibleContacts);
+            engine.AddQSOs(m_VisibleContacts);
+            engine.AddQSOs(m_VisibleContacts);
+            engine.AddQSOs(m_VisibleContacts);
+            engine.AddQSOs(m_VisibleContacts);
+            engine.AddQSOs(m_VisibleContacts);
             engine.AddQSOs(m_VisibleContacts);
             engine.AddQSOs(m_VisibleContacts);
             engine.AddQSOs(m_VisibleContacts);
@@ -47,7 +68,8 @@ namespace QslManager
             if (m_TxtCallsign.TextLength < 3)
                 return;
 
-            m_VisibleContacts = m_ContactStore.GetPreviousContacts(m_TxtCallsign.Text);
+            // Get the previous contacts, filtering according to the selected source
+            m_VisibleContacts = m_ContactStore.GetPreviousContacts(m_TxtCallsign.Text).FindAll(c => c.SourceId == m_SelectedSource);
             m_ContactsGrid.Rows.Clear();
 
             foreach (Contact c in m_VisibleContacts)

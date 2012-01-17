@@ -40,13 +40,21 @@
             this.QSLRX = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.QSLTX = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.QSLMethod = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.button1 = new System.Windows.Forms.Button();
+            this.m_MarkSelectedAsReceived = new System.Windows.Forms.Button();
+            this.m_PrintQueuedCards = new System.Windows.Forms.Button();
+            this.m_UpdateLabelsUsed = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.m_QslMethod = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.m_OutputPath = new System.Windows.Forms.TextBox();
+            this.m_OutputPathBrowse = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.m_ContactsGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // m_TxtCallsign
             // 
-            this.m_TxtCallsign.Location = new System.Drawing.Point(64, 12);
+            this.m_TxtCallsign.Location = new System.Drawing.Point(88, 12);
+            this.m_TxtCallsign.MaxLength = 20;
             this.m_TxtCallsign.Name = "m_TxtCallsign";
             this.m_TxtCallsign.Size = new System.Drawing.Size(100, 20);
             this.m_TxtCallsign.TabIndex = 1;
@@ -59,14 +67,14 @@
             this.label1.Location = new System.Drawing.Point(12, 15);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(46, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Callsign:";
+            this.label1.TabIndex = 0;
+            this.label1.Text = "&Callsign:";
             // 
             // m_ContactsGrid
             // 
-            this.m_ContactsGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_ContactsGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.m_ContactsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.m_ContactsGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.QSL,
@@ -78,10 +86,10 @@
             this.QSLRX,
             this.QSLTX,
             this.QSLMethod});
-            this.m_ContactsGrid.Location = new System.Drawing.Point(12, 38);
+            this.m_ContactsGrid.Location = new System.Drawing.Point(12, 69);
             this.m_ContactsGrid.Name = "m_ContactsGrid";
-            this.m_ContactsGrid.Size = new System.Drawing.Size(670, 404);
-            this.m_ContactsGrid.TabIndex = 3;
+            this.m_ContactsGrid.Size = new System.Drawing.Size(670, 373);
+            this.m_ContactsGrid.TabIndex = 10;
             // 
             // QSL
             // 
@@ -154,22 +162,96 @@
             this.QSLMethod.ReadOnly = true;
             this.QSLMethod.Width = 92;
             // 
-            // button1
+            // m_MarkSelectedAsReceived
             // 
-            this.button1.Location = new System.Drawing.Point(170, 10);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.m_MarkSelectedAsReceived.Location = new System.Drawing.Point(241, 9);
+            this.m_MarkSelectedAsReceived.Name = "m_MarkSelectedAsReceived";
+            this.m_MarkSelectedAsReceived.Size = new System.Drawing.Size(199, 23);
+            this.m_MarkSelectedAsReceived.TabIndex = 2;
+            this.m_MarkSelectedAsReceived.Text = "&Mark selected cards as received";
+            this.m_MarkSelectedAsReceived.UseVisualStyleBackColor = true;
+            this.m_MarkSelectedAsReceived.Click += new System.EventHandler(this.m_MarkSelectedAsReceived_Click);
+            // 
+            // m_PrintQueuedCards
+            // 
+            this.m_PrintQueuedCards.Location = new System.Drawing.Point(446, 9);
+            this.m_PrintQueuedCards.Name = "m_PrintQueuedCards";
+            this.m_PrintQueuedCards.Size = new System.Drawing.Size(115, 23);
+            this.m_PrintQueuedCards.TabIndex = 3;
+            this.m_PrintQueuedCards.Text = "&Print queued cards";
+            this.m_PrintQueuedCards.UseVisualStyleBackColor = true;
+            this.m_PrintQueuedCards.Click += new System.EventHandler(this.m_PrintQueuedCards_Click);
+            // 
+            // m_UpdateLabelsUsed
+            // 
+            this.m_UpdateLabelsUsed.Location = new System.Drawing.Point(567, 9);
+            this.m_UpdateLabelsUsed.Name = "m_UpdateLabelsUsed";
+            this.m_UpdateLabelsUsed.Size = new System.Drawing.Size(115, 23);
+            this.m_UpdateLabelsUsed.TabIndex = 4;
+            this.m_UpdateLabelsUsed.Text = "&Labels used: 0";
+            this.m_UpdateLabelsUsed.UseVisualStyleBackColor = true;
+            this.m_UpdateLabelsUsed.Click += new System.EventHandler(this.m_UpdateLabelsUsed_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 41);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(70, 13);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "&QSL Method:";
+            // 
+            // m_QslMethod
+            // 
+            this.m_QslMethod.Location = new System.Drawing.Point(88, 38);
+            this.m_QslMethod.MaxLength = 20;
+            this.m_QslMethod.Name = "m_QslMethod";
+            this.m_QslMethod.Size = new System.Drawing.Size(100, 20);
+            this.m_QslMethod.TabIndex = 6;
+            this.m_QslMethod.Text = "Bureau";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(244, 41);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(71, 13);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "&Output folder:";
+            // 
+            // m_OutputPath
+            // 
+            this.m_OutputPath.Location = new System.Drawing.Point(321, 38);
+            this.m_OutputPath.MaxLength = 20;
+            this.m_OutputPath.Name = "m_OutputPath";
+            this.m_OutputPath.Size = new System.Drawing.Size(325, 20);
+            this.m_OutputPath.TabIndex = 8;
+            this.m_OutputPath.Text = "C:\\Temp";
+            // 
+            // m_OutputPathBrowse
+            // 
+            this.m_OutputPathBrowse.Location = new System.Drawing.Point(652, 36);
+            this.m_OutputPathBrowse.Name = "m_OutputPathBrowse";
+            this.m_OutputPathBrowse.Size = new System.Drawing.Size(30, 23);
+            this.m_OutputPathBrowse.TabIndex = 9;
+            this.m_OutputPathBrowse.Text = "...";
+            this.m_OutputPathBrowse.UseVisualStyleBackColor = true;
+            this.m_OutputPathBrowse.Click += new System.EventHandler(this.m_OutputPathBrowse_Click);
             // 
             // MainForm
             // 
+            this.AcceptButton = this.m_MarkSelectedAsReceived;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(694, 454);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.m_OutputPathBrowse);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.m_OutputPath);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.m_QslMethod);
+            this.Controls.Add(this.m_UpdateLabelsUsed);
+            this.Controls.Add(this.m_PrintQueuedCards);
+            this.Controls.Add(this.m_MarkSelectedAsReceived);
             this.Controls.Add(this.m_ContactsGrid);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.m_TxtCallsign);
@@ -195,7 +277,14 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn QSLRX;
         private System.Windows.Forms.DataGridViewTextBoxColumn QSLTX;
         private System.Windows.Forms.DataGridViewTextBoxColumn QSLMethod;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button m_MarkSelectedAsReceived;
+        private System.Windows.Forms.Button m_PrintQueuedCards;
+        private System.Windows.Forms.Button m_UpdateLabelsUsed;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox m_QslMethod;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox m_OutputPath;
+        private System.Windows.Forms.Button m_OutputPathBrowse;
 
     }
 }

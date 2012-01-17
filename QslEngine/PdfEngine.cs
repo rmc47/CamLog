@@ -30,9 +30,11 @@ namespace QslEngine
 
         private PdfPTable m_MainTable;
         private int m_LabelsUsed = 0;
+        private readonly string m_OurCallsign;
 
         public PdfEngine(string ourCallsign)
         {
+            m_OurCallsign = ourCallsign;
             m_MainTable = new PdfPTable(c_Columns);
             m_MainTable.TotalWidth = mm2p(196);
             int[] widths = new int[c_Columns];
@@ -41,10 +43,16 @@ namespace QslEngine
             m_MainTable.SetWidths(widths);
         }
 
-        public void AddQSOs(List<Contact> entries)
+        public int CalculateLabelCount(List<Contact> entries)
+        {
+            return (entries.Count + c_QsoPerLabel - 1) / c_QsoPerLabel;
+        }
+
+        public int AddQSOs(List<Contact> entries)
         {
             // For each group of up to n QSOs, print on to one label
             int startIndex = 0;
+            int labelsUsedHere = 0;
             while (startIndex < entries.Count)
             {
                 List<Contact> labelContacts = entries.GetRange(startIndex, Math.Min(c_QsoPerLabel, entries.Count - startIndex));
@@ -55,7 +63,7 @@ namespace QslEngine
                         Band = BandHelper.ToMHzString(c.Band),
                         Callsign = c.Callsign,
                         Mode = ModeHelper.ToString(c.Mode),
-                        MyCall = "GS3PYE/P",
+                        MyCall = m_OurCallsign,
                         Rst = c.ReportSent,
                         UtcTime = c.StartTime
                     };
@@ -63,11 +71,18 @@ namespace QslEngine
                 m_MainTable.AddCell(PopulateCell(labelEntries.ToArray()));
                 startIndex += c_QsoPerLabel;
                 m_LabelsUsed++;
+                labelsUsedHere++;
             }
+            return labelsUsedHere;
         }
 
         public void PrintDocument(string filename)
         {
+            if (m_LabelsUsed == 0)
+            {
+                throw new InvalidOperationException("No QSOs to print");
+            }
+
             // Pad out to a full row of labels used
             while (m_LabelsUsed % c_Columns > 0)
             {
@@ -124,8 +139,8 @@ namespace QslEngine
             cell.AddElement(titlePhrase);
             foreach (TableEntry qso in entries)
             {
-                AddCell(qsoTable, s_TableFont, qso.UtcTime.ToString("yy-MM-dd"));
-                AddCell(qsoTable, s_TableFont, qso.UtcTime.ToString("hhmm"));
+                AddCell(qsoTable, s_TableFont, qso.UtcTime.ToString("yyyy-MM-dd"));
+                AddCell(qsoTable, s_TableFont, qso.UtcTime.ToString("HHmm"));
                 AddCell(qsoTable, s_TableFont, qso.Band);
                 AddCell(qsoTable, s_TableFont, qso.Rst);
                 AddCell(qsoTable, s_TableFont, qso.Mode);

@@ -687,6 +687,79 @@ namespace Engine
             }
         }
 
+        public List<List<Contact>> GetContactsToQsl(int sourceId)
+        {
+            List<int> idsToPrint = new List<int>();
+            lock (m_Connection)
+            {
+                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT id FROM log WHERE qslRxDate IS NOT NULL and qslTxDate IS NULL AND sourceId=?sourceId ORDER BY callsign, startTime;";
+                    cmd.Parameters.AddWithValue("?sourceId", sourceId);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int contactId = reader.GetInt32(reader.GetOrdinal("id"));
+                            idsToPrint.Add(contactId);
+                        }
+                    }
+                }
+            }
+
+            List<List<Contact>> contacts = new List<List<Contact>>();
+            string currentCallsign = null;
+            List<Contact> currentCallsignContacts = null;
+            foreach (int id in idsToPrint)
+            {
+                Contact c = LoadContact(sourceId, id);
+                if (!string.Equals(c.Callsign, currentCallsign, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    if (currentCallsignContacts != null)
+                        contacts.Add(currentCallsignContacts);
+                    currentCallsign = c.Callsign;
+                    currentCallsignContacts = new List<Contact>();
+                }
+                currentCallsignContacts.Add(c);
+            }
+            if (currentCallsignContacts != null)
+                contacts.Add(currentCallsignContacts);
+
+            return contacts;
+        }
+
+        public void MarkQslsSent(List<List<Contact>> contacts)
+        {
+            List<Contact> combinedContacts = new List<Contact>();
+            contacts.ForEach(innerContacts => combinedContacts.AddRange(innerContacts));
+            MarkQslsSent(combinedContacts);
+        }
+
+        public void MarkQslsSent(List<Contact> contacts)
+        {
+            lock (m_Connection)
+            {
+                using (MySqlTransaction tran = m_Connection.BeginTransaction())
+                {
+                    using (MySqlCommand cmd = m_Connection.CreateCommand())
+                    {
+                        cmd.Transaction = tran;
+                        cmd.CommandText = "UPDATE log SET qslTxDate=?txDate WHERE id=?id AND sourceId=?sourceId;";
+                        MySqlParameter idParam = cmd.Parameters.Add("?id", MySqlDbType.Int32);
+                        MySqlParameter sourceIdParam = cmd.Parameters.Add("?sourceId", MySqlDbType.Int32);
+                        cmd.Parameters.AddWithValue("?txDate", DateTime.UtcNow);
+                        foreach (Contact c in contacts)
+                        {
+                            idParam.Value = c.Id;
+                            sourceIdParam.Value = c.SourceId;
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                    tran.Commit();
+                }
+            }
+        }
+
         public void Dispose()
         {
             if (m_Connection != null)

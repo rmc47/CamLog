@@ -132,6 +132,18 @@ namespace QslManager
             }
             else
             {
+                // Sort according to the QSL method we're using
+                switch (m_QslMethod.Text)
+                {
+                    case "Bureau":
+                        contactsToPrint.Sort(BureauSorter);
+                        break;
+                    case "Direct":
+                        contactsToPrint.Sort(DirectSorter);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException("Unknown QSL method: " + m_QslMethod.Text);
+                }
                 foreach (List<Contact> contacts in contactsToPrint)
                 {
                     engine.AddQSOs(contacts);
@@ -140,6 +152,33 @@ namespace QslManager
                 m_ContactStore.MarkQslsSent(contactsToPrint);
             }
             m_TxtCallsign.Focus();
+        }
+
+        private static int BureauSorter(List<Contact> contacts1, List<Contact> contacts2)
+        {
+            if ((contacts1 == null || contacts1.Count == 0) && (contacts2 == null || contacts2.Count == 0))
+                return 0;
+            if (contacts1 == null || contacts1.Count == 0)
+                return 1;
+            if (contacts2 == null || contacts2.Count == 0)
+                return -1;
+
+            return contacts1[0].Callsign.CompareTo(contacts2[0].Callsign);
+        }
+
+        private static int DirectSorter(List<Contact> contacts1, List<Contact> contacts2)
+        {
+            if ((contacts1 == null || contacts1.Count == 0) && (contacts2 == null || contacts2.Count == 0))
+                return 0;
+            if (contacts1 == null || contacts1.Count == 0)
+                return 1;
+            if (contacts2 == null || contacts2.Count == 0)
+                return -1;
+
+            if (!contacts1[0].QslRxDate.HasValue)
+                return 1;
+
+            return contacts1[0].QslRxDate.Value.CompareTo(contacts2[0].QslRxDate);
         }
 
         private void m_OutputPathBrowse_Click(object sender, EventArgs e)

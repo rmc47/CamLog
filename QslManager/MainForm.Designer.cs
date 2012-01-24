@@ -44,10 +44,10 @@
             this.m_PrintQueuedCards = new System.Windows.Forms.Button();
             this.m_UpdateLabelsUsed = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.m_QslMethod = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.m_OutputPath = new System.Windows.Forms.TextBox();
             this.m_OutputPathBrowse = new System.Windows.Forms.Button();
+            this.m_QslMethod = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.m_ContactsGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -201,15 +201,6 @@
             this.label2.TabIndex = 5;
             this.label2.Text = "&QSL Method:";
             // 
-            // m_QslMethod
-            // 
-            this.m_QslMethod.Location = new System.Drawing.Point(88, 38);
-            this.m_QslMethod.MaxLength = 20;
-            this.m_QslMethod.Name = "m_QslMethod";
-            this.m_QslMethod.Size = new System.Drawing.Size(100, 20);
-            this.m_QslMethod.TabIndex = 6;
-            this.m_QslMethod.Text = "Bureau";
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -238,17 +229,28 @@
             this.m_OutputPathBrowse.UseVisualStyleBackColor = true;
             this.m_OutputPathBrowse.Click += new System.EventHandler(this.m_OutputPathBrowse_Click);
             // 
+            // m_QslMethod
+            // 
+            this.m_QslMethod.FormattingEnabled = true;
+            this.m_QslMethod.Items.AddRange(new object[] {
+            "Bureau",
+            "Direct"});
+            this.m_QslMethod.Location = new System.Drawing.Point(88, 38);
+            this.m_QslMethod.Name = "m_QslMethod";
+            this.m_QslMethod.Size = new System.Drawing.Size(100, 21);
+            this.m_QslMethod.TabIndex = 11;
+            // 
             // MainForm
             // 
             this.AcceptButton = this.m_MarkSelectedAsReceived;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(694, 454);
+            this.Controls.Add(this.m_QslMethod);
             this.Controls.Add(this.m_OutputPathBrowse);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.m_OutputPath);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.m_QslMethod);
             this.Controls.Add(this.m_UpdateLabelsUsed);
             this.Controls.Add(this.m_PrintQueuedCards);
             this.Controls.Add(this.m_MarkSelectedAsReceived);
@@ -281,10 +283,10 @@
         private System.Windows.Forms.Button m_PrintQueuedCards;
         private System.Windows.Forms.Button m_UpdateLabelsUsed;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox m_QslMethod;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox m_OutputPath;
         private System.Windows.Forms.Button m_OutputPathBrowse;
+        private System.Windows.Forms.ComboBox m_QslMethod;
 
     }
 }

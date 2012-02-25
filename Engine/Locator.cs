@@ -9,21 +9,12 @@ namespace Engine
         public static readonly Locator Unknown = new Locator(0, 0);
 
         private readonly string m_Maidenhead;
-        private readonly double m_Lat;
-        private readonly double m_Long;
+        private double? m_Lat;
+        private double? m_Long;
 
         public Locator(string maidenhead)
         {
             m_Maidenhead = maidenhead;
-            try
-            {
-                Geographics.LatLongFromMaidenhead(maidenhead, out m_Lat, out m_Long);
-            }
-            catch
-            {
-#warning Mmm, tasty hack...
-                m_Lat = m_Long = 0;
-            }
         }
 
         public Locator(double latitude, double longitude)
@@ -35,12 +26,36 @@ namespace Engine
 
         public double Latitude
         {
-            get { return m_Lat; }
+            get {
+                if (!m_Lat.HasValue)
+                    PopulateLatLong();
+                return m_Lat.Value; 
+            }
         }
 
         public double Longitude
         {
-            get { return m_Long; }
+            get 
+            {
+                if (!m_Long.HasValue)
+                    PopulateLatLong();
+                return m_Long.Value; 
+            }
+        }
+
+        private void PopulateLatLong()
+        {
+            double lat, lon;
+            try
+            {
+                Geographics.LatLongFromMaidenhead(m_Maidenhead, out lat, out lon);
+            }
+            catch
+            {
+                lat = lon = 0.0;
+            }
+            m_Lat = lat;
+            m_Long = lon;
         }
 
         public override string ToString()

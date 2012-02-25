@@ -501,7 +501,13 @@ namespace UI
 
         private void m_ExportAdif_Click(object sender, EventArgs e)
         {
-            AdifHandler.ExportContacts(m_ContactStore.GetAllContacts("GS3PYE/P"), "C:\\gs3pyelog.adif");
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                if (sfd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                    return;
+                AdifHandler.ExportContacts(m_ContactStore.GetAllContacts("%"), sfd.FileName);
+                MessageBox.Show("Export complete!");
+            }
         }
 
         private void m_ExportCabrillo_Click(object sender, EventArgs e)

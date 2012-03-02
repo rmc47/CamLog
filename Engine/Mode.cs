@@ -52,7 +52,7 @@ namespace Engine
             }
         }
         
-        public static string ToCabrillloString(Mode m)
+        public static string ToCabrilloString(Mode m)
         {
             switch (m)
             {

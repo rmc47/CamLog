@@ -39,7 +39,7 @@ namespace Engine
         {
            writer.WriteLine("QSO: {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10}",
                 zxa_ensureLength(BandHelper.ToMHzString(c.Band), 4, ' ', true),
-                ModeHelper.ToCabrillloString(c.Mode),
+                ModeHelper.ToCabrilloString(c.Mode),
                 c.StartTime.ToString("yyyy-MM-dd HHmm"),
                 zxa_ensureLength(zxa_callUsed, 15, ' ', false).ToUpper(),
                 zxa_locatorSent.ToUpper(),

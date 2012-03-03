@@ -501,12 +501,27 @@ namespace UI
 
         private void m_ExportAdif_Click(object sender, EventArgs e)
         {
-            AdifHandler.ExportContacts(m_ContactStore.GetAllContacts("GS3PYE/P"), "C:\\gs3pyelog.adif");
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                if (sfd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                    return;
+                AdifHandler.ExportContacts(m_ContactStore.GetAllContacts("%"), sfd.FileName);
+                MessageBox.Show("Export complete!");
+            }
         }
 
         private void m_ExportCabrillo_Click(object sender, EventArgs e)
         {
-            CabrilloExporter.ExportContacts(m_ContactStore.GetAllContacts("1"), "C:\\ssbfd.txt");
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.DefaultExt = "log";
+            sfd.Filter = "Cabrillo files (*.log)|*.log|All files (*.*)|*.*";
+            using (sfd)
+            {
+                if (sfd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                    return;
+                CabrilloExporter.ExportContacts(m_ContactStore.GetAllContacts("1"), sfd.FileName);
+                MessageBox.Show("Export complete!");
+            } 
         }
 
         private void m_Callsign_Leave(object sender, EventArgs e)

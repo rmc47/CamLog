@@ -180,14 +180,14 @@ namespace Engine
                 {
                     if (c.Id > 0)
                         cmd.CommandText = @"UPDATE log SET lastModified=?lastModified, startTime=?startTime, endTime=?endTime,
-                            callsign=?callsign, station=?station, operator=?operator, band=?band, mode=?mode, frequency=?frequency,
-                            reportTx=?reportTx, reportRx=?reportRx, locator=?locatorReceived, notes=?notes, serialSent=?serialSent, serialReceived=?serialReceived, qslRxDate=?qslRxDate, 
-                            qslTxDate=?qslTxDate, qslMethod=?qslMethod WHERE id=?id AND sourceId=?sourceId;";
+callsign=?callsign, station=?station, operator=?operator, band=?band, mode=?mode, frequency=?frequency,
+reportTx=?reportTx, reportRx=?reportRx, locator=?locatorReceived, notes=?notes, serialSent=?serialSent, serialReceived=?serialReceived, qslRxDate=?qslRxDate,
+qslTxDate=?qslTxDate, qslMethod=?qslMethod WHERE id=?id AND sourceId=?sourceId;";
                     else
-                        cmd.CommandText = @"INSERT INTO log (sourceId, lastModified, startTime, endTime, callsign, station, 
-                            operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent, serialReceived, qslRxDate, qslTxDate, qslMethod) VALUES 
-                            (?sourceId, ?lastModified, ?startTime, ?endTime, ?callsign, ?station, ?operator, ?band, ?mode, ?frequency,
-                            ?reportTx, ?reportRx, ?locatorReceived, ?notes, ?serialSent, ?serialReceived, ?qslRxDate, ?qslTxDate, ?qslMethod);";
+                        cmd.CommandText = @"INSERT INTO log (sourceId, lastModified, startTime, endTime, callsign, station,
+operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent, serialReceived, qslRxDate, qslTxDate, qslMethod) VALUES
+(?sourceId, ?lastModified, ?startTime, ?endTime, ?callsign, ?station, ?operator, ?band, ?mode, ?frequency,
+?reportTx, ?reportRx, ?locatorReceived, ?notes, ?serialSent, ?serialReceived, ?qslRxDate, ?qslTxDate, ?qslMethod);";
 
                     cmd.Parameters.AddWithValue("?sourceId", c.SourceId);
                     cmd.Parameters.AddWithValue("?lastModified", DateTime.Now); c.LastModified = DateTime.Now;
@@ -332,7 +332,7 @@ namespace Engine
                             string callDB = reader.GetString(0);
                             if (!callDB.Equals(callsign, StringComparison.InvariantCultureIgnoreCase))
                             {
-                                if (!(callDB.EndsWith("/p", StringComparison.InvariantCultureIgnoreCase) || callDB.EndsWith("/m", StringComparison.InvariantCultureIgnoreCase)))
+                                if (!(callDB.EndsWith("/p", StringComparison.InvariantCultureIgnoreCase) || callDB.EndsWith("/m", StringComparison.InvariantCultureIgnoreCase) || callDB.EndsWith("/a", StringComparison.InvariantCultureIgnoreCase)))
                                     continue;
                             }
 
@@ -560,21 +560,21 @@ namespace Engine
                     ContactName = "Robert Chipperfield",
                     ContactPhone = "07990 646923",
                     ContactPostCode = "CB24 8TR",
-                    ContestName = "VHF NFD BAND",
+                    ContestName = "UKAC",
                     EndDate = new DateTime(2010, 07, 04),
                     HeightAboveGround = 20,
-                    HeightAboveSea = 115,
-                    Locator = new Locator("JO02ED"),
+                    HeightAboveSea = 68,
+                    Locator = new Locator("JO02CE"),
                     Multipliers = locator4SquaresSeen.Count,
                     OdxCall = oDxContact.Callsign,
                     OdxLocator = oDxContact.LocatorReceived,
                     OdxDistance = oDxPoints,
-                    Operators = "G1SAA,G3ZAY,G4ERO,G6KWA,G7VJR,G8IDL,G8TMV,M/DD2YCS,M0MVB,M0NKM,M0VFC,M1BXF",
+                    Operators = "M0LCM,M0VFC,M0ZRN,M1BXF",
                     Points = totalPoints,
-                    Power = 400,
+                    Power = 100,
                     Qsos = contactIDs.Count,
                     Receiver = "RECEIVER",
-                    Section = "Open",
+                    Section = "UKAC Restricted",
                     StartDate = new DateTime(2010, 07, 03),
                     TotalScore = totalPoints * locator4SquaresSeen.Count,
                     Transmitter = "TRANSMITTER"
@@ -587,28 +587,28 @@ namespace Engine
 
         //private string GetContactLog(Contact c)
         //{
-        //    string thisEntry = string.Format("{0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12} {13} {14} {15} {16} {17} {18}",
-        //        c.Time.ToString("yyMMdd"),
-        //        c.Time.ToString ("HHmm"),
-        //        BandHelper.ToMHzString (c.Band).PadRight(4),
-        //        ModeHelper.ToOfficialString(c.Mode).PadRight(3),
-        //        c.Callsign.PadRight (15),
-        //        c.ReportSent.PadRight (3),
-        //        c.SerialSent.ToString().PadRight (4),
-        //        c.ReportReceived.PadRight (3),
-        //        c.SerialReceived.ToString().PadRight (4),
-        //        string.Empty.PadRight (4) /* bonus multiplier etc */,
-        //        c.Points.ToString().PadRight (4),
-        //        c.Operator.PadRight(6),
-        //        c.LocatorReceived.ToString(),
-        //        string.Empty.PadRight (1) /* locator multiplier */,
-        //        string.Empty.PadRight (3) /* postcode */,
-        //        string.Empty.PadRight(1) /* postcode mult */,
-        //        string.Empty.PadRight (3) /* country code */,
-        //        string.Empty.PadRight (1) /* country code mult */,
-        //        c.Notes + "<CE>"
-        //        );
-        //    return thisEntry;
+        // string thisEntry = string.Format("{0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12} {13} {14} {15} {16} {17} {18}",
+        // c.Time.ToString("yyMMdd"),
+        // c.Time.ToString ("HHmm"),
+        // BandHelper.ToMHzString (c.Band).PadRight(4),
+        // ModeHelper.ToOfficialString(c.Mode).PadRight(3),
+        // c.Callsign.PadRight (15),
+        // c.ReportSent.PadRight (3),
+        // c.SerialSent.ToString().PadRight (4),
+        // c.ReportReceived.PadRight (3),
+        // c.SerialReceived.ToString().PadRight (4),
+        // string.Empty.PadRight (4) /* bonus multiplier etc */,
+        // c.Points.ToString().PadRight (4),
+        // c.Operator.PadRight(6),
+        // c.LocatorReceived.ToString(),
+        // string.Empty.PadRight (1) /* locator multiplier */,
+        // string.Empty.PadRight (3) /* postcode */,
+        // string.Empty.PadRight(1) /* postcode mult */,
+        // string.Empty.PadRight (3) /* country code */,
+        // string.Empty.PadRight (1) /* country code mult */,
+        // c.Notes + "<CE>"
+        // );
+        // return thisEntry;
         //}
 
 
@@ -618,7 +618,7 @@ namespace Engine
             // Figure out if this QSO is valid as a mult
             bool qualifiesForMult;
             PrefixRecord prefix = m_CallsignLookup.LookupPrefix(c.Callsign.Trim());
-            if (prefix == null)
+            if (prefix == null || prefix.Entity == null)
             {
                 qualifiesForMult = false;
             }

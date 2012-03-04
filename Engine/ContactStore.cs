@@ -332,7 +332,7 @@ namespace Engine
                             string callDB = reader.GetString(0);
                             if (!callDB.Equals(callsign, StringComparison.InvariantCultureIgnoreCase))
                             {
-                                if (!(callDB.EndsWith("/p", StringComparison.InvariantCultureIgnoreCase) || callDB.EndsWith("/m", StringComparison.InvariantCultureIgnoreCase)))
+                                if (!(callDB.EndsWith("/p", StringComparison.InvariantCultureIgnoreCase) || callDB.EndsWith("/m", StringComparison.InvariantCultureIgnoreCase) || callDB.EndsWith("/a", StringComparison.InvariantCultureIgnoreCase)))
                                     continue;
                             }
 
@@ -560,21 +560,21 @@ namespace Engine
                     ContactName = "Robert Chipperfield",
                     ContactPhone = "07990 646923",
                     ContactPostCode = "CB24 8TR",
-                    ContestName = "VHF NFD BAND",
+                    ContestName = "UKAC",
                     EndDate = new DateTime(2010, 07, 04),
                     HeightAboveGround = 20,
-                    HeightAboveSea = 115,
-                    Locator = new Locator("JO02ED"),
+                    HeightAboveSea = 68,
+                    Locator = new Locator("JO02CE"),
                     Multipliers = locator4SquaresSeen.Count,
                     OdxCall = oDxContact.Callsign,
                     OdxLocator = oDxContact.LocatorReceived,
                     OdxDistance = oDxPoints,
-                    Operators = "G1SAA,G3ZAY,G4ERO,G6KWA,G7VJR,G8IDL,G8TMV,M/DD2YCS,M0MVB,M0NKM,M0VFC,M1BXF",
+                    Operators = "M0LCM,M0VFC,M0ZRN,M1BXF",
                     Points = totalPoints,
-                    Power = 400,
+                    Power = 100,
                     Qsos = contactIDs.Count,
                     Receiver = "RECEIVER",
-                    Section = "Open",
+                    Section = "UKAC Restricted",
                     StartDate = new DateTime(2010, 07, 03),
                     TotalScore = totalPoints * locator4SquaresSeen.Count,
                     Transmitter = "TRANSMITTER"
@@ -618,7 +618,7 @@ namespace Engine
             // Figure out if this QSO is valid as a mult
             bool qualifiesForMult;
             PrefixRecord prefix = m_CallsignLookup.LookupPrefix(c.Callsign.Trim());
-            if (prefix == null)
+            if (prefix == null || prefix.Entity == null)
             {
                 qualifiesForMult = false;
             }

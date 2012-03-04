@@ -18,6 +18,7 @@ namespace QslManager
         private List<Contact> m_VisibleContacts;
         private Dictionary<int, string> m_SourceIdCallsigns;
         private int m_SelectedSource;
+        private int m_LabelsUsed;
 
         private const int c_SelectedIndex = 0;
         private const int c_QslRxDateIndex = 6;
@@ -90,6 +91,8 @@ namespace QslManager
             if (m_VisibleContacts == null || m_VisibleContacts.Count == 0)
                 return;
 
+            PdfEngine engine = new PdfEngine(m_SourceIdCallsigns[m_SelectedSource]);
+            List<Contact> contactsToPrint = new List<Contact>();
             for (int row = 0; row < m_VisibleContacts.Count; row++)
             {
                 DataGridViewRow gridRow = m_ContactsGrid.Rows[row];
@@ -101,8 +104,12 @@ namespace QslManager
                     c.QslTxDate = null; // Need to mark as "not sent" again, or it won't get reprinted
                     c.QslMethod = m_QslMethod.Text;
                     m_ContactStore.SaveContact(c);
+                    contactsToPrint.Add(c);
                 }
             }
+            m_LabelsUsed += engine.CalculateLabelCount(contactsToPrint);
+            m_UpdateLabelsUsed.Text = string.Format("&Labels used: {0}", m_LabelsUsed);
+
             UpdateGrid();
             m_TxtCallsign.Text = string.Empty;
             m_TxtCallsign.Focus();
@@ -117,6 +124,7 @@ namespace QslManager
             {
                 labelsUsed += engine.CalculateLabelCount(contacts);
             }
+            m_LabelsUsed = labelsUsed;
             m_UpdateLabelsUsed.Text = string.Format("&Labels used: {0}", labelsUsed);
             m_TxtCallsign.Focus();
         }
@@ -150,6 +158,7 @@ namespace QslManager
                 }
                 engine.PrintDocument(Path.Combine(m_OutputPath.Text, string.Format("QSL-{0}-{1}.pdf", myCall.Replace('/', '_'), DateTime.UtcNow.ToString("yyyy-MM-dd-HHmm"))));
                 m_ContactStore.MarkQslsSent(contactsToPrint);
+                m_LabelsUsed = 0;
             }
             m_TxtCallsign.Focus();
         }

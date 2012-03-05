@@ -20,6 +20,8 @@ namespace QslManager
         private SourceCallsign m_SelectedSource;
         private int m_LabelsUsed;
 
+        private IPageLayout m_PageLayout = new LayoutAvery7160();
+
         private const int c_SelectedIndex = 0;
         private const int c_QslRxDateIndex = 6;
         private const int c_QslMethodIndex = 8;
@@ -27,6 +29,14 @@ namespace QslManager
         public MainForm()
         {
             InitializeComponent();
+
+            m_Layouts.BeginUpdate();
+            m_Layouts.Items.Clear();
+            m_Layouts.Items.Add(new LayoutAvery7160());
+            m_Layouts.Items.Add(new LayoutAvery7162());
+            m_Layouts.SelectedIndex = 0;
+            m_Layouts.ValueMember = "Name";
+            m_Layouts.EndUpdate();
         }
 
 
@@ -107,7 +117,7 @@ namespace QslManager
             if (m_VisibleContacts == null || m_VisibleContacts.Count == 0)
                 return;
 
-            PdfEngine engine = new PdfEngine(m_SelectedSource.Callsign);
+            PdfEngine engine = new PdfEngine(m_PageLayout, m_SelectedSource.Callsign);
             List<Contact> contactsToPrint = new List<Contact>();
             for (int row = 0; row < m_VisibleContacts.Count; row++)
             {
@@ -133,7 +143,7 @@ namespace QslManager
 
         private void m_UpdateLabelsUsed_Click(object sender, EventArgs e)
         {
-            PdfEngine engine = new PdfEngine(m_SelectedSource.Callsign);
+            PdfEngine engine = new PdfEngine(m_PageLayout, m_SelectedSource.Callsign);
             List<List<Contact>> contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource.SourceID);
             int labelsUsed = 0;
             foreach (List<Contact> contacts in contactsToPrint)
@@ -148,7 +158,7 @@ namespace QslManager
         private void m_PrintQueuedCards_Click(object sender, EventArgs e)
         {
             string myCall = m_SelectedSource.Callsign;
-            PdfEngine engine = new PdfEngine(myCall);
+            PdfEngine engine = new PdfEngine(m_PageLayout, myCall);
             List<List<Contact>> contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource.SourceID);
             if (contactsToPrint.Count == 0)
             {
@@ -226,5 +236,9 @@ namespace QslManager
             UpdateGrid();
         }
 
+        private void m_Layouts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            m_PageLayout = (IPageLayout)m_Layouts.SelectedItem;
+        }
     }
 }

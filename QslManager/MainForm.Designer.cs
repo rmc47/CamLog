@@ -51,6 +51,8 @@
             this.m_OurCallsign = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.m_ChangeDB = new System.Windows.Forms.Button();
+            this.m_Layouts = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.m_ContactsGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -220,7 +222,7 @@
             this.m_OutputPath.Name = "m_OutputPath";
             this.m_OutputPath.Size = new System.Drawing.Size(325, 20);
             this.m_OutputPath.TabIndex = 8;
-            this.m_OutputPath.Text = "C:\\Temp";
+            this.m_OutputPath.Text = "C:\\Temp\\test";
             // 
             // m_OutputPathBrowse
             // 
@@ -274,12 +276,35 @@
             this.m_ChangeDB.UseVisualStyleBackColor = true;
             this.m_ChangeDB.Click += new System.EventHandler(this.m_ChangeDB_Click);
             // 
+            // m_Layouts
+            // 
+            this.m_Layouts.FormattingEnabled = true;
+            this.m_Layouts.Items.AddRange(new object[] {
+            "Bureau",
+            "Direct"});
+            this.m_Layouts.Location = new System.Drawing.Point(321, 65);
+            this.m_Layouts.Name = "m_Layouts";
+            this.m_Layouts.Size = new System.Drawing.Size(119, 21);
+            this.m_Layouts.TabIndex = 16;
+            this.m_Layouts.SelectedIndexChanged += new System.EventHandler(this.m_Layouts_SelectedIndexChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(244, 68);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(71, 13);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "&Label Format:";
+            // 
             // MainForm
             // 
             this.AcceptButton = this.m_MarkSelectedAsReceived;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(694, 454);
+            this.Controls.Add(this.m_Layouts);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.m_ChangeDB);
             this.Controls.Add(this.m_OurCallsign);
             this.Controls.Add(this.label4);
@@ -328,6 +353,8 @@
         private System.Windows.Forms.ComboBox m_OurCallsign;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button m_ChangeDB;
+        private System.Windows.Forms.ComboBox m_Layouts;
+        private System.Windows.Forms.Label label5;
 
     }
 }

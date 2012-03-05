@@ -11,13 +11,6 @@ namespace QslEngine
 {
     public class PdfEngine
     {
-        private const int c_QsoPerLabel = 4;
-        private const int c_Columns = 2;
-        private const double c_LabelHeight = 33.9;
-        private const double c_PageVerticalMargin = 13;
-        private const double c_PageHorizontalMargin = 5;
-        private const double c_LabelPaddingHorizontal = 5;
-
         /// <summary>
         /// For some reason, the horizontal margins are actually bigger than specified. This value corrects for that.
         /// </summary>
@@ -31,21 +24,23 @@ namespace QslEngine
         private PdfPTable m_MainTable;
         private int m_LabelsUsed = 0;
         private readonly string m_OurCallsign;
+        private readonly IPageLayout m_Layout;
 
-        public PdfEngine(string ourCallsign)
+        public PdfEngine(IPageLayout layout, string ourCallsign)
         {
             m_OurCallsign = ourCallsign;
-            m_MainTable = new PdfPTable(c_Columns);
+            m_Layout = layout;
+            m_MainTable = new PdfPTable(m_Layout.Columns);
             m_MainTable.TotalWidth = mm2p(196);
-            int[] widths = new int[c_Columns];
-            for (int i = 0; i < c_Columns; i++)
+            int[] widths = new int[m_Layout.Columns];
+            for (int i = 0; i < m_Layout.Columns; i++)
                 widths[i] = 1;
             m_MainTable.SetWidths(widths);
         }
 
         public int CalculateLabelCount(List<Contact> entries)
         {
-            return (entries.Count + c_QsoPerLabel - 1) / c_QsoPerLabel;
+            return (entries.Count + m_Layout.QsoPerLabel - 1) / m_Layout.QsoPerLabel;
         }
 
         public int AddQSOs(List<Contact> entries)
@@ -55,7 +50,7 @@ namespace QslEngine
             int labelsUsedHere = 0;
             while (startIndex < entries.Count)
             {
-                List<Contact> labelContacts = entries.GetRange(startIndex, Math.Min(c_QsoPerLabel, entries.Count - startIndex));
+                List<Contact> labelContacts = entries.GetRange(startIndex, Math.Min(m_Layout.QsoPerLabel, entries.Count - startIndex));
                 List<TableEntry> labelEntries = labelContacts.ConvertAll<TableEntry>(c =>
                 {
                     return new TableEntry
@@ -69,7 +64,7 @@ namespace QslEngine
                     };
                 });
                 m_MainTable.AddCell(PopulateCell(labelEntries.ToArray()));
-                startIndex += c_QsoPerLabel;
+                startIndex += m_Layout.QsoPerLabel;
                 m_LabelsUsed++;
                 labelsUsedHere++;
             }
@@ -84,7 +79,7 @@ namespace QslEngine
             }
 
             // Pad out to a full row of labels used
-            while (m_LabelsUsed % c_Columns > 0)
+            while (m_LabelsUsed % m_Layout.Columns > 0)
             {
                 m_MainTable.AddCell(GetCell());
                 m_LabelsUsed++;
@@ -97,7 +92,7 @@ namespace QslEngine
                 using (PdfWriter writer = PdfWriter.GetInstance(doc, fs))
                 {
                     bool result = doc.SetPageSize(new Rectangle(0, 0, mm2p(210), mm2p(297), 0));
-                    result = doc.SetMargins(mm2p(c_PageHorizontalMargin + c_HorizontalMarginFudge), mm2p(c_PageHorizontalMargin + c_HorizontalMarginFudge), mm2p(c_PageVerticalMargin), mm2p(c_PageVerticalMargin + c_HorizontalMarginFudge));
+                    result = doc.SetMargins(mm2p(m_Layout.PageHorizontalMargin + c_HorizontalMarginFudge), mm2p(m_Layout.PageHorizontalMargin + c_HorizontalMarginFudge), mm2p(m_Layout.PageVerticalMargin), mm2p(m_Layout.PageVerticalMargin + c_HorizontalMarginFudge));
                     doc.Open();
                     doc.NewPage();
                     doc.Add(m_MainTable);
@@ -106,23 +101,23 @@ namespace QslEngine
             }
         }
 
-        private static PdfPCell GetCell()
+        private PdfPCell GetCell()
         {
             PdfPCell cell = new PdfPCell();
-            cell.FixedHeight = mm2p(c_LabelHeight);
+            cell.FixedHeight = mm2p(m_Layout.LabelHeight);
             cell.Border = 0;
             //cell.BackgroundColor = BaseColor.RED;
-            cell.PaddingLeft = mm2p(c_LabelPaddingHorizontal);
-            cell.PaddingRight = mm2p(c_LabelPaddingHorizontal);
+            cell.PaddingLeft = mm2p(m_Layout.LabelPaddingHorizontal);
+            cell.PaddingRight = mm2p(m_Layout.LabelPaddingHorizontal);
             return cell;
         }
 
-        private static PdfPCell PopulateCell(TableEntry[] entries)
+        private PdfPCell PopulateCell(TableEntry[] entries)
         {
             PdfPCell cell = GetCell();
 
             PdfPTable qsoTable = new PdfPTable(5);
-            qsoTable.SetWidths(new [] { 1.6f, 1, 1, 0.8f, 1.2f });
+            qsoTable.SetWidths(m_Layout.ColumnRelativeWidths);
             qsoTable.WidthPercentage = 100f;
             
             AddCell(qsoTable, s_HeaderFont, "Date");
@@ -132,6 +127,7 @@ namespace QslEngine
             AddCell(qsoTable, s_HeaderFont, "Mode");
 
             Phrase titlePhrase = new Phrase();
+            titlePhrase.Leading = 14.0f;
             titlePhrase.Add(new Chunk(entries[0].MyCall, s_MyCallFont));
             titlePhrase.Add(new Chunk(" confirms the following QSO(s) with ", s_TitleTextFont));
             titlePhrase.Add(new Chunk(entries[0].Callsign, s_MyCallFont));

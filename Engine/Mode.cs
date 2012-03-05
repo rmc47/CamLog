@@ -51,6 +51,18 @@ namespace Engine
                 default: return "???";
             }
         }
+        
+        public static string ToCabrilloString(Mode m)
+        {
+            switch (m)
+            {
+                case Mode.CW: return "CW";
+                case Mode.SSB: return "PH";
+                case Mode.FM: return "PH";
+                default: return "??";
+            }
+        }
+        
         public static Mode Parse(string val)
         {
             if (val == null) return Mode.Unknown;

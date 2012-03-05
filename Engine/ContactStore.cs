@@ -180,14 +180,14 @@ namespace Engine
                 {
                     if (c.Id > 0)
                         cmd.CommandText = @"UPDATE log SET lastModified=?lastModified, startTime=?startTime, endTime=?endTime,
-                            callsign=?callsign, station=?station, operator=?operator, band=?band, mode=?mode, frequency=?frequency,
-                            reportTx=?reportTx, reportRx=?reportRx, locator=?locatorReceived, notes=?notes, serialSent=?serialSent, serialReceived=?serialReceived, qslRxDate=?qslRxDate, 
-                            qslTxDate=?qslTxDate, qslMethod=?qslMethod WHERE id=?id AND sourceId=?sourceId;";
+callsign=?callsign, station=?station, operator=?operator, band=?band, mode=?mode, frequency=?frequency,
+reportTx=?reportTx, reportRx=?reportRx, locator=?locatorReceived, notes=?notes, serialSent=?serialSent, serialReceived=?serialReceived, qslRxDate=?qslRxDate,
+qslTxDate=?qslTxDate, qslMethod=?qslMethod WHERE id=?id AND sourceId=?sourceId;";
                     else
-                        cmd.CommandText = @"INSERT INTO log (sourceId, lastModified, startTime, endTime, callsign, station, 
-                            operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent, serialReceived, qslRxDate, qslTxDate, qslMethod) VALUES 
-                            (?sourceId, ?lastModified, ?startTime, ?endTime, ?callsign, ?station, ?operator, ?band, ?mode, ?frequency,
-                            ?reportTx, ?reportRx, ?locatorReceived, ?notes, ?serialSent, ?serialReceived, ?qslRxDate, ?qslTxDate, ?qslMethod);";
+                        cmd.CommandText = @"INSERT INTO log (sourceId, lastModified, startTime, endTime, callsign, station,
+operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent, serialReceived, qslRxDate, qslTxDate, qslMethod) VALUES
+(?sourceId, ?lastModified, ?startTime, ?endTime, ?callsign, ?station, ?operator, ?band, ?mode, ?frequency,
+?reportTx, ?reportRx, ?locatorReceived, ?notes, ?serialSent, ?serialReceived, ?qslRxDate, ?qslTxDate, ?qslMethod);";
 
                     cmd.Parameters.AddWithValue("?sourceId", c.SourceId);
                     cmd.Parameters.AddWithValue("?lastModified", DateTime.Now); c.LastModified = DateTime.Now;
@@ -587,28 +587,28 @@ namespace Engine
 
         //private string GetContactLog(Contact c)
         //{
-        //    string thisEntry = string.Format("{0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12} {13} {14} {15} {16} {17} {18}",
-        //        c.Time.ToString("yyMMdd"),
-        //        c.Time.ToString ("HHmm"),
-        //        BandHelper.ToMHzString (c.Band).PadRight(4),
-        //        ModeHelper.ToOfficialString(c.Mode).PadRight(3),
-        //        c.Callsign.PadRight (15),
-        //        c.ReportSent.PadRight (3),
-        //        c.SerialSent.ToString().PadRight (4),
-        //        c.ReportReceived.PadRight (3),
-        //        c.SerialReceived.ToString().PadRight (4),
-        //        string.Empty.PadRight (4) /* bonus multiplier etc */,
-        //        c.Points.ToString().PadRight (4),
-        //        c.Operator.PadRight(6),
-        //        c.LocatorReceived.ToString(),
-        //        string.Empty.PadRight (1) /* locator multiplier */,
-        //        string.Empty.PadRight (3) /* postcode */,
-        //        string.Empty.PadRight(1) /* postcode mult */,
-        //        string.Empty.PadRight (3) /* country code */,
-        //        string.Empty.PadRight (1) /* country code mult */,
-        //        c.Notes + "<CE>"
-        //        );
-        //    return thisEntry;
+        // string thisEntry = string.Format("{0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12} {13} {14} {15} {16} {17} {18}",
+        // c.Time.ToString("yyMMdd"),
+        // c.Time.ToString ("HHmm"),
+        // BandHelper.ToMHzString (c.Band).PadRight(4),
+        // ModeHelper.ToOfficialString(c.Mode).PadRight(3),
+        // c.Callsign.PadRight (15),
+        // c.ReportSent.PadRight (3),
+        // c.SerialSent.ToString().PadRight (4),
+        // c.ReportReceived.PadRight (3),
+        // c.SerialReceived.ToString().PadRight (4),
+        // string.Empty.PadRight (4) /* bonus multiplier etc */,
+        // c.Points.ToString().PadRight (4),
+        // c.Operator.PadRight(6),
+        // c.LocatorReceived.ToString(),
+        // string.Empty.PadRight (1) /* locator multiplier */,
+        // string.Empty.PadRight (3) /* postcode */,
+        // string.Empty.PadRight(1) /* postcode mult */,
+        // string.Empty.PadRight (3) /* country code */,
+        // string.Empty.PadRight (1) /* country code mult */,
+        // c.Notes + "<CE>"
+        // );
+        // return thisEntry;
         //}
 
 

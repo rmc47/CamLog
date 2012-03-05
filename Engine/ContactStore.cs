@@ -665,7 +665,7 @@ namespace Engine
             return thisEntry;
         }
 
-        public Dictionary<int, string> GetSources()
+        public List<SourceCallsign> GetSources()
         {
             lock (m_Connection)
             {
@@ -674,12 +674,12 @@ namespace Engine
                     cmd.CommandText = "SELECT id, callsign FROM sources;";
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
-                        Dictionary<int, string> sources = new Dictionary<int, string>();
+                        List<SourceCallsign> sources = new List<SourceCallsign>();
                         while (reader.Read())
                         {
                             int source = reader.GetInt32(reader.GetOrdinal("id"));
                             string callsign = reader.GetString(reader.GetOrdinal("callsign"));
-                            sources.Add(source, callsign);
+                            sources.Add(new SourceCallsign(source, callsign));
                         }
                         return sources;
                     }

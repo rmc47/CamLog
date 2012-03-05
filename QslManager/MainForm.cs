@@ -16,8 +16,8 @@ namespace QslManager
     {
         public ContactStore m_ContactStore;
         private List<Contact> m_VisibleContacts;
-        private Dictionary<int, string> m_SourceIdCallsigns;
-        private int m_SelectedSource;
+        private List<SourceCallsign> m_SourceIdCallsigns;
+        private SourceCallsign m_SelectedSource;
         private int m_LabelsUsed;
 
         private const int c_SelectedIndex = 0;
@@ -27,28 +27,44 @@ namespace QslManager
         public MainForm()
         {
             InitializeComponent();
-            m_ContactStore = new ContactStore("localhost", "harris2010", "root", "");
-            m_SourceIdCallsigns = m_ContactStore.GetSources();
-
-            foreach (var kvp in m_SourceIdCallsigns)
-                if (kvp.Value == "GM3PYE/P")
-                    m_SelectedSource = kvp.Key;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+
+        private void MainForm_Shown(object sender, EventArgs e)
         {
-            string selectedCallsign;
-            if (!m_SourceIdCallsigns.TryGetValue(m_SelectedSource, out selectedCallsign))
+            if (!ShowLogon())
+                Close();
+        }
+
+
+        private void m_ChangeDB_Click(object sender, EventArgs e)
+        {
+            ShowLogon();
+        }
+
+        private bool ShowLogon()
+        {
+            using (LogonForm lf = new LogonForm())
             {
-                MessageBox.Show("No source selected");
-                return;
+                DialogResult dr = lf.ShowDialog();
+                if (dr != System.Windows.Forms.DialogResult.OK)
+                    return false;
+
+                m_ContactStore = lf.ContactStore;
+                m_SourceIdCallsigns = m_ContactStore.GetSources();
+
+                m_OurCallsign.BeginUpdate();
+                m_OurCallsign.Items.Clear();
+                foreach (SourceCallsign src in m_SourceIdCallsigns)
+                {
+                    m_OurCallsign.Items.Add(src);
+                }
+                if (m_OurCallsign.Items.Count > 0)
+                    m_OurCallsign.SelectedIndex = 0;
+                m_OurCallsign.EndUpdate();
+
+                return true;
             }
-
-            PdfEngine engine = new PdfEngine(selectedCallsign);
-            
-            engine.AddQSOs(m_VisibleContacts);
-
-            engine.PrintDocument(@"C:\Temp\test.pdf");
         }
 
         private void m_TxtCallsign_TextChanged(object sender, EventArgs e)
@@ -68,7 +84,7 @@ namespace QslManager
             }
 
             // Get the previous contacts, filtering according to the selected source
-            m_VisibleContacts = m_ContactStore.GetPreviousContacts(m_TxtCallsign.Text).FindAll(c => c.SourceId == m_SelectedSource);
+            m_VisibleContacts = m_ContactStore.GetPreviousContacts(m_TxtCallsign.Text).FindAll(c => c.SourceId == m_SelectedSource.SourceID);
             
             foreach (Contact c in m_VisibleContacts)
             {
@@ -91,7 +107,7 @@ namespace QslManager
             if (m_VisibleContacts == null || m_VisibleContacts.Count == 0)
                 return;
 
-            PdfEngine engine = new PdfEngine(m_SourceIdCallsigns[m_SelectedSource]);
+            PdfEngine engine = new PdfEngine(m_SelectedSource.Callsign);
             List<Contact> contactsToPrint = new List<Contact>();
             for (int row = 0; row < m_VisibleContacts.Count; row++)
             {
@@ -117,8 +133,8 @@ namespace QslManager
 
         private void m_UpdateLabelsUsed_Click(object sender, EventArgs e)
         {
-            PdfEngine engine = new PdfEngine(m_SourceIdCallsigns[m_SelectedSource]);
-            List<List<Contact>> contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource);
+            PdfEngine engine = new PdfEngine(m_SelectedSource.Callsign);
+            List<List<Contact>> contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource.SourceID);
             int labelsUsed = 0;
             foreach (List<Contact> contacts in contactsToPrint)
             {
@@ -131,9 +147,9 @@ namespace QslManager
 
         private void m_PrintQueuedCards_Click(object sender, EventArgs e)
         {
-            string myCall = m_SourceIdCallsigns[m_SelectedSource];
+            string myCall = m_SelectedSource.Callsign;
             PdfEngine engine = new PdfEngine(myCall);
-            List<List<Contact>> contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource);
+            List<List<Contact>> contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource.SourceID);
             if (contactsToPrint.Count == 0)
             {
                 MessageBox.Show("No QSOs to print");
@@ -201,5 +217,14 @@ namespace QslManager
                 }
             }
         }
+
+        private void m_OurCallsign_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            m_SelectedSource = m_OurCallsign.SelectedItem as SourceCallsign;
+
+            // Update the contact grid, in case we've already entered a callsign, so it gets populated with the new info for this source
+            UpdateGrid();
+        }
+
     }
 }

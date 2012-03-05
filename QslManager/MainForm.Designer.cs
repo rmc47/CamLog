@@ -48,6 +48,9 @@
             this.m_OutputPath = new System.Windows.Forms.TextBox();
             this.m_OutputPathBrowse = new System.Windows.Forms.Button();
             this.m_QslMethod = new System.Windows.Forms.ComboBox();
+            this.m_OurCallsign = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.m_ChangeDB = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.m_ContactsGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -86,9 +89,9 @@
             this.QSLRX,
             this.QSLTX,
             this.QSLMethod});
-            this.m_ContactsGrid.Location = new System.Drawing.Point(12, 69);
+            this.m_ContactsGrid.Location = new System.Drawing.Point(12, 99);
             this.m_ContactsGrid.Name = "m_ContactsGrid";
-            this.m_ContactsGrid.Size = new System.Drawing.Size(670, 373);
+            this.m_ContactsGrid.Size = new System.Drawing.Size(670, 343);
             this.m_ContactsGrid.TabIndex = 10;
             // 
             // QSL
@@ -184,7 +187,7 @@
             // 
             // m_UpdateLabelsUsed
             // 
-            this.m_UpdateLabelsUsed.Location = new System.Drawing.Point(567, 9);
+            this.m_UpdateLabelsUsed.Location = new System.Drawing.Point(567, 63);
             this.m_UpdateLabelsUsed.Name = "m_UpdateLabelsUsed";
             this.m_UpdateLabelsUsed.Size = new System.Drawing.Size(115, 23);
             this.m_UpdateLabelsUsed.TabIndex = 4;
@@ -240,12 +243,46 @@
             this.m_QslMethod.Size = new System.Drawing.Size(100, 21);
             this.m_QslMethod.TabIndex = 11;
             // 
+            // m_OurCallsign
+            // 
+            this.m_OurCallsign.FormattingEnabled = true;
+            this.m_OurCallsign.Items.AddRange(new object[] {
+            "Bureau",
+            "Direct"});
+            this.m_OurCallsign.Location = new System.Drawing.Point(88, 65);
+            this.m_OurCallsign.Name = "m_OurCallsign";
+            this.m_OurCallsign.Size = new System.Drawing.Size(100, 21);
+            this.m_OurCallsign.TabIndex = 13;
+            this.m_OurCallsign.SelectedIndexChanged += new System.EventHandler(this.m_OurCallsign_SelectedIndexChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 68);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(66, 13);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "&Our Callsign:";
+            // 
+            // m_ChangeDB
+            // 
+            this.m_ChangeDB.Location = new System.Drawing.Point(567, 9);
+            this.m_ChangeDB.Name = "m_ChangeDB";
+            this.m_ChangeDB.Size = new System.Drawing.Size(115, 23);
+            this.m_ChangeDB.TabIndex = 14;
+            this.m_ChangeDB.Text = "&Change Database";
+            this.m_ChangeDB.UseVisualStyleBackColor = true;
+            this.m_ChangeDB.Click += new System.EventHandler(this.m_ChangeDB_Click);
+            // 
             // MainForm
             // 
             this.AcceptButton = this.m_MarkSelectedAsReceived;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(694, 454);
+            this.Controls.Add(this.m_ChangeDB);
+            this.Controls.Add(this.m_OurCallsign);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.m_QslMethod);
             this.Controls.Add(this.m_OutputPathBrowse);
             this.Controls.Add(this.label3);
@@ -259,6 +296,7 @@
             this.Controls.Add(this.m_TxtCallsign);
             this.Name = "MainForm";
             this.Text = "CamLog | QSL Manager";
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.m_ContactsGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -287,6 +325,9 @@
         private System.Windows.Forms.TextBox m_OutputPath;
         private System.Windows.Forms.Button m_OutputPathBrowse;
         private System.Windows.Forms.ComboBox m_QslMethod;
+        private System.Windows.Forms.ComboBox m_OurCallsign;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button m_ChangeDB;
 
     }
 }

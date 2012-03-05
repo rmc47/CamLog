@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdifTests.cs" />
     <Compile Include="BandTests.cs" />
     <Compile Include="CallsignLookupTests.cs" />
     <Compile Include="CivTests.cs" />

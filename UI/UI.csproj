@@ -78,6 +78,12 @@
     <Compile Include="EditForm.Designer.cs">
       <DependentUpon>EditForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ExportCabrilloForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExportCabrilloForm.Designer.cs">
+      <DependentUpon>ExportCabrilloForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ExportForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -105,6 +111,9 @@
     <EmbeddedResource Include="EditForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>EditForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExportCabrilloForm.resx">
+      <DependentUpon>ExportCabrilloForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ExportForm.resx">
       <DependentUpon>ExportForm.cs</DependentUpon>

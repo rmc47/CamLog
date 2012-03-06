@@ -512,17 +512,20 @@ namespace UI
 
         private void m_ExportCabrillo_Click(object sender, EventArgs e)
         {
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.DefaultExt = "log";
-            sfd.Filter = "Cabrillo files (*.log)|*.log|All files (*.*)|*.*";
-            using (sfd)
+            using (ExportCabrilloForm ef = new ExportCabrilloForm
             {
-                if (sfd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
-                    return;
-                CabrilloExporter.ExportContacts(m_ContactStore.GetAllContacts("1"), sfd.FileName);
-                MessageBox.Show("Export complete!");
-            } 
+                CallSent = m_OurOperator.Text,
+                SourceLocator = m_OurLocatorValue,
+                AvailableBands = m_ContactStore.GetAllBands()
+            })
+            {
+                DialogResult dr = ef.ShowDialog();
+                if (dr == DialogResult.OK)
+                    CabrilloExporter.ExportContacts(m_ContactStore.GetAllContacts("1"), ef.ExportPath, ef.SourceLocator.ToString(), ef.CallSent, ef.Operators, ef.Contest, ef.ClaimedScore);
+            }
         }
+
+
 
         private void m_Callsign_Leave(object sender, EventArgs e)
         {

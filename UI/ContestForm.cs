@@ -521,7 +521,7 @@ namespace UI
             {
                 DialogResult dr = ef.ShowDialog();
                 if (dr == DialogResult.OK)
-                    CabrilloExporter.ExportContacts(m_ContactStore.GetAllContacts("1"), ef.ExportPath, ef.SourceLocator.ToString(), ef.CallSent, ef.Operators, ef.Contest, ef.ClaimedScore);
+                    CabrilloExporter.ExportContacts(m_ContactStore.GetAllContacts("1"), ef.ExportPath, ef.SourceLocator.ToString(), ef.CallSent, ef.Operators, ef.Contest, ef.ClaimedScore, ef.CustomHeaders);
             }
         }
 

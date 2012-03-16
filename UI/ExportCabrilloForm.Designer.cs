@@ -45,6 +45,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.m_TxtClaimedScore = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.m_BtnCustomHeaders = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -80,6 +81,7 @@
             this.m_TxtExportPath.Name = "m_TxtExportPath";
             this.m_TxtExportPath.Size = new System.Drawing.Size(265, 20);
             this.m_TxtExportPath.TabIndex = 13;
+            this.m_TxtExportPath.Enter += new System.EventHandler(this.m_TxtExportPath_Enter);
             // 
             // m_BtnBrowse
             // 
@@ -196,6 +198,16 @@
             this.label7.TabIndex = 15;
             this.label7.Text = "Claimed score:";
             // 
+            // m_BtnCustomHeaders
+            // 
+            this.m_BtnCustomHeaders.Location = new System.Drawing.Point(12, 115);
+            this.m_BtnCustomHeaders.Name = "m_BtnCustomHeaders";
+            this.m_BtnCustomHeaders.Size = new System.Drawing.Size(93, 23);
+            this.m_BtnCustomHeaders.TabIndex = 20;
+            this.m_BtnCustomHeaders.Text = "Custom Headers";
+            this.m_BtnCustomHeaders.UseVisualStyleBackColor = true;
+            this.m_BtnCustomHeaders.Click += new System.EventHandler(this.m_BtnCustomHeaders_Click);
+            // 
             // ExportCabrilloForm
             // 
             this.AcceptButton = this.m_BtnOK;
@@ -203,6 +215,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_BtnCancel;
             this.ClientSize = new System.Drawing.Size(402, 149);
+            this.Controls.Add(this.m_BtnCustomHeaders);
             this.Controls.Add(this.m_TxtClaimedScore);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.m_TxtContest);
@@ -248,5 +261,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox m_TxtClaimedScore;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button m_BtnCustomHeaders;
     }
 }

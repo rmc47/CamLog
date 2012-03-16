@@ -188,7 +188,7 @@ namespace UI
 
         private void m_BtnCustomHeaders_Click(object sender, EventArgs e)
         {
-            using (CustomCabrilloHeaders cch = new CustomCabrilloHeaders { })
+            using (CustomCabrilloHeaders cch = new CustomCabrilloHeaders { Headers = m_CustomHeaders })
             {
                 DialogResult dr = cch.ShowDialog();
                 if (dr == DialogResult.OK)

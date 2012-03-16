@@ -21,8 +21,13 @@ namespace UI
         public string Headers
         {
             get { return m_Headers; }
-            private set { m_Headers = value; }
+            set {
+                m_Headers = value;
+                m_TxtCustomHeaders.Text = m_Headers;
+            }
         }
+
+
 
         private void m_CustomHeaders_TextChanged(object sender, EventArgs e)
         {

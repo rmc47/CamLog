@@ -42,16 +42,16 @@
             this.m_TxtCustomHeaders.Size = new System.Drawing.Size(256, 165);
             this.m_TxtCustomHeaders.TabIndex = 0;
             this.m_TxtCustomHeaders.Text = "";
-            this.m_TxtCustomHeaders.TextChanged += new System.EventHandler(this.m_CustomHeaders_TextChanged);
+            this.m_TxtCustomHeaders.Leave += new System.EventHandler(this.m_CustomHeaders_TextChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(13, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(229, 13);
+            this.label1.Size = new System.Drawing.Size(223, 13);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Enter your headerds below, each on a new line";
+            this.label1.Text = "Enter your headers below, each on a new line";
             // 
             // textBox1
             // 

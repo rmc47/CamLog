@@ -51,7 +51,7 @@ namespace UI
 
                 m_Band.Text = BandHelper.ToString(value.Band);
                 m_Callsign.Text = value.Callsign;
-                m_Locator.Text = value.LocatorReceived.ToString();
+                m_Locator.Text = value.LocatorReceivedString;
                 m_RstReceived.Text = value.ReportReceived;
                 m_RstSent.Text = value.ReportSent;
                 m_SerialSent.Text = value.SerialSent.ToString().PadLeft(3, '0');

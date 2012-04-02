@@ -360,7 +360,7 @@ namespace UI
 
                     rowLabels[(int)ContactTableColumns.Callsign].Text = c.Callsign;
                     rowLabels[(int)ContactTableColumns.Comments].Text = c.Notes;
-                    rowLabels[(int)ContactTableColumns.LocatorReceived].Text = c.LocatorReceived.ToString().ToUpper();
+                    rowLabels[(int)ContactTableColumns.LocatorReceived].Text = c.LocatorReceivedString;
                     rowLabels[(int)ContactTableColumns.RstReceived].Text = c.ReportReceived;
                     rowLabels[(int)ContactTableColumns.RstSent].Text = c.ReportSent;
                     rowLabels[(int)ContactTableColumns.SerialReceived].Text = c.SerialReceived.ToString().PadLeft(3, '0');

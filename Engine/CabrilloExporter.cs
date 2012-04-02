@@ -47,7 +47,7 @@ namespace Engine
                  c.ReportSent.PadRight(3),
                  c.SerialSent.ToString().PadLeft(3),
                  c.Callsign.PadRight(15).ToUpper(),
-                 c.LocatorReceived.ToString().ToUpper(),
+                 c.LocatorReceivedString,
                  c.ReportReceived.PadRight(3),
                  c.SerialReceived.ToString().PadLeft(3));
         }

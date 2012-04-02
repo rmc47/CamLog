@@ -201,7 +201,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                     cmd.Parameters.AddWithValue("?frequency", c.Frequency);
                     cmd.Parameters.AddWithValue("?reportRx", c.ReportReceived);
                     cmd.Parameters.AddWithValue("?reportTx", c.ReportSent);
-                    cmd.Parameters.AddWithValue("?locatorReceived", c.LocatorReceived.ToString());
+                    cmd.Parameters.AddWithValue("?locatorReceived", c.LocatorReceivedString ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("?notes", c.Notes);
                     cmd.Parameters.AddWithValue("?serialSent", c.SerialSent.ToString());
                     cmd.Parameters.AddWithValue("?serialReceived", c.SerialReceived.ToString());
@@ -641,7 +641,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                 }
             }
 
-            string square4 = c.LocatorReceived.ToString().Substring(0, 4);
+            string square4 = c.LocatorReceivedString.Substring(0, 4);
             bool newSquare = qualifiesForMult && !locator4SquaresSeen.Contains(square4.ToLowerInvariant());
             if (newSquare)
                 locator4SquaresSeen.Add(square4.ToLowerInvariant());
@@ -656,7 +656,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                 c.ReportReceived,
                 c.SerialReceived,
                 string.Empty /* received exchange */,
-                c.LocatorReceived.ToString().ToUpperInvariant(),
+                c.LocatorReceivedString,
                 points = (int)Math.Ceiling(Geographics.GeodesicDistance(sourceLocator, c.LocatorReceived) / 1000),
                 string.Empty /* new exchange */,
                 newSquare ? "N" : string.Empty /* new locator square */,

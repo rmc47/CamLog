@@ -47,7 +47,7 @@ namespace Engine
             WriteField("stx", contact.ReportSent, writer);
             WriteField("rst_rcvd", contact.ReportReceived, writer);
             WriteField("srx", contact.SerialReceived.ToString(), writer);
-            WriteField("gridsquare", contact.LocatorReceived.ToString(), writer);
+            WriteField("gridsquare", contact.LocatorReceivedString, writer);
             writer.WriteLine("<EOR>");
             writer.WriteLine("");
         }
@@ -84,7 +84,7 @@ namespace Engine
                 c.ReportSent = currentRecord["rst_sent"];
                 c.Operator = currentRecord["operator"];
                 c.Mode = ModeHelper.Parse(currentRecord["mode"]);
-
+                c.Station = string.Empty;
                 contacts.Add(c);
             }
 

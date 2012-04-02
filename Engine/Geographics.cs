@@ -12,6 +12,9 @@ namespace Engine
 
         public static double GeodesicDistance(Locator start, Locator end)
         {
+            if (start == null || end == null)
+                return 0;
+
             double L = DegreesToRadians(end.Longitude - start.Longitude);
 
             //var U1 = Math.atan((1-f) * Math.tan(lat1.toRad()));

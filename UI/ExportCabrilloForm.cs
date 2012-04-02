@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using Microsoft.Win32;
 using Engine;
 
 namespace UI
@@ -18,6 +19,7 @@ namespace UI
         private string m_Operators;
         private string m_Contest;
         private string m_ClaimedScore;
+        private string m_CustomHeaders;
         
         public ExportCabrilloForm()
         {
@@ -114,10 +116,29 @@ namespace UI
             }
         }
 
+        public string CustomHeaders
+        {
+            get
+            {
+                return m_CustomHeaders;
+            }
+            private set
+            {
+                m_ClaimedScore = value;
+            }
+        }
+
         private void m_BtnBrowse_Click(object sender, EventArgs e)
         {
             using (SaveFileDialog sfd = new SaveFileDialog())
             {
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\M0VFC Contest Log", false))
+                {
+                    if (!string.IsNullOrEmpty((string)key.GetValue("Database", "")))
+                    {
+                        sfd.FileName = (string)key.GetValue("Database", "");
+                    }
+                }
                 sfd.DefaultExt = "log";
                 sfd.Filter = "Cabrillo files (*.log)|*.log|All files (*.*)|*.*";
                 if (sfd.ShowDialog() == DialogResult.OK)
@@ -157,6 +178,25 @@ namespace UI
         private void m_CmbBand_SelectedIndexChanged(object sender, EventArgs e)
         {
             Band = BandHelper.Parse(m_CmbBand.SelectedItem.ToString());
+        }
+
+        private void m_TxtExportPath_Enter(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(m_TxtExportPath.Text))
+                m_BtnBrowse_Click(sender, e);
+        }
+
+        private void m_BtnCustomHeaders_Click(object sender, EventArgs e)
+        {
+            using (CustomCabrilloHeaders cch = new CustomCabrilloHeaders { Headers = m_CustomHeaders })
+            {
+                DialogResult dr = cch.ShowDialog();
+                if (dr == DialogResult.OK)
+                {
+                    m_CustomHeaders = cch.Headers;
+                }
+                    
+            }
         }
     }
 }

@@ -375,7 +375,11 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                     while (reader.Read())
                     {
                         string call = reader.GetString(0);
-                        string loc = reader.GetString(1);
+                        string loc;
+                        if (reader.IsDBNull(1))
+                            loc = string.Empty;
+                        else
+                            loc = reader.GetString(1);
                         matches.Add(call + " - " + loc);
                     }
                 }

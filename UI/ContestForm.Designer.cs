@@ -674,12 +674,14 @@ namespace UI
             this.Controls.Add(groupBox1);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "ContestForm";
             this.Text = "M0VFC Contest Log";
             this.Load += new System.EventHandler(this.ContestForm_Load);
             this.Shown += new System.EventHandler(this.ContestForm_Shown);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ContestForm_KeyDown);
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);

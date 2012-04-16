@@ -593,5 +593,14 @@ namespace UI
         {
             ClearContactRow();
         }
+
+        private void ContestForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode >= Keys.F1 && e.KeyCode <= Keys.F12 && e.Modifiers == Keys.None)
+            {
+                e.SuppressKeyPress = true;
+                Controller.CWMacro.SendMacro(e.KeyCode - Keys.F1, new Dictionary<string, string>());
+            }
+        }
     }
 }

@@ -407,46 +407,49 @@ namespace UI
 
         private void CallsignChangedWorker(string callsign, string ourBandText, Locator ourLocatorValue)
         {
-            string notesText;
-            Color notesBackColor;
+            string notesText = null;
+            Color notesBackColor = Color.Transparent;
             string locatorText = null;
             string beamText = null, distanceText = null, commentsText = null;
             object[] matchesKnownCalls = null, matchesThisContest = null, locatorMatchesThisContest = null;
 
             Locator existingLocator;
-            List<Band> bands = m_ContactStore.GetPreviousBands(callsign, out existingLocator);
-            Band ourBand = BandHelper.Parse(ourBandText);
-            if (bands.Contains(ourBand))
+            if (callsign.Length > 2)
             {
-                notesBackColor = c_DupeColor;
-                notesText = string.Format("Already worked {0} on {1}", callsign, BandHelper.ToString(ourBand));
-            }
-            else if (bands.Count > 0)
-            {
-                notesBackColor = c_WorkedOtherBandsColor;
-                string bandString = string.Empty;
-                foreach (Band b in bands)
+                List<Band> bands = m_ContactStore.GetPreviousBands(callsign, out existingLocator);
+                Band ourBand = BandHelper.Parse(ourBandText);
+                if (bands.Contains(ourBand))
                 {
-                    bandString += BandHelper.ToString(b) + ", ";
+                    notesBackColor = c_DupeColor;
+                    notesText = string.Format("Already worked {0} on {1}", callsign, BandHelper.ToString(ourBand));
                 }
-                notesText = string.Format("Worked {0} on {1} - {2}", callsign, bandString, existingLocator);
-                if (existingLocator != null)
-                    locatorText = existingLocator.ToString();
-            }
-            else
-            {
-                notesText = string.Empty;
-                notesBackColor = Color.Transparent;
-            }
+                else if (bands.Count > 0)
+                {
+                    notesBackColor = c_WorkedOtherBandsColor;
+                    string bandString = string.Empty;
+                    foreach (Band b in bands)
+                    {
+                        bandString += BandHelper.ToString(b) + ", ";
+                    }
+                    notesText = string.Format("Worked {0} on {1} - {2}", callsign, bandString, existingLocator);
+                    if (existingLocator != null)
+                        locatorText = existingLocator.ToString();
+                }
+                else
+                {
+                    notesText = string.Empty;
+                    notesBackColor = Color.Transparent;
+                }
 
-            // Do a first guess beam heading etc
-            PrefixRecord pfx = m_CallsignLookup.LookupPrefix(callsign);
-            if (pfx != null)
-            {
-                Locator theirLocator = new Locator(pfx.Latitude, pfx.Longitude);
-                beamText = Geographics.BeamHeading(ourLocatorValue, theirLocator).ToString();
-                distanceText = Math.Ceiling(Geographics.GeodesicDistance(ourLocatorValue, theirLocator) / 1000).ToString();
-                commentsText = pfx.Entity;
+                // Do a first guess beam heading etc
+                PrefixRecord pfx = m_CallsignLookup.LookupPrefix(callsign);
+                if (pfx != null)
+                {
+                    Locator theirLocator = new Locator(pfx.Latitude, pfx.Longitude);
+                    beamText = Geographics.BeamHeading(ourLocatorValue, theirLocator).ToString();
+                    distanceText = Math.Ceiling(Geographics.GeodesicDistance(ourLocatorValue, theirLocator) / 1000).ToString();
+                    commentsText = pfx.Entity;
+                }
             }
 
             // Populate the lists of partial callsign matches
@@ -468,8 +471,16 @@ namespace UI
                 return;
             Invoke(new MethodInvoker(() =>
             {
-                m_Notes.Text = notesText;
-                m_Notes.BackColor = notesBackColor;
+                // If the callsign has been changed while we've been doing this work, don't do the update - another request
+                // will have been kicked off since, and we don't want to trample on the later update
+                if (m_Callsign.Text != callsign)
+                    return;
+
+                if (notesText != null)
+                {
+                    m_Notes.Text = notesText;
+                    m_Notes.BackColor = notesBackColor;
+                }
 
                 if (locatorText != null) m_Locator.Text = locatorText;
 

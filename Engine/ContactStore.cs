@@ -306,16 +306,6 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
             return null;
         }
 
-        public Locator GetPreviousLocator(string callsign)
-        {
-            foreach (Contact c in GetPreviousContacts(callsign))
-            {
-                if (!string.IsNullOrEmpty(c.IotaRef))
-                    return c.LocatorReceived;
-            }
-            return null;
-        }
-
         public List<Contact> GetPreviousContacts(string callsign)
         {
             lock (m_Connection)
@@ -365,78 +355,90 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
         private List<string> GetPartialMatches(string callsign, string table)
         {
-            List<string> matches = new List<string>();
-            using (MySqlCommand cmd = m_Connection.CreateCommand())
+            lock (m_Connection)
             {
-                cmd.CommandText = "SELECT callsign, MAX(locator) AS loc FROM " + table + " WHERE callsign LIKE ?callsign GROUP BY callsign ORDER BY callsign";
-                cmd.Parameters.AddWithValue("?callsign", string.Format("%{0}%", callsign.ToUpperInvariant()));
-                using (MySqlDataReader reader = cmd.ExecuteReader())
+                List<string> matches = new List<string>();
+                using (MySqlCommand cmd = m_Connection.CreateCommand())
                 {
-                    while (reader.Read())
+                    cmd.CommandText = "SELECT callsign, MAX(locator) AS loc FROM " + table + " WHERE callsign LIKE ?callsign GROUP BY callsign ORDER BY callsign";
+                    cmd.Parameters.AddWithValue("?callsign", string.Format("%{0}%", callsign.ToUpperInvariant()));
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
-                        string call = reader.GetString(0);
-                        string loc;
-                        if (reader.IsDBNull(1))
-                            loc = string.Empty;
-                        else
-                            loc = reader.GetString(1);
-                        matches.Add(call + " - " + loc);
+                        while (reader.Read())
+                        {
+                            string call = reader.GetString(0);
+                            string loc;
+                            if (reader.IsDBNull(1))
+                                loc = string.Empty;
+                            else
+                                loc = reader.GetString(1);
+                            matches.Add(call + " - " + loc);
+                        }
                     }
                 }
+                return matches;
             }
-            return matches;
         }
 
         private List<string> GetLocatorMatches(string locator, string table)
         {
-            List<string> matches = new List<string>();
-            using (MySqlCommand cmd = m_Connection.CreateCommand())
+            lock (m_Connection)
             {
-                cmd.CommandText = "SELECT callsign, MAX(locator) AS loc FROM " + table + " WHERE locator LIKE ?locator GROUP BY callsign ORDER BY callsign";
-                cmd.Parameters.AddWithValue("?locator", string.Format("%{0}%", locator.ToUpperInvariant()));
-                using (MySqlDataReader reader = cmd.ExecuteReader())
+                List<string> matches = new List<string>();
+                using (MySqlCommand cmd = m_Connection.CreateCommand())
                 {
-                    while (reader.Read())
+                    cmd.CommandText = "SELECT callsign, MAX(locator) AS loc FROM " + table + " WHERE locator LIKE ?locator GROUP BY callsign ORDER BY callsign";
+                    cmd.Parameters.AddWithValue("?locator", string.Format("%{0}%", locator.ToUpperInvariant()));
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
-                        string call = reader.GetString(0);
-                        string loc = reader.GetString(1);
-                        matches.Add(call + " - " + loc);
+                        while (reader.Read())
+                        {
+                            string call = reader.GetString(0);
+                            string loc = reader.GetString(1);
+                            matches.Add(call + " - " + loc);
+                        }
                     }
                 }
+                return matches;
             }
-            return matches;
         }
 
         public bool IsNewSquare(string locator, Band band)
         {
-            if (locator.Length > 4)
-                locator = locator.Substring(0, 4);
-
-            using (MySqlCommand cmd = m_Connection.CreateCommand())
+            lock (m_Connection)
             {
-                cmd.CommandText = "SELECT COUNT(*) FROM log WHERE band LIKE ?band AND locator LIKE ?locator;";
-                cmd.Parameters.AddWithValue("?band", BandHelper.ToString(band));
-                cmd.Parameters.AddWithValue("?locator", locator.ToUpperInvariant() + "%");
-                using (MySqlDataReader reader = cmd.ExecuteReader())
+                if (locator.Length > 4)
+                    locator = locator.Substring(0, 4);
+
+                using (MySqlCommand cmd = m_Connection.CreateCommand())
                 {
-                    if (!reader.Read())
-                        return false;
-                    return reader.GetInt32(0) == 0;
+                    cmd.CommandText = "SELECT COUNT(*) FROM log WHERE band LIKE ?band AND locator LIKE ?locator;";
+                    cmd.Parameters.AddWithValue("?band", BandHelper.ToString(band));
+                    cmd.Parameters.AddWithValue("?locator", locator.ToUpperInvariant() + "%");
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.Read())
+                            return false;
+                        return reader.GetInt32(0) == 0;
+                    }
                 }
             }
         }
 
         public void ImportKnownCalls(string filename)
         {
-            string[] lines = File.ReadAllLines(filename);
-            using (MySqlCommand cmd = m_Connection.CreateCommand())
+            lock (m_Connection)
             {
-                cmd.CommandText = "INSERT IGNORE INTO knowncalls (callsign) VALUES (?callsign)";
-                cmd.Parameters.Add("?callsign", MySqlDbType.VarChar);
-                foreach (string callsign in lines)
+                string[] lines = File.ReadAllLines(filename);
+                using (MySqlCommand cmd = m_Connection.CreateCommand())
                 {
-                    cmd.Parameters["?callsign"].Value = callsign.Trim().ToUpperInvariant();
-                    cmd.ExecuteNonQuery();
+                    cmd.CommandText = "INSERT IGNORE INTO knowncalls (callsign) VALUES (?callsign)";
+                    cmd.Parameters.Add("?callsign", MySqlDbType.VarChar);
+                    foreach (string callsign in lines)
+                    {
+                        cmd.Parameters["?callsign"].Value = callsign.Trim().ToUpperInvariant();
+                        cmd.ExecuteNonQuery();
+                    }
                 }
             }
         }

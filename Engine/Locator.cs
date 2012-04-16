@@ -14,7 +14,20 @@ namespace Engine
 
         public Locator(string maidenhead)
         {
-            m_Maidenhead = maidenhead;
+            if (maidenhead == null)
+            {
+                m_Lat = 0.0;
+                m_Long = 0.0;
+            }
+            else
+            {
+                m_Maidenhead = maidenhead.Trim();
+                if (m_Maidenhead.Length == 0)
+                {
+                    m_Lat = 0.0;
+                    m_Long = 0.0;
+                }
+            }
         }
 
         public Locator(double latitude, double longitude)

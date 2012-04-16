@@ -25,7 +25,9 @@ namespace Engine
             // Should be pretty much async
             if (!EnsurePortOpen())
                 throw new InvalidOperationException("Cannot open WinKey on port " + m_PortName);
-            m_Port.Write(str);
+
+            byte[] bytes = Encoding.ASCII.GetBytes(str);
+            m_Port.Write(bytes,0, bytes.Length);
         }
 
         public void StopSending()
@@ -69,12 +71,16 @@ namespace Engine
                         return false; // Something went wrong opening the port - not a WinKey?
 
                     // Open host mode
-                    m_Port.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                    m_Port.Write(new byte[] { 0x00, 0x02 }, 0, 2);
                     int version = m_Port.ReadChar();
                     if (version < 20 || version > 30)
                         return false; // Weird version code - not a WinKey?
 
                     m_Port.DataReceived += new SerialDataReceivedEventHandler(DataReceived);
+                    
+                    // Use the speed pot value
+                    m_Port.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+
                     return true;
                 }
             }

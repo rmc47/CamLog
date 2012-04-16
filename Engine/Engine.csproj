@@ -69,6 +69,7 @@
     <Compile Include="CivServer.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="ContactStore.cs" />
+    <Compile Include="CWMacro.cs" />
     <Compile Include="DatabaseType.cs" />
     <Compile Include="DBMigrations\DbMigrator.cs" />
     <Compile Include="FrequencyHelper.cs" />

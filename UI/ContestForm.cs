@@ -588,5 +588,10 @@ namespace UI
         {
             Controller.OpenLog();
         }
+
+        private void WipeQSOClicked(object sender, EventArgs e)
+        {
+            ClearContactRow();
+        }
     }
 }

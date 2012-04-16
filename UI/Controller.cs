@@ -14,6 +14,15 @@ namespace UI
 
         public ContactStore ContactStore {get;private set;}
         public CivServer CivServer { get;private set;}
+        public WinKey WinKey { get; private set; }
+        public CWMacro CWMacro { get; private set; }
+
+        public Controller()
+        {
+            WinKey = new WinKey("COM17");
+            CWMacro = new CWMacro(null);
+            CWMacro.WinKey = WinKey;
+        }
 
         public void OpenLog()
         {

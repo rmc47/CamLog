@@ -599,7 +599,14 @@ namespace UI
             if (e.KeyCode >= Keys.F1 && e.KeyCode <= Keys.F12 && e.Modifiers == Keys.None)
             {
                 e.SuppressKeyPress = true;
-                Controller.CWMacro.SendMacro(e.KeyCode - Keys.F1, new Dictionary<string, string>());
+                try
+                {
+                    Controller.CWMacro.SendMacro(e.KeyCode - Keys.F1, new Dictionary<string, string>());
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error sending CW macro: " + ex.Message);
+                }
             }
         }
     }

@@ -81,6 +81,11 @@ namespace UI
             this.m_Notes = new System.Windows.Forms.Label();
             this.m_ContactTable = new System.Windows.Forms.TableLayoutPanel();
             this.m_RedrawTimer = new System.Windows.Forms.Timer(this.components);
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.winKeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             groupBox1 = new System.Windows.Forms.GroupBox();
             label7 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
@@ -103,6 +108,7 @@ namespace UI
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             this.m_ContactTable.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -123,7 +129,7 @@ namespace UI
             groupBox1.Controls.Add(this.m_OurLocator);
             groupBox1.Controls.Add(this.m_OurBand);
             groupBox1.Controls.Add(this.m_OurOperator);
-            groupBox1.Location = new System.Drawing.Point(400, 12);
+            groupBox1.Location = new System.Drawing.Point(400, 27);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new System.Drawing.Size(392, 147);
             groupBox1.TabIndex = 0;
@@ -289,7 +295,7 @@ namespace UI
             // 
             groupBox2.Controls.Add(this.m_MatchesKnownCalls);
             groupBox2.Controls.Add(this.m_MatchesThisContest);
-            groupBox2.Location = new System.Drawing.Point(12, 12);
+            groupBox2.Location = new System.Drawing.Point(12, 27);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new System.Drawing.Size(382, 147);
             groupBox2.TabIndex = 14;
@@ -543,7 +549,7 @@ namespace UI
             // 
             // m_Notes
             // 
-            this.m_Notes.Location = new System.Drawing.Point(12, 384);
+            this.m_Notes.Location = new System.Drawing.Point(12, 399);
             this.m_Notes.Name = "m_Notes";
             this.m_Notes.Size = new System.Drawing.Size(780, 18);
             this.m_Notes.TabIndex = 13;
@@ -587,7 +593,7 @@ namespace UI
             this.m_ContactTable.Controls.Add(this.m_RstReceived, 5, 9);
             this.m_ContactTable.Controls.Add(this.m_SerialReceived, 6, 9);
             this.m_ContactTable.Controls.Add(this.m_Locator, 7, 9);
-            this.m_ContactTable.Location = new System.Drawing.Point(12, 165);
+            this.m_ContactTable.Location = new System.Drawing.Point(12, 180);
             this.m_ContactTable.Name = "m_ContactTable";
             this.m_ContactTable.RowCount = 10;
             this.m_ContactTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -608,18 +614,59 @@ namespace UI
             this.m_RedrawTimer.Interval = 2500;
             this.m_RedrawTimer.Tick += new System.EventHandler(this.m_RedrawTimer_Tick);
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.logToolStripMenuItem,
+            this.optionsToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(796, 24);
+            this.menuStrip1.TabIndex = 15;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // logToolStripMenuItem
+            // 
+            this.logToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openLogToolStripMenuItem});
+            this.logToolStripMenuItem.Name = "logToolStripMenuItem";
+            this.logToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.logToolStripMenuItem.Text = "&Log";
+            // 
+            // openLogToolStripMenuItem
+            // 
+            this.openLogToolStripMenuItem.Name = "openLogToolStripMenuItem";
+            this.openLogToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openLogToolStripMenuItem.Text = "&Open log...";
+            this.openLogToolStripMenuItem.Click += new System.EventHandler(this.openLogToolStripMenuItem_Click);
+            // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.winKeyToolStripMenuItem});
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.optionsToolStripMenuItem.Text = "&Options";
+            // 
+            // winKeyToolStripMenuItem
+            // 
+            this.winKeyToolStripMenuItem.Name = "winKeyToolStripMenuItem";
+            this.winKeyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.winKeyToolStripMenuItem.Text = "WinKey...";
+            // 
             // ContestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(796, 398);
+            this.ClientSize = new System.Drawing.Size(796, 423);
             this.Controls.Add(this.m_ContactTable);
             this.Controls.Add(groupBox2);
             this.Controls.Add(this.m_Notes);
             this.Controls.Add(groupBox1);
+            this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(812, 436);
-            this.MinimumSize = new System.Drawing.Size(812, 436);
             this.Name = "ContestForm";
             this.Text = "M0VFC Contest Log";
             this.Load += new System.EventHandler(this.ContestForm_Load);
@@ -629,7 +676,10 @@ namespace UI
             groupBox2.ResumeLayout(false);
             this.m_ContactTable.ResumeLayout(false);
             this.m_ContactTable.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -661,6 +711,11 @@ namespace UI
         private System.Windows.Forms.Button m_Export;
         private System.Windows.Forms.Button m_ExportAdif;
         private System.Windows.Forms.Button m_ExportCabrillo;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem logToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openLogToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem winKeyToolStripMenuItem;
     }
 }
 

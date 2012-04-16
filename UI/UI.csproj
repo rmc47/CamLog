@@ -72,6 +72,7 @@
     <Compile Include="ContestForm.Designer.cs">
       <DependentUpon>ContestForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controller.cs" />
     <Compile Include="EditForm.cs">
       <SubType>Form</SubType>
     </Compile>

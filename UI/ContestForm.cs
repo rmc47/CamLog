@@ -16,6 +16,7 @@ namespace UI
         private static readonly Color c_DupeColor = Color.Red;
         private static readonly Color c_WorkedOtherBandsColor = Color.Green;
 
+        private Controller Controller { get; set; }
         private ContactStore m_ContactStore;
         private CivServer m_CivServer;
         private CallsignLookup m_CallsignLookup = new CallsignLookup("cty.xml");
@@ -27,7 +28,35 @@ namespace UI
         
         public ContestForm()
         {
+            Controller = Program.Controller;
             InitializeComponent();
+
+            Controller.ContactStoreChanged += new EventHandler(ContactStoreChanged);
+            Controller.CivServerChanged += new EventHandler(CivServerChanged);
+        }
+
+        private void CivServerChanged(object sender, EventArgs e)
+        {
+            if (m_CivServer != null)
+            {
+                m_CivServer.FrequencyChanged -= m_CivServer_FrequencyChanged;
+                m_CivServer.ModeChanged -= m_CivServer_ModeChanged;
+            }
+
+            m_CivServer = Controller.CivServer;
+            if (m_CivServer != null)
+            {
+                m_CivServer.FrequencyChanged += m_CivServer_FrequencyChanged;
+                m_CivServer.ModeChanged += m_CivServer_ModeChanged;
+            }
+        }
+
+        private void ContactStoreChanged(object sender, EventArgs e)
+        {
+            m_ContactStore = Controller.ContactStore;
+
+            m_RedrawTimer.Enabled = true;
+            m_SerialSent.Text = m_ContactStore.GetSerial(Band.Unknown).ToString().PadLeft(3, '0');
         }
 
         private void ClearContactRow()
@@ -242,30 +271,7 @@ namespace UI
 
         private void ContestForm_Shown(object sender, EventArgs e)
         {
-            // Get the login details
-            using (LogonForm lf = new LogonForm())
-            {
-                DialogResult dr = lf.ShowDialog(this);
-                if (dr != DialogResult.OK)
-                    Close();
-                else
-                {
-                    m_ContactStore = new ContactStore(lf.Server, lf.Database, lf.Username, lf.Password);
-
-                    m_RedrawTimer.Enabled = true;
-                    m_SerialSent.Text = m_ContactStore.GetSerial(Band.Unknown).ToString().PadLeft(3, '0');
-                    if (!string.IsNullOrEmpty(lf.CivSerialPort))
-                    {
-                        m_CivServer = new CivServer(lf.CivSerialPort, lf.CivDtr, lf.CivRts);
-                        // Hook up to the frequency and mode change events
-                        m_CivServer.FrequencyChanged += new EventHandler<EventArgs>(m_CivServer_FrequencyChanged);
-                        m_CivServer.ModeChanged += new EventHandler<EventArgs>(m_CivServer_ModeChanged);
-
-                        // Force a frequency query
-                        m_CivServer.QueryFrequency();
-                    }
-                }
-            }
+            Controller.OpenLog();
         }
 
         private void ContactControls_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -578,5 +584,9 @@ namespace UI
             }
         }
 
+        private void openLogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Controller.OpenLog();
+        }
     }
 }

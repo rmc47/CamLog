@@ -14,6 +14,8 @@ namespace EngineTests
         public void TryImportAdif()
         {
             List<Contact> contacts = AdifHandler.ImportAdif(@"C:\temp\test.adi");
+            ContactStore store = new ContactStore("localhost", "fp2011", "root", "aopen");
+            contacts.ForEach(store.SaveContact);
         }
     }
 }

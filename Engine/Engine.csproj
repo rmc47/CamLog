@@ -85,6 +85,7 @@
     <Compile Include="Registry.cs" />
     <Compile Include="SerialProvider.cs" />
     <Compile Include="SourceCallsign.cs" />
+    <Compile Include="WinKey.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="cty.xml">

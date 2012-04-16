@@ -75,7 +75,7 @@ namespace Engine
                 // This parsing is horrid. TODO: Figure out how to use IFormatProvider properly.
                 string dateStr = currentRecord["qso_date"];
                 string timeOnStr = currentRecord["time_on"];
-                DateTime date = new DateTime(int.Parse(dateStr.Substring(0, 4)), int.Parse(dateStr.Substring(2, 2)), int.Parse(dateStr.Substring(4, 2)), int.Parse(timeOnStr.Substring(0, 2)), int.Parse(timeOnStr.Substring(2, 2)), 0);
+                DateTime date = new DateTime(int.Parse(dateStr.Substring(0, 4)), int.Parse(dateStr.Substring(4, 2)), int.Parse(dateStr.Substring(6, 2)), int.Parse(timeOnStr.Substring(0, 2)), int.Parse(timeOnStr.Substring(2, 2)), 0);
                 c.StartTime = date;
 
                 c.Band = BandHelper.Parse(currentRecord["band"]);

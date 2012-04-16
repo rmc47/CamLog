@@ -402,58 +402,100 @@ namespace UI
             if (m_ContactStore == null)
                 return;
 
+            ThreadPool.QueueUserWorkItem(_ => CallsignChangedWorker(m_Callsign.Text, m_Band.Text, m_OurLocatorValue));
+        }
+
+        private void CallsignChangedWorker(string callsign, string ourBandText, Locator ourLocatorValue)
+        {
+            string notesText;
+            Color notesBackColor;
+            string locatorText = null;
+            string beamText = null, distanceText = null, commentsText = null;
+            object[] matchesKnownCalls = null, matchesThisContest = null, locatorMatchesThisContest = null;
 
             Locator existingLocator;
-            List<Band> bands = m_ContactStore.GetPreviousBands(m_Callsign.Text, out existingLocator);
-            Band ourBand = BandHelper.Parse(m_Band.Text);
+            List<Band> bands = m_ContactStore.GetPreviousBands(callsign, out existingLocator);
+            Band ourBand = BandHelper.Parse(ourBandText);
             if (bands.Contains(ourBand))
             {
-                m_Notes.BackColor = c_DupeColor;
-                m_Notes.Text = string.Format("Already worked {0} on {1}", m_Callsign.Text, BandHelper.ToString(ourBand));
+                notesBackColor = c_DupeColor;
+                notesText = string.Format("Already worked {0} on {1}", callsign, BandHelper.ToString(ourBand));
             }
             else if (bands.Count > 0)
             {
-                m_Notes.BackColor = c_WorkedOtherBandsColor;
+                notesBackColor = c_WorkedOtherBandsColor;
                 string bandString = string.Empty;
                 foreach (Band b in bands)
                 {
                     bandString += BandHelper.ToString(b) + ", ";
                 }
-                m_Notes.Text = string.Format("Worked {0} on {1} - {2}", m_Callsign.Text, bandString, existingLocator);
+                notesText = string.Format("Worked {0} on {1} - {2}", callsign, bandString, existingLocator);
                 if (existingLocator != null)
-                    m_Locator.Text = existingLocator.ToString();
+                    locatorText = existingLocator.ToString();
             }
             else
             {
-                m_Notes.Text = string.Empty;
-                m_Notes.BackColor = BackColor;
+                notesText = string.Empty;
+                notesBackColor = Color.Transparent;
             }
 
             // Do a first guess beam heading etc
-            PrefixRecord pfx = m_CallsignLookup.LookupPrefix(m_Callsign.Text);
+            PrefixRecord pfx = m_CallsignLookup.LookupPrefix(callsign);
             if (pfx != null)
             {
                 Locator theirLocator = new Locator(pfx.Latitude, pfx.Longitude);
-                m_Beam.Text = Geographics.BeamHeading(m_OurLocatorValue, theirLocator).ToString();
-                m_Distance.Text = Math.Ceiling(Geographics.GeodesicDistance(m_OurLocatorValue, theirLocator) / 1000).ToString();
-                m_Comments.Text = pfx.Entity;
+                beamText = Geographics.BeamHeading(ourLocatorValue, theirLocator).ToString();
+                distanceText = Math.Ceiling(Geographics.GeodesicDistance(ourLocatorValue, theirLocator) / 1000).ToString();
+                commentsText = pfx.Entity;
             }
 
             // Populate the lists of partial callsign matches
-            if (m_Callsign.TextLength > 0)
+            if (callsign.Length > 0)
             {
-                m_MatchesKnownCalls.Items.Clear();
-                m_MatchesThisContest.Items.Clear();
-                m_MatchesKnownCalls.Items.AddRange(m_ContactStore.GetPartialMatchesKnownCalls(m_Callsign.Text).ToArray());
-                m_MatchesThisContest.Items.AddRange(m_ContactStore.GetPartialMatchesThisContest(m_Callsign.Text).ToArray());
+                matchesKnownCalls = m_ContactStore.GetPartialMatchesKnownCalls(callsign).ToArray();
+                matchesThisContest = m_ContactStore.GetPartialMatchesThisContest(callsign).ToArray();
             }
 
             // Also search locators if we've got enough digits for it to be sensibly 
             // distinguished from a callsign
-            if (m_Callsign.TextLength > 2)
+            if (callsign.Length > 2)
             {
-                m_MatchesThisContest.Items.AddRange(m_ContactStore.GetLocatorMatchesThisContest(m_Callsign.Text).ToArray());
+                locatorMatchesThisContest = m_ContactStore.GetLocatorMatchesThisContest(callsign).ToArray();
             }
+
+            // Actually populate everything back on the UI thread!
+            if (Disposing || IsDisposed || !IsHandleCreated)
+                return;
+            Invoke(new MethodInvoker(() =>
+            {
+                m_Notes.Text = notesText;
+                m_Notes.BackColor = notesBackColor;
+
+                if (locatorText != null) m_Locator.Text = locatorText;
+
+                if (beamText != null) m_Beam.Text = beamText;
+                if (distanceText != null) m_Distance.Text = distanceText;
+                if (commentsText != null) m_Comments.Text = commentsText;
+
+                if (matchesKnownCalls != null || locatorMatchesThisContest != null)
+                {
+                    m_MatchesKnownCalls.BeginUpdate();
+                    m_MatchesKnownCalls.Items.Clear();
+
+                    if (matchesKnownCalls != null)
+                        m_MatchesKnownCalls.Items.AddRange(matchesKnownCalls);
+                    if (locatorMatchesThisContest != null)
+                        m_MatchesKnownCalls.Items.AddRange(locatorMatchesThisContest);
+                    m_MatchesKnownCalls.EndUpdate();
+                }
+                if (matchesThisContest != null)
+                {
+                    m_MatchesThisContest.BeginUpdate();
+                    m_MatchesThisContest.Items.Clear();
+                    m_MatchesThisContest.Items.AddRange(matchesThisContest);
+                    m_MatchesThisContest.EndUpdate();
+                }
+            }));
         }
 
         private void m_OurMode_SelectedIndexChanged(object sender, EventArgs e)

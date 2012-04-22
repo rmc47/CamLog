@@ -59,7 +59,7 @@ namespace UI
             m_SerialSent.Text = m_ContactStore.GetSerial(Band.Unknown).ToString().PadLeft(3, '0');
         }
 
-        private void ClearContactRow()
+        private void ClearContactRow(bool newSerial)
         {
             m_Callsign.Text = string.Empty;
             m_RstReceived.Text = m_RstSent.Text = ModeHelper.GetDefaultReport(ModeHelper.Parse(m_OurMode.Text));
@@ -67,7 +67,7 @@ namespace UI
             m_Locator.Text = string.Empty;
             m_Comments.Text = string.Empty;
 
-            if (m_ContactStore != null) // Can't do this before we connect to the DB
+            if (newSerial && m_ContactStore != null) // Can't do this before we connect to the DB
                 m_SerialSent.Text = m_ContactStore.GetSerial(BandHelper.Parse(m_Band.Text)).ToString().PadLeft(3, '0'); // For IOTA just use unknown band
 
             m_LocatorSetManually = false;
@@ -231,7 +231,7 @@ namespace UI
             InitialisePreviousContactsGrid();
 
             // Clear stuff out ready for use
-            ClearContactRow();
+            ClearContactRow(true);
 
             // Get our station number from the registry
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\M0VFC Contest Log", false))
@@ -281,7 +281,7 @@ namespace UI
                 if (ValidateContact())
                 {
                     m_ContactStore.SaveContact(Contact);
-                    ClearContactRow();
+                    ClearContactRow(true);
                     PopulatePreviousContactsGrid();
                 }
             }
@@ -644,7 +644,7 @@ namespace UI
 
         private void WipeQSOClicked(object sender, EventArgs e)
         {
-            ClearContactRow();
+            ClearContactRow(false);
         }
 
         private void ContestForm_KeyDown(object sender, KeyEventArgs e)

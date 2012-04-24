@@ -220,7 +220,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
             }
         }
 
-        public List<Contact> GetLatestContacts(int maxToFetch)
+        public List<Contact> GetLatestContacts(int maxToFetch, string station)
         {
             lock (m_Connection)
             {
@@ -228,7 +228,14 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                 List<KeyValuePair<int, int>> contactIds = new List<KeyValuePair<int, int>>();
                 using (MySqlCommand cmd = m_Connection.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT sourceId, id FROM log ORDER BY endTime DESC LIMIT " + maxToFetch;
+                    if (string.IsNullOrEmpty(station))
+                        cmd.CommandText = "SELECT sourceId, id FROM log ORDER BY endTime DESC LIMIT ?maxToFetch";
+                    else
+                        cmd.CommandText = "SELECT sourceId, id FROM log WHERE station=?station ORDER BY endTime DESC LIMIT ?maxToFetch";
+
+                    cmd.Parameters.AddWithValue("?station", station);
+                    cmd.Parameters.AddWithValue("?maxToFetch", maxToFetch);
+
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())

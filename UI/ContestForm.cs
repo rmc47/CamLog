@@ -337,7 +337,14 @@ namespace UI
         {
             if (m_ContactStore == null)
                 return;
-            List<Contact> contacts = m_ContactStore.GetLatestContacts(m_ContactTable.RowCount - 2);
+
+            string station;
+            if (m_OnlyMyQSOs.Checked)
+                station = m_Station.Text;
+            else
+                station = null;
+
+            List<Contact> contacts = m_ContactStore.GetLatestContacts(m_ContactTable.RowCount - 2, station);
             Locator ourLocation = m_OurLocatorValue;
             for (int i = 1; i < m_ContactTable.RowCount - 1; i++)
             {
@@ -373,6 +380,15 @@ namespace UI
                     rowLabels[(int)ContactTableColumns.SerialSent].Text = c.SerialSent.ToString().PadLeft(3, '0');
                     rowLabels[(int)ContactTableColumns.Time].Text = c.StartTime.ToString("HHmm");
                     m_ContactIds[i - 1] = new KeyValuePair<int, int>(c.SourceId, c.Id);
+
+                    if (string.Equals(c.Station, m_Station.Text, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        Array.ForEach(rowLabels, l => l.ForeColor = Color.Black);
+                    }
+                    else
+                    {
+                        Array.ForEach(rowLabels, l => l.ForeColor = Color.DarkGray);
+                    }
 
                 }
                 else
@@ -661,6 +677,12 @@ namespace UI
                     MessageBox.Show("Error sending CW macro: " + ex.Message);
                 }
             }
+        }
+
+        private void OnlyMyQSOsClicked(object sender, EventArgs e)
+        {
+            m_OnlyMyQSOs.Checked = !m_OnlyMyQSOs.Checked;
+            PopulatePreviousContactsGrid();
         }
     }
 }

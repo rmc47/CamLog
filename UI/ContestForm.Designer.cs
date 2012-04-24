@@ -87,6 +87,9 @@ namespace UI
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.winKeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wipeQSOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_OnlyMyQSOs = new System.Windows.Forms.ToolStripMenuItem();
             groupBox1 = new System.Windows.Forms.GroupBox();
             label7 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
@@ -619,6 +622,7 @@ namespace UI
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.logToolStripMenuItem,
+            this.viewToolStripMenuItem,
             this.optionsToolStripMenuItem,
             this.wipeQSOToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -638,14 +642,15 @@ namespace UI
             // openLogToolStripMenuItem
             // 
             this.openLogToolStripMenuItem.Name = "openLogToolStripMenuItem";
-            this.openLogToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openLogToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.openLogToolStripMenuItem.Text = "&Open log...";
             this.openLogToolStripMenuItem.Click += new System.EventHandler(this.openLogToolStripMenuItem_Click);
             // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.winKeyToolStripMenuItem});
+            this.winKeyToolStripMenuItem,
+            this.toolStripMenuItem1});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "&Options";
@@ -662,6 +667,26 @@ namespace UI
             this.wipeQSOToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
             this.wipeQSOToolStripMenuItem.Text = "&Wipe QSO";
             this.wipeQSOToolStripMenuItem.Click += new System.EventHandler(this.WipeQSOClicked);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+            // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_OnlyMyQSOs});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "&View";
+            // 
+            // m_OnlyMyQSOs
+            // 
+            this.m_OnlyMyQSOs.Name = "m_OnlyMyQSOs";
+            this.m_OnlyMyQSOs.Size = new System.Drawing.Size(152, 22);
+            this.m_OnlyMyQSOs.Text = "Only my QSOs";
+            this.m_OnlyMyQSOs.Click += new System.EventHandler(this.OnlyMyQSOsClicked);
             // 
             // ContestForm
             // 
@@ -728,6 +753,9 @@ namespace UI
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem winKeyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem wipeQSOToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem m_OnlyMyQSOs;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
     }
 }
 

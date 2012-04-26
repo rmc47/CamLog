@@ -57,6 +57,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Referenced Dlls\MySql.Data.dll</HintPath>
     </Reference>
+    <Reference Include="RigCAT.NET">
+      <HintPath>..\..\CloudLogCAT\Build\Debug\RigCAT.NET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -66,7 +69,6 @@
     <Compile Include="Band.cs" />
     <Compile Include="CabrilloExporter.cs" />
     <Compile Include="CallsignLookup.cs" />
-    <Compile Include="CivServer.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="ContactStore.cs" />
     <Compile Include="CWMacro.cs" />

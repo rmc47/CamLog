@@ -13,11 +13,9 @@ namespace UI
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (m_CivServer != null)
+            if (m_RadioCAT != null)
             {
-                m_CivServer.FrequencyChanged -= m_CivServer_FrequencyChanged;
-                m_CivServer.ModeChanged -= m_CivServer_ModeChanged;
-                m_CivServer.Dispose();
+                m_RadioCAT.FrequencyChanged -= m_CivServer_FrequencyChanged;
             }
 
             if (disposing && (components != null))

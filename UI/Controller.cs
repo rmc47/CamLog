@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Engine;
+using RigCAT.NET;
 
 namespace UI
 {
@@ -13,7 +14,7 @@ namespace UI
         public event EventHandler CivServerChanged;
 
         public ContactStore ContactStore {get;private set;}
-        public CivServer CivServer { get;private set;}
+        public IRadio Radio { get;private set;}
         public WinKey WinKey { get; private set; }
         public CWMacro CWMacro { get; private set; }
 
@@ -39,12 +40,9 @@ namespace UI
 
                 if (!string.IsNullOrEmpty(lf.CivSerialPort))
                 {
-                    CivServer = new CivServer(lf.CivSerialPort, lf.CivDtr, lf.CivRts);
+                    Radio = new RadioFactory().GetRadio(RadioModel.IcomGeneric, new RadioConnectionSettings { BaudRate = 19200, FlowControl = FlowControl.None, Port = "COM2", UseDTR = true, UseRTS = true });
                     if (CivServerChanged != null)
                         CivServerChanged(this, new EventArgs());
-
-                    // Force a frequency query
-                    CivServer.QueryFrequency();
                 }
             }
         }

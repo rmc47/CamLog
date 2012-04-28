@@ -34,6 +34,10 @@
     <Reference Include="itextsharp">
       <HintPath>..\Referenced Dlls\itextsharp.dll</HintPath>
     </Reference>
+    <Reference Include="RigCAT.NET, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\CloudLogCAT\Build\Debug\RigCAT.NET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

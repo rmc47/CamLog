@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using RigCAT.NET;
 
 namespace Engine
 {
@@ -37,6 +38,22 @@ namespace Engine
                 case Mode.RTTY: return "RTTY";
                 case Mode.DStar: return "D-STAR";
                 case Mode.SSTV: return "SSTV";
+                default: return "Unknown";
+            }
+        }
+
+        public static string ToString(OperatingMode m)
+        {
+            switch (m)
+            {
+                case OperatingMode.AM: return "AM";
+                case OperatingMode.CW: return "CW";
+                case OperatingMode.CWRev: return "CW";
+                case OperatingMode.Data: return "Data";
+                case OperatingMode.DataRev: return "Data";
+                case OperatingMode.FM: return "FM";
+                case OperatingMode.LSB: return "LSB";
+                case OperatingMode.USB: return "USB";
                 default: return "Unknown";
             }
         }

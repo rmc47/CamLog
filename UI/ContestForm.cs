@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Engine;
 using Microsoft.Win32;
 using System.Threading;
+using RigCAT.NET;
 
 namespace UI
 {
@@ -18,7 +19,7 @@ namespace UI
 
         private Controller Controller { get; set; }
         private ContactStore m_ContactStore;
-        private CivServer m_CivServer;
+        private IRadio m_RadioCAT;
         private CallsignLookup m_CallsignLookup = new CallsignLookup("cty.xml");
         private Locator m_OurLocatorValue = new Locator("JO01GI");
         private Label[][] m_ContactTableLabels;
@@ -37,17 +38,15 @@ namespace UI
 
         private void CivServerChanged(object sender, EventArgs e)
         {
-            if (m_CivServer != null)
+            if (m_RadioCAT != null)
             {
-                m_CivServer.FrequencyChanged -= m_CivServer_FrequencyChanged;
-                m_CivServer.ModeChanged -= m_CivServer_ModeChanged;
+                m_RadioCAT.FrequencyChanged -= m_CivServer_FrequencyChanged;
             }
 
-            m_CivServer = Controller.CivServer;
-            if (m_CivServer != null)
+            m_RadioCAT = Controller.Radio;
+            if (m_RadioCAT != null)
             {
-                m_CivServer.FrequencyChanged += m_CivServer_FrequencyChanged;
-                m_CivServer.ModeChanged += m_CivServer_ModeChanged;
+                m_RadioCAT.FrequencyChanged += m_CivServer_FrequencyChanged;
             }
         }
 
@@ -245,20 +244,13 @@ namespace UI
             }
         }
 
-        void m_CivServer_ModeChanged(object sender, EventArgs e)
-        {
-            Invoke(new MethodInvoker(delegate
-            {
-                m_OurMode.SelectedItem = ModeHelper.ToString(m_CivServer.Mode);
-            }));
-        }
-
         void m_CivServer_FrequencyChanged(object sender, EventArgs e)
         {
             Invoke(new MethodInvoker(delegate
             {
-                m_Frequency.Text = FrequencyHelper.ToString(m_CivServer.Frequency);
-                m_OurBand.SelectedItem = BandHelper.ToString(BandHelper.FromFrequency(m_CivServer.Frequency));
+                m_Frequency.Text = FrequencyHelper.ToString(m_RadioCAT.PrimaryFrequency);
+                m_OurBand.SelectedItem = BandHelper.ToString(BandHelper.FromFrequency(m_RadioCAT.PrimaryFrequency));
+                m_OurMode.SelectedItem = ModeHelper.ToString(m_RadioCAT.PrimaryMode);
             }));
         }
 

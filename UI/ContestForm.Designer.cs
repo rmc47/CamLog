@@ -87,9 +87,21 @@ namespace UI
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.winKeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wipeQSOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.m_OnlyMyQSOs = new System.Windows.Forms.ToolStripMenuItem();
+            this.rigControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            //this.m_QSOGrid = new System.Windows.Forms.DataGridView();
+            //this.m_QBand = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            //this.m_QTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            //this.m_QCallsign = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            //this.m_QSent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            //this.m_QSentSerial = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            //this.m_QReceived = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            //this.m_QReceivedSerial = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            //this.m_QLocator = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            //this.m_QDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            //this.m_QBeam = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            //this.m_QComments = new System.Windows.Forms.DataGridViewTextBoxColumn();
             groupBox1 = new System.Windows.Forms.GroupBox();
             label7 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
@@ -113,6 +125,7 @@ namespace UI
             groupBox2.SuspendLayout();
             this.m_ContactTable.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            //((System.ComponentModel.ISupportInitialize)(this.m_QSOGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -642,7 +655,7 @@ namespace UI
             // openLogToolStripMenuItem
             // 
             this.openLogToolStripMenuItem.Name = "openLogToolStripMenuItem";
-            this.openLogToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.openLogToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.openLogToolStripMenuItem.Text = "&Open log...";
             this.openLogToolStripMenuItem.Click += new System.EventHandler(this.openLogToolStripMenuItem_Click);
             // 
@@ -650,7 +663,7 @@ namespace UI
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.winKeyToolStripMenuItem,
-            this.toolStripMenuItem1});
+            this.rigControlToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "&Options";
@@ -668,11 +681,6 @@ namespace UI
             this.wipeQSOToolStripMenuItem.Text = "&Wipe QSO";
             this.wipeQSOToolStripMenuItem.Click += new System.EventHandler(this.WipeQSOClicked);
             // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
-            // 
             // viewToolStripMenuItem
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -688,11 +696,104 @@ namespace UI
             this.m_OnlyMyQSOs.Text = "Only my QSOs";
             this.m_OnlyMyQSOs.Click += new System.EventHandler(this.OnlyMyQSOsClicked);
             // 
+            // rigControlToolStripMenuItem
+            // 
+            this.rigControlToolStripMenuItem.Name = "rigControlToolStripMenuItem";
+            this.rigControlToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.rigControlToolStripMenuItem.Text = "Rig Control...";
+            //// 
+            //// m_QSOGrid
+            //// 
+            //this.m_QSOGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            //this.m_QSOGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            //this.m_QBand,
+            //this.m_QTime,
+            //this.m_QCallsign,
+            //this.m_QSent,
+            //this.m_QSentSerial,
+            //this.m_QReceived,
+            //this.m_QReceivedSerial,
+            //this.m_QLocator,
+            //this.m_QDistance,
+            //this.m_QBeam,
+            //this.m_QComments});
+            //this.m_QSOGrid.Location = new System.Drawing.Point(12, 208);
+            //this.m_QSOGrid.Name = "m_QSOGrid";
+            //this.m_QSOGrid.Size = new System.Drawing.Size(774, 159);
+            //this.m_QSOGrid.TabIndex = 2;
+            //// 
+            //// m_QBand
+            //// 
+            //this.m_QBand.HeaderText = "Band";
+            //this.m_QBand.Name = "m_QBand";
+            //this.m_QBand.ReadOnly = true;
+            //// 
+            //// m_QTime
+            //// 
+            //this.m_QTime.HeaderText = "Time";
+            //this.m_QTime.Name = "m_QTime";
+            //this.m_QTime.ReadOnly = true;
+            //// 
+            //// m_QCallsign
+            //// 
+            //this.m_QCallsign.HeaderText = "Callsign";
+            //this.m_QCallsign.Name = "m_QCallsign";
+            //this.m_QCallsign.ReadOnly = true;
+            //// 
+            //// m_QSent
+            //// 
+            //this.m_QSent.HeaderText = "Sent";
+            //this.m_QSent.Name = "m_QSent";
+            //this.m_QSent.ReadOnly = true;
+            //// 
+            //// m_QSentSerial
+            //// 
+            //this.m_QSentSerial.HeaderText = "Serial";
+            //this.m_QSentSerial.Name = "m_QSentSerial";
+            //this.m_QSentSerial.ReadOnly = true;
+            //// 
+            //// m_QReceived
+            //// 
+            //this.m_QReceived.HeaderText = "Received";
+            //this.m_QReceived.Name = "m_QReceived";
+            //this.m_QReceived.ReadOnly = true;
+            //// 
+            //// m_QReceivedSerial
+            //// 
+            //this.m_QReceivedSerial.HeaderText = "Serial";
+            //this.m_QReceivedSerial.Name = "m_QReceivedSerial";
+            //this.m_QReceivedSerial.ReadOnly = true;
+            //// 
+            //// m_QLocator
+            //// 
+            //this.m_QLocator.HeaderText = "Locator";
+            //this.m_QLocator.Name = "m_QLocator";
+            //this.m_QLocator.ReadOnly = true;
+            //// 
+            //// m_QDistance
+            //// 
+            //this.m_QDistance.HeaderText = "Dist";
+            //this.m_QDistance.Name = "m_QDistance";
+            //this.m_QDistance.ReadOnly = true;
+            //// 
+            //// m_QBeam
+            //// 
+            //this.m_QBeam.HeaderText = "Beam";
+            //this.m_QBeam.Name = "m_QBeam";
+            //this.m_QBeam.ReadOnly = true;
+            //// 
+            //// m_QComments
+            //// 
+            //this.m_QComments.HeaderText = "Comments";
+            //this.m_QComments.Name = "m_QComments";
+            //this.m_QComments.ReadOnly = true;
+            // 
             // ContestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(796, 423);
+            //this.Controls.Add(this.m_QSOGrid);
             this.Controls.Add(this.m_ContactTable);
             this.Controls.Add(groupBox2);
             this.Controls.Add(this.m_Notes);
@@ -714,6 +815,7 @@ namespace UI
             this.m_ContactTable.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            //((System.ComponentModel.ISupportInitialize)(this.m_QSOGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -755,7 +857,19 @@ namespace UI
         private System.Windows.Forms.ToolStripMenuItem wipeQSOToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem m_OnlyMyQSOs;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem rigControlToolStripMenuItem;
+        //private System.Windows.Forms.DataGridView m_QSOGrid;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QBand;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QTime;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QCallsign;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QSent;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QSentSerial;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QReceived;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QReceivedSerial;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QLocator;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QDistance;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QBeam;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QComments;
     }
 }
 

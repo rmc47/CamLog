@@ -190,7 +190,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 ?reportTx, ?reportRx, ?locatorReceived, ?notes, ?serialSent, ?serialReceived, ?qslRxDate, ?qslTxDate, ?qslMethod);";
 
                     cmd.Parameters.AddWithValue("?sourceId", c.SourceId);
-                    cmd.Parameters.AddWithValue("?lastModified", DateTime.Now); c.LastModified = DateTime.Now;
+                    cmd.Parameters.AddWithValue("?lastModified", DateTime.UtcNow); c.LastModified = DateTime.UtcNow;
                     cmd.Parameters.AddWithValue("?startTime", c.StartTime);
                     cmd.Parameters.AddWithValue("?endTime", c.EndTime);
                     cmd.Parameters.AddWithValue("?callsign", c.Callsign);

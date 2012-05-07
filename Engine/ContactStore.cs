@@ -457,7 +457,10 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                 List<KeyValuePair<int, int>> contactIDs = new List<KeyValuePair<int, int>>();
                 using (MySqlCommand cmd = m_Connection.CreateCommand())
                 {
+                    if (station != null)
                     cmd.CommandText = "SELECT sourceId, id FROM log WHERE station LIKE ?station ORDER BY endTime";
+                    else
+                        cmd.CommandText = "SELECT sourceId, id FROM log ORDER BY endTime";
                     cmd.Parameters.AddWithValue("station", station);
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {

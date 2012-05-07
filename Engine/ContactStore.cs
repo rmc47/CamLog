@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using MySql.Data.MySqlClient;
 using System.IO;
+using System.Threading;
 
 namespace Engine
 {
@@ -100,19 +101,23 @@ namespace Engine
             m_Connection = new MySqlConnection(csb.ConnectionString);
             m_Connection.Open();
 
-            return;
-
             using (MySqlCommand cmd = m_Connection.CreateCommand())
             {
-                cmd.CommandText = "SELECT id FROM sources WHERE default=1;";
-                object sourceId = cmd.ExecuteScalar();
-                if (!int.TryParse(sourceId as string, out m_SourceId))
+                cmd.CommandText = "SELECT id FROM sources WHERE `default`=1;";
+                using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
-                    m_SourceId = new Random().Next();
-                    cmd.CommandText = "INSERT INTO sources (id, callsign, default) VALUES (?id, ?callsign, 1);";
-                    cmd.Parameters.AddWithValue("?id", m_SourceId);
-                    cmd.Parameters.AddWithValue("?callsign", m_SourceId.ToString()); // TODO: should really ask the user for this
-                    cmd.ExecuteNonQuery();
+                    if (!reader.Read() || reader.IsDBNull(0))
+                    {
+                        m_SourceId = new Random().Next();
+                        cmd.CommandText = "INSERT INTO sources (id, callsign, `default`) VALUES (?id, ?callsign, 1);";
+                        cmd.Parameters.AddWithValue("?id", m_SourceId);
+                        cmd.Parameters.AddWithValue("?callsign", m_SourceId.ToString()); // TODO: should really ask the user for this
+                        cmd.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        m_SourceId = reader.GetInt32(0);
+                    }
                 }
             }
         }

@@ -21,7 +21,7 @@ namespace EngineTests
         [Test]
         public void FixAdifDates()
         {
-            List<Contact> adifContacts = AdifHandler.ImportAdif(@"C:\temp\test.adi");
+            List<Contact> adifContacts = AdifHandler.ImportAdif(@"C:\temp\test.adi", string.Empty, 0, "M0VFC");
             ContactStore store = new ContactStore("localhost", "fp2011", "root", "aopen");
 
             foreach (Contact adifContact in adifContacts)

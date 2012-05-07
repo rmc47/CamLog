@@ -240,6 +240,10 @@ namespace UI
                     m_Station.Text = (string)key.GetValue("StationNumber", "1");
                     m_OurLocator.Text = (string)key.GetValue("Locator", "JO02BG");
                     m_OurOperator.Text = (string)key.GetValue("Operator", "UNKNOWN");
+                    bool performQRZLookups;
+                    string performQRZLookupsObj = (string)key.GetValue("PerformQRZLookups", "True");
+                    bool.TryParse(performQRZLookupsObj, out performQRZLookups);
+                    m_PerformQRZLookups.Checked = performQRZLookups;
                 }
             }
         }
@@ -556,6 +560,7 @@ namespace UI
             {
                 key.SetValue("StationNumber", m_Station.Text);
             }
+            this.Text = string.Format("{0} - CamLog", m_Station.Text);
         }
 
         private void m_ImportCallsigns_Click(object sender, EventArgs e)
@@ -611,7 +616,7 @@ namespace UI
 
         private void m_Callsign_Leave(object sender, EventArgs e)
         {
-            if (m_Callsign.TextLength > 2)
+            if (m_Callsign.TextLength > 2 && m_PerformQRZLookups.Checked)
             {
                 // Fire off a thread to try and grab the locator from qrz.com
                 string targetCall = m_Callsign.Text;
@@ -690,6 +695,14 @@ namespace UI
         {
             m_OnlyMyQSOs.Checked = !m_OnlyMyQSOs.Checked;
             PopulatePreviousContactsGrid();
+        }
+
+        private void m_PerformQRZLookups_CheckedChanged(object sender, EventArgs e)
+        {
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\M0VFC Contest Log"))
+            {
+                key.SetValue("PerformQRZLookups", m_PerformQRZLookups.Checked.ToString());
+            }
         }
     }
 }

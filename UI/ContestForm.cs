@@ -592,7 +592,7 @@ namespace UI
             {
                 if (sfd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
                     return;
-                AdifHandler.ExportContacts(m_ContactStore.GetAllContacts("%"), sfd.FileName);
+                AdifHandler.ExportContacts(m_ContactStore.GetAllContacts(null), sfd.FileName);
                 MessageBox.Show("Export complete!");
             }
         }
@@ -608,7 +608,7 @@ namespace UI
             {
                 DialogResult dr = ef.ShowDialog();
                 if (dr == DialogResult.OK)
-                    CabrilloExporter.ExportContacts(m_ContactStore.GetAllContacts("1"), ef.ExportPath, ef.SourceLocator.ToString(), ef.CallSent, ef.Operators, ef.Contest, ef.ClaimedScore);
+                    CabrilloExporter.ExportContacts(m_ContactStore.GetAllContacts(null), ef.ExportPath, ef.SourceLocator.ToString(), ef.CallSent, ef.Operators, ef.Contest, ef.ClaimedScore);
             }
         }
 

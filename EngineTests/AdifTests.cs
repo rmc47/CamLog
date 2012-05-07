@@ -28,11 +28,11 @@ namespace EngineTests
             {
                 // Find the matching one in the DB
                 List<Contact> existingContacts = store.GetPreviousContacts(adifContact.Callsign);
-                List<Contact> probableMatches = existingContacts.FindAll(c => c.EndTime.TimeOfDay == adifContact.EndTime.TimeOfDay && c.Band == adifContact.Band);
+                List<Contact> probableMatches = existingContacts.FindAll(c => c.StartTime.TimeOfDay == adifContact.StartTime.TimeOfDay && c.Band == adifContact.Band);
                 if (probableMatches.Count == 1)
                 {
-                    probableMatches[0].StartTime = probableMatches[0].EndTime = adifContact.EndTime;
-                    //store.SaveContact(probableMatches[0]);
+                    probableMatches[0].StartTime = probableMatches[0].EndTime = adifContact.StartTime;
+                    store.SaveContact(probableMatches[0]);
                 }
                 else
                 {

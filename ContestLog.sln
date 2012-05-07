@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QslEngine", "QslEngine\QslE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QslManager", "QslManager\QslManager.csproj", "{AE0D2999-FB89-4DE7-AC68-CC8339723429}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RigCAT.NET", "..\CloudlogCAT\RigCAT.NET\RigCAT.NET.csproj", "{71135AC1-AB0B-4E4E-9F7A-6090CD9F246F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,16 @@ Global
 		{AE0D2999-FB89-4DE7-AC68-CC8339723429}.Release|Mixed Platforms.Build.0 = Release|x86
 		{AE0D2999-FB89-4DE7-AC68-CC8339723429}.Release|x86.ActiveCfg = Release|x86
 		{AE0D2999-FB89-4DE7-AC68-CC8339723429}.Release|x86.Build.0 = Release|x86
+		{71135AC1-AB0B-4E4E-9F7A-6090CD9F246F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71135AC1-AB0B-4E4E-9F7A-6090CD9F246F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71135AC1-AB0B-4E4E-9F7A-6090CD9F246F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{71135AC1-AB0B-4E4E-9F7A-6090CD9F246F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{71135AC1-AB0B-4E4E-9F7A-6090CD9F246F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{71135AC1-AB0B-4E4E-9F7A-6090CD9F246F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71135AC1-AB0B-4E4E-9F7A-6090CD9F246F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71135AC1-AB0B-4E4E-9F7A-6090CD9F246F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{71135AC1-AB0B-4E4E-9F7A-6090CD9F246F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{71135AC1-AB0B-4E4E-9F7A-6090CD9F246F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

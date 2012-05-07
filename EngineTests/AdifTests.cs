@@ -13,9 +13,36 @@ namespace EngineTests
         [Test]
         public void TryImportAdif()
         {
-            List<Contact> contacts = AdifHandler.ImportAdif(@"C:\temp\test.adi");
-            ContactStore store = new ContactStore("localhost", "fp2011", "root", "aopen");
+            List<Contact> contacts = AdifHandler.ImportAdif(@"\\server.dx\share\Lunga2012\lunga2012.adi", "LUNGA", 2, "GS6PYE/P");
+            ContactStore store = new ContactStore("server.dx", "mull2012", "g3pye", "flossie");
             contacts.ForEach(store.SaveContact);
         }
+
+        [Test]
+        public void CountCountries()
+        {
+            ContactStore store = new ContactStore("server.dx", "mull2012", "g3pye", "flossie");
+            List<Contact> contacts = store.GetAllContacts(null);
+            CallsignLookup cl = new CallsignLookup("cty.xml");
+            Dictionary<string, object> countries = new Dictionary<string,object>();
+            foreach (Contact c in contacts)
+            {
+                try
+                {
+                    PrefixRecord pr = cl.LookupPrefix(c.Callsign);
+                    countries[pr.Entity] = new object();
+                }
+                catch
+                {
+                    ;
+                }
+            }
+            List<string> countryList = new List<string>();
+            countryList.AddRange(countries.Keys);
+            countryList.Sort();
+            foreach (string country in countryList)
+                Console.WriteLine(country);
+        }
+
     }
 }

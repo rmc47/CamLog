@@ -35,7 +35,7 @@ namespace Engine
         public Contact()
         {
             m_Id = -1;
-            m_LastModified = DateTime.Now;
+            m_LastModified = DateTime.UtcNow;
         }
 
         public int Id

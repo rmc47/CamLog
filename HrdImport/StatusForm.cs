@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Data.Odbc;
 using Engine;
 using System.Threading;
+using System.IO;
 
 namespace HrdImport
 {
@@ -17,8 +18,10 @@ namespace HrdImport
         private string m_Username;
         private string m_Database;
         private string m_Password;
-
+        private string m_ConnString;
+        private string m_Station;
         private bool m_RunSync;
+        private DateTime m_LastQsoSeen = DateTime.MinValue;
 
         public StatusForm()
         {
@@ -29,10 +32,17 @@ namespace HrdImport
         {
             while (m_RunSync)
             {
-                Invoke(new MethodInvoker(() => m_StatusLabel.Text = "Running synchronisation..."));
+                if (Disposing || IsDisposed || !IsHandleCreated)
+                    return;
+                Invoke(new MethodInvoker(() => { 
+                    m_StatusLabel.Text = "Running synchronisation...";
+                }));
                 try
                 {
-                    RunSync();
+                    if (File.Exists(m_ConnString))
+                        RunMixWSync();
+                    else
+                        RunHrdSync();
                     Invoke(new MethodInvoker(() => m_StatusLabel.Text = "Completed synchronisation"));
                 }
                 catch (Exception ex)
@@ -43,13 +53,69 @@ namespace HrdImport
             }
         }
 
-        private void RunSync()
+        private void RunMixWSync()
+        {
+            DateTime lastQsoThisRun = m_LastQsoSeen;
+
+            using (ContactStore cs = new ContactStore(m_Server, m_Database, m_Username, m_Password))
+            {
+                Exception storedEx = null;
+
+                string[] logLines = File.ReadAllLines(m_ConnString);
+                foreach (string line in logLines)
+                {
+                    string[] lineBits = line.Split(';');
+                    Contact c = new Contact();
+                    long freq = long.Parse(lineBits[6]) / 1000 * 1000;
+                    string dateString = lineBits[2];
+
+                    c.Band = BandHelper.FromFrequency(freq);
+                    c.Callsign = lineBits[1].Trim().ToUpperInvariant();
+                    c.EndTime = c.StartTime = new DateTime(
+                        int.Parse(dateString.Substring(0, 4)),
+                        int.Parse(dateString.Substring(4, 2)),
+                        int.Parse(dateString.Substring(6, 2)),
+                        int.Parse(dateString.Substring(8, 2)),
+                        int.Parse(dateString.Substring(10, 2)),
+                        int.Parse(dateString.Substring(12, 2)));
+                    c.Frequency = freq;
+                    c.Mode = ModeHelper.Parse(lineBits[9]);
+                    c.Operator = m_DefaultOperator.Text;
+                    c.ReportReceived = lineBits[10];
+                    c.ReportSent = lineBits[11];
+                    c.Station = m_Station;
+
+                    // If we've already uploaded something more recent, don't bother hitting the DB...
+                    if (m_LastQsoSeen >= c.StartTime)
+                    {
+                        continue;
+                    }
+                    if (c.StartTime > lastQsoThisRun)
+                        lastQsoThisRun = c.StartTime;
+
+                    Contact previousQso = cs.GetPreviousContacts(c.Callsign).Find(previousContact => previousContact.StartTime == c.StartTime);
+                    if (previousQso == null)
+                    {
+                        cs.SaveContact(c);
+
+                        Invoke(new MethodInvoker(() => m_LastQsoLabel.Text = c.Callsign));
+                    }
+                }
+
+                m_LastQsoSeen = lastQsoThisRun;
+
+                if (storedEx != null)
+                    throw storedEx;
+            }
+        }
+
+        private void RunHrdSync()
         {
             using (ContactStore cs = new ContactStore(m_Server, m_Database, m_Username, m_Password))
             {
                 Exception storedEx = null;
 
-                using (OdbcConnection localConn = new OdbcConnection("DSN=HrdLocal"))
+                using (OdbcConnection localConn = new OdbcConnection(m_ConnString))
                 {
                     localConn.Open();
                     List<int> keysToMarkUploaded = new List<int>();
@@ -57,27 +123,26 @@ namespace HrdImport
                     {
                         try
                         {
-                            localCmd.CommandText = @"SELECT * FROM TBL_LOGBOOK WHERE Custom1 IS NULL OR Custom1 <> 'HarrisUploadDone'";
+                            localCmd.CommandText = @"SELECT * FROM TABLE_HRD_CONTACTS_V01 WHERE COL_USER_DEFINED_1 IS NULL OR COL_USER_DEFINED_1 <> 'CamLogUploadDone'";
                             using (OdbcDataReader reader = localCmd.ExecuteReader())
                             {
                                 while (reader.Read())
                                 {
                                     Contact c = new Contact();
                                     c.SourceId = cs.SourceId;
-                                    c.Callsign = (string)reader["Station"];
-                                    c.StartTime = (DateTime)reader["StartTime"];
-                                    c.EndTime = (DateTime)reader["EndTime"];
-                                    c.Band = BandHelper.Parse(reader["BandMHz"] as string);
-                                    c.Frequency = GetFrequency(reader["Frequency"] as string);
-                                    c.Mode = ModeHelper.Parse(reader["Mode"] as string);
-                                    c.Notes = reader["Remark"] as string;
-                                    c.Operator = reader["MyOperator"] as string;
-                                    c.Station = "GS3PYE/P";
+                                    c.Callsign = (string)reader["COL_CALL"];
+                                    c.StartTime = (DateTime)reader["COL_TIME_ON"];
+                                    c.EndTime = (DateTime)reader["COL_TIME_OFF"];
+                                    c.Band = BandHelper.Parse(reader["COL_BAND"] as string);
+                                    c.Frequency = GetFrequency(reader.GetInt32(reader.GetOrdinal("COL_FREQ")).ToString());
+                                    c.Mode = ModeHelper.Parse(reader["COL_MODE"] as string);
+                                    c.Operator = (reader["COL_OPERATOR"] as string) ?? "GS3PYE/P";
+                                    c.Station = m_Station;
                                     c.LocatorReceived = new Locator(0, 0);
-                                    c.ReportReceived = c.ReportSent = "NA";
+                                    c.ReportReceived = c.ReportSent = "599";
                                     cs.SaveContact(c);
                                     Invoke(new MethodInvoker(() => m_LastQsoLabel.Text = c.Callsign));
-                                    keysToMarkUploaded.Add(reader.GetInt32(reader.GetOrdinal("PrimaryKey")));
+                                    keysToMarkUploaded.Add(reader.GetInt32(reader.GetOrdinal("COL_PRIMARY_KEY")));
                                 }
                             }
                         }
@@ -92,7 +157,7 @@ namespace HrdImport
                         foreach (int key in keysToMarkUploaded)
                         {
                             updateCommand.CommandText =
-                                "UPDATE TBL_LOGBOOK SET Custom1='HarrisUploadDone' WHERE PrimaryKey=" + key;
+                                "UPDATE TABLE_HRD_CONTACTS_V01 SET COL_USER_DEFINED_1='CamLogUploadDone' WHERE COL_PRIMARY_KEY=" + key;
                             updateCommand.ExecuteNonQuery();
                         }
                     }
@@ -134,6 +199,8 @@ namespace HrdImport
                     m_Database = lf.Database;
                     m_Username = lf.Username;
                     m_Password = lf.Password;
+                    m_Station = lf.Station;
+                    m_ConnString = lf.ConnString;
                 }
                 else
                     Close();

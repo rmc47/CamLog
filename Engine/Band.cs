@@ -21,7 +21,8 @@ namespace Engine
         B4m,
         B2m,
         B70cm,
-        B23cm
+        B23cm,
+        B3cm
     }
 
     public static class BandHelper
@@ -52,6 +53,9 @@ namespace Engine
                 case "70c": return Band.B70cm;
                 case "23":
                 case "23c": return Band.B23cm;
+                case "3":
+                case "3cm":
+                case "3c": return Band.B3cm;
                 default: return Band.Unknown;
             }
         }
@@ -75,6 +79,7 @@ namespace Engine
                 case Band.B2m: return "2m";
                 case Band.B70cm: return "70cm";
                 case Band.B23cm: return "23cm";
+                case Band.B3cm: return "3cm";
                 default: return "Unknown";
             }
         }

@@ -82,12 +82,13 @@ namespace UI
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.winKeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.wipeQSOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.m_OnlyMyQSOs = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_PerformQRZLookups = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.winKeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rigControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.wipeQSOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             groupBox1 = new System.Windows.Forms.GroupBox();
             label7 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
@@ -644,37 +645,11 @@ namespace UI
             this.openLogToolStripMenuItem.Text = "&Open log...";
             this.openLogToolStripMenuItem.Click += new System.EventHandler(this.openLogToolStripMenuItem_Click);
             // 
-            // optionsToolStripMenuItem
-            // 
-            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.winKeyToolStripMenuItem,
-            this.toolStripMenuItem1});
-            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.optionsToolStripMenuItem.Text = "&Options";
-            // 
-            // winKeyToolStripMenuItem
-            // 
-            this.winKeyToolStripMenuItem.Name = "winKeyToolStripMenuItem";
-            this.winKeyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.winKeyToolStripMenuItem.Text = "WinKey...";
-            // 
-            // wipeQSOToolStripMenuItem
-            // 
-            this.wipeQSOToolStripMenuItem.Name = "wipeQSOToolStripMenuItem";
-            this.wipeQSOToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
-            this.wipeQSOToolStripMenuItem.Text = "&Wipe QSO";
-            this.wipeQSOToolStripMenuItem.Click += new System.EventHandler(this.WipeQSOClicked);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
-            // 
             // viewToolStripMenuItem
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.m_OnlyMyQSOs});
+            this.m_OnlyMyQSOs,
+            this.m_PerformQRZLookups});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.viewToolStripMenuItem.Text = "&View";
@@ -682,9 +657,45 @@ namespace UI
             // m_OnlyMyQSOs
             // 
             this.m_OnlyMyQSOs.Name = "m_OnlyMyQSOs";
-            this.m_OnlyMyQSOs.Size = new System.Drawing.Size(152, 22);
+            this.m_OnlyMyQSOs.Size = new System.Drawing.Size(169, 22);
             this.m_OnlyMyQSOs.Text = "Only my QSOs";
             this.m_OnlyMyQSOs.Click += new System.EventHandler(this.OnlyMyQSOsClicked);
+            // 
+            // m_PerformQRZLookups
+            // 
+            this.m_PerformQRZLookups.CheckOnClick = true;
+            this.m_PerformQRZLookups.Name = "m_PerformQRZLookups";
+            this.m_PerformQRZLookups.Size = new System.Drawing.Size(169, 22);
+            this.m_PerformQRZLookups.Text = "QRZ.com lookups";
+            this.m_PerformQRZLookups.CheckedChanged += new System.EventHandler(this.m_PerformQRZLookups_CheckedChanged);
+            // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.winKeyToolStripMenuItem,
+            this.rigControlToolStripMenuItem});
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.optionsToolStripMenuItem.Text = "&Options";
+            // 
+            // winKeyToolStripMenuItem
+            // 
+            this.winKeyToolStripMenuItem.Name = "winKeyToolStripMenuItem";
+            this.winKeyToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.winKeyToolStripMenuItem.Text = "WinKey...";
+            // 
+            // rigControlToolStripMenuItem
+            // 
+            this.rigControlToolStripMenuItem.Name = "rigControlToolStripMenuItem";
+            this.rigControlToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.rigControlToolStripMenuItem.Text = "Rig Control...";
+            // 
+            // wipeQSOToolStripMenuItem
+            // 
+            this.wipeQSOToolStripMenuItem.Name = "wipeQSOToolStripMenuItem";
+            this.wipeQSOToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
+            this.wipeQSOToolStripMenuItem.Text = "&Wipe QSO";
+            this.wipeQSOToolStripMenuItem.Click += new System.EventHandler(this.WipeQSOClicked);
             // 
             // ContestForm
             // 
@@ -701,7 +712,7 @@ namespace UI
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "ContestForm";
-            this.Text = "M0VFC Contest Log";
+            this.Text = "CamLog";
             this.Load += new System.EventHandler(this.ContestForm_Load);
             this.Shown += new System.EventHandler(this.ContestForm_Shown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ContestForm_KeyDown);
@@ -753,7 +764,20 @@ namespace UI
         private System.Windows.Forms.ToolStripMenuItem wipeQSOToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem m_OnlyMyQSOs;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem rigControlToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem m_PerformQRZLookups;
+        //private System.Windows.Forms.DataGridView m_QSOGrid;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QBand;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QTime;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QCallsign;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QSent;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QSentSerial;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QReceived;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QReceivedSerial;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QLocator;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QDistance;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QBeam;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QComments;
     }
 }
 

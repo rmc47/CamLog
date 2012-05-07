@@ -240,6 +240,10 @@ namespace UI
                     m_Station.Text = (string)key.GetValue("StationNumber", "1");
                     m_OurLocator.Text = (string)key.GetValue("Locator", "JO02BG");
                     m_OurOperator.Text = (string)key.GetValue("Operator", "UNKNOWN");
+                    bool performQRZLookups;
+                    string performQRZLookupsObj = (string)key.GetValue("PerformQRZLookups", "True");
+                    bool.TryParse(performQRZLookupsObj, out performQRZLookups);
+                    m_PerformQRZLookups.Checked = performQRZLookups;
                 }
             }
         }
@@ -338,6 +342,8 @@ namespace UI
 
             List<Contact> contacts = m_ContactStore.GetLatestContacts(m_ContactTable.RowCount - 2, station);
             Locator ourLocation = m_OurLocatorValue;
+            //m_QSOGrid.Rows.Clear();
+
             for (int i = 1; i < m_ContactTable.RowCount - 1; i++)
             {
                 int contactsIndex = m_ContactTable.RowCount - i-2;
@@ -382,6 +388,19 @@ namespace UI
                         Array.ForEach(rowLabels, l => l.ForeColor = Color.DarkGray);
                     }
 
+                    //DataGridViewRow row = new DataGridViewRow();
+                    //m_QSOGrid.Rows.Add(row);
+                    //row.Cells[(int)ContactTableColumns.Beam].Value = Geographics.BeamHeading(ourLocation, theirLocator).ToString().PadLeft(3, '0');
+                    //row.Cells[(int)ContactTableColumns.Distance].Value = ((int)Math.Ceiling(Geographics.GeodesicDistance(ourLocation, theirLocator) / 1000)).ToString();
+
+                    //row.Cells[(int)ContactTableColumns.Callsign].Value = c.Callsign;
+                    //row.Cells[(int)ContactTableColumns.Comments].Value = c.Notes;
+                    //row.Cells[(int)ContactTableColumns.LocatorReceived].Value = c.LocatorReceivedString;
+                    //row.Cells[(int)ContactTableColumns.RstReceived].Value = c.ReportReceived;
+                    //row.Cells[(int)ContactTableColumns.RstSent].Value = c.ReportSent;
+                    //row.Cells[(int)ContactTableColumns.SerialReceived].Value = c.SerialReceived.ToString().PadLeft(3, '0');
+                    //row.Cells[(int)ContactTableColumns.SerialSent].Value = c.SerialSent.ToString().PadLeft(3, '0');
+                    //row.Cells[(int)ContactTableColumns.Time].Value = c.StartTime.ToString("HHmm");
                 }
                 else
                 {
@@ -541,6 +560,7 @@ namespace UI
             {
                 key.SetValue("StationNumber", m_Station.Text);
             }
+            this.Text = string.Format("{0} - CamLog", m_Station.Text);
         }
 
         private void m_ImportCallsigns_Click(object sender, EventArgs e)
@@ -596,7 +616,7 @@ namespace UI
 
         private void m_Callsign_Leave(object sender, EventArgs e)
         {
-            if (m_Callsign.TextLength > 2)
+            if (m_Callsign.TextLength > 2 && m_PerformQRZLookups.Checked)
             {
                 // Fire off a thread to try and grab the locator from qrz.com
                 string targetCall = m_Callsign.Text;
@@ -675,6 +695,14 @@ namespace UI
         {
             m_OnlyMyQSOs.Checked = !m_OnlyMyQSOs.Checked;
             PopulatePreviousContactsGrid();
+        }
+
+        private void m_PerformQRZLookups_CheckedChanged(object sender, EventArgs e)
+        {
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\M0VFC Contest Log"))
+            {
+                key.SetValue("PerformQRZLookups", m_PerformQRZLookups.Checked.ToString());
+            }
         }
     }
 }

@@ -57,9 +57,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Referenced Dlls\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="RigCAT.NET">
-      <HintPath>..\..\CloudLogCAT\Build\Debug\RigCAT.NET.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -115,6 +112,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CloudlogCAT\RigCAT.NET\RigCAT.NET.csproj">
+      <Project>{71135AC1-AB0B-4E4E-9F7A-6090CD9F246F}</Project>
+      <Name>RigCAT.NET</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

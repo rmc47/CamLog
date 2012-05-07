@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using MySql.Data.MySqlClient;
 using System.IO;
+using System.Threading;
 
 namespace Engine
 {
@@ -100,19 +101,23 @@ namespace Engine
             m_Connection = new MySqlConnection(csb.ConnectionString);
             m_Connection.Open();
 
-            return;
-
             using (MySqlCommand cmd = m_Connection.CreateCommand())
             {
-                cmd.CommandText = "SELECT id FROM sources WHERE default=1;";
-                object sourceId = cmd.ExecuteScalar();
-                if (!int.TryParse(sourceId as string, out m_SourceId))
+                cmd.CommandText = "SELECT id FROM sources WHERE `default`=1;";
+                using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
-                    m_SourceId = new Random().Next();
-                    cmd.CommandText = "INSERT INTO sources (id, callsign, default) VALUES (?id, ?callsign, 1);";
-                    cmd.Parameters.AddWithValue("?id", m_SourceId);
-                    cmd.Parameters.AddWithValue("?callsign", m_SourceId.ToString()); // TODO: should really ask the user for this
-                    cmd.ExecuteNonQuery();
+                    if (!reader.Read() || reader.IsDBNull(0))
+                    {
+                        m_SourceId = new Random().Next();
+                        cmd.CommandText = "INSERT INTO sources (id, callsign, `default`) VALUES (?id, ?callsign, 1);";
+                        cmd.Parameters.AddWithValue("?id", m_SourceId);
+                        cmd.Parameters.AddWithValue("?callsign", m_SourceId.ToString()); // TODO: should really ask the user for this
+                        cmd.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        m_SourceId = reader.GetInt32(0);
+                    }
                 }
             }
         }
@@ -190,7 +195,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 ?reportTx, ?reportRx, ?locatorReceived, ?notes, ?serialSent, ?serialReceived, ?qslRxDate, ?qslTxDate, ?qslMethod);";
 
                     cmd.Parameters.AddWithValue("?sourceId", c.SourceId);
-                    cmd.Parameters.AddWithValue("?lastModified", DateTime.Now); c.LastModified = DateTime.Now;
+                    cmd.Parameters.AddWithValue("?lastModified", DateTime.UtcNow); c.LastModified = DateTime.UtcNow;
                     cmd.Parameters.AddWithValue("?startTime", c.StartTime);
                     cmd.Parameters.AddWithValue("?endTime", c.EndTime);
                     cmd.Parameters.AddWithValue("?callsign", c.Callsign);
@@ -457,7 +462,10 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                 List<KeyValuePair<int, int>> contactIDs = new List<KeyValuePair<int, int>>();
                 using (MySqlCommand cmd = m_Connection.CreateCommand())
                 {
+                    if (station != null)
                     cmd.CommandText = "SELECT sourceId, id FROM log WHERE station LIKE ?station ORDER BY endTime";
+                    else
+                        cmd.CommandText = "SELECT sourceId, id FROM log ORDER BY endTime";
                     cmd.Parameters.AddWithValue("station", station);
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {

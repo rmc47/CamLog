@@ -20,7 +20,7 @@ namespace UI
 
         public Controller()
         {
-            WinKey = new WinKey("COM17");
+            //WinKey = new WinKey("COM17");
             CWMacro = new CWMacro(null);
             CWMacro.WinKey = WinKey;
         }
@@ -38,9 +38,9 @@ namespace UI
                 if (ContactStoreChanged != null)
                     ContactStoreChanged(this, new EventArgs());
 
-                if (!string.IsNullOrEmpty(lf.CivSerialPort))
+                if (!string.IsNullOrEmpty(lf.CivSerialPort) && lf.RadioModel.HasValue)
                 {
-                    Radio = new RadioFactory().GetRadio(RadioModel.IcomGeneric, new RadioConnectionSettings { BaudRate = 19200, FlowControl = FlowControl.None, Port = "COM2", UseDTR = true, UseRTS = true });
+                    Radio = new RadioFactory().GetRadio(lf.RadioModel.Value, new RadioConnectionSettings { BaudRate = lf.CivSpeed, FlowControl = FlowControl.None, Port = lf.CivSerialPort, UseDTR = lf.CivDtr, UseRTS = lf.CivRts});
                     if (CivServerChanged != null)
                         CivServerChanged(this, new EventArgs());
                 }

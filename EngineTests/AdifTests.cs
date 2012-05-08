@@ -45,7 +45,7 @@ namespace EngineTests
         {
             ContactStore store = new ContactStore("server.dx", "mull2012", "g3pye", "flossie");
             List<Contact> contacts = store.GetAllContacts(null);
-            CallsignLookup cl = new CallsignLookup("cty.xml");
+            CallsignLookup cl = new CallsignLookup("cty.xml.gz");
             Dictionary<string, object> countries = new Dictionary<string,object>();
             foreach (Contact c in contacts)
             {

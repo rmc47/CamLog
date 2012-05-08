@@ -88,9 +88,6 @@
     <Compile Include="WinKey.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="cty.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <EmbeddedResource Include="DBMigrations\MySQL\2.sql" />
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +115,11 @@
       <Project>{71135AC1-AB0B-4E4E-9F7A-6090CD9F246F}</Project>
       <Name>RigCAT.NET</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cty.xml.gz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

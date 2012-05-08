@@ -11,7 +11,7 @@ namespace Engine
     {
         private MySqlConnection m_Connection;
         private int m_SourceId;
-        private CallsignLookup m_CallsignLookup = new CallsignLookup("cty.xml");
+        private CallsignLookup m_CallsignLookup = new CallsignLookup("cty.xml.gz");
 
         public static ContactStore Create(string server, string database, string username, string password)
         {
@@ -112,6 +112,7 @@ namespace Engine
                         cmd.CommandText = "INSERT INTO sources (id, callsign, `default`) VALUES (?id, ?callsign, 1);";
                         cmd.Parameters.AddWithValue("?id", m_SourceId);
                         cmd.Parameters.AddWithValue("?callsign", m_SourceId.ToString()); // TODO: should really ask the user for this
+                        reader.Close();
                         cmd.ExecuteNonQuery();
                     }
                     else

@@ -12,7 +12,7 @@ namespace EngineTests
         [Test]
         public void LoadCtyXml()
         {
-            new CallsignLookup("cty.xml");
+            new CallsignLookup("cty.xml.gz");
         }
 
         [Test]

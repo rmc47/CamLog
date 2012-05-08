@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Xml;
+using System.IO.Compression;
 
 namespace Engine
 {
@@ -14,10 +15,16 @@ namespace Engine
         {
             if (!File.Exists(countryXmlFile))
                 throw new ArgumentException("File '" + countryXmlFile + "' not found");
-
+            
             // Parse the cty.xml file
             XmlDocument doc = new XmlDocument();
-            doc.Load(countryXmlFile);
+            using (FileStream stream = File.OpenRead(countryXmlFile))
+            {
+                using (GZipStream zipStream = new GZipStream(stream, CompressionMode.Decompress))
+                {
+                    doc.Load(zipStream);
+                }
+            }
 
             m_PrefixRecords = new Dictionary<string,PrefixRecord> ();
             XmlNodeList prefixes = doc.DocumentElement["prefixes"].ChildNodes;

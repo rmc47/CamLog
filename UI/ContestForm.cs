@@ -20,7 +20,7 @@ namespace UI
         private Controller Controller { get; set; }
         private ContactStore m_ContactStore;
         private IRadio m_RadioCAT;
-        private CallsignLookup m_CallsignLookup = new CallsignLookup("cty.xml");
+        private CallsignLookup m_CallsignLookup = new CallsignLookup("cty.xml.gz");
         private Locator m_OurLocatorValue = new Locator("JO01GI");
         private Label[][] m_ContactTableLabels;
         private KeyValuePair<int, int>[] m_ContactIds;

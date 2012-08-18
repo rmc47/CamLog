@@ -351,6 +351,48 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
             }
         }
 
+        public List<Contact> GetApproximateMatches(string callsign)
+        {
+            lock (m_Connection)
+            {
+                List<KeyValuePair<int, int>> ids = new List<KeyValuePair<int, int>>();
+                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT sourceId, id FROM log WHERE callsign LIKE ?callsign";
+                    MySqlParameter callsignParam = cmd.Parameters.Add("?callsign", MySqlDbType.String);
+
+                    // Firstly, exact match
+                    callsignParam.Value = callsign;
+                    AddContacts(ids, cmd);
+
+                    // Now for each position, allow wildcard substitution
+                    for (int i = 0; i < callsign.Length; i++)
+                    {
+                        char[] callChars = callsign.ToCharArray();
+                        callChars[i] = '%';
+                        callsignParam.Value = new string(callChars);
+                        AddContacts(ids, cmd);
+                    }
+                }
+
+                List<Contact> previousContacts = new List<Contact>(ids.Count);
+                foreach (KeyValuePair<int, int> id in ids)
+                    previousContacts.Add(LoadContact(id.Key, id.Value));
+                return previousContacts;
+            }
+        }
+
+        private static void AddContacts(List<KeyValuePair<int, int>> contactList, MySqlCommand cmd)
+        {
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    contactList.Add(new KeyValuePair<int, int>(reader.GetInt32(0), reader.GetInt32(1)));
+                }
+            }
+        }
+
         public List<string> GetPartialMatchesThisContest(string callsign)
         {
             return GetPartialMatches(callsign, "log");

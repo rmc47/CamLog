@@ -18,19 +18,18 @@ namespace Engine
         {
             get
             {
-                lock (m_Connection) // Slightly tenuous locking, but want this to be Thread-Local soon anyway...
+                MySqlConnection conn = m_Connection;
+                // Don't Ping() - it'll interrupt any other threads using this connection and break them!
+                if (conn.State == System.Data.ConnectionState.Open/* && conn.Ping()*/)
                 {
-                    if (m_Connection.State == System.Data.ConnectionState.Open && m_Connection.Ping())
-                    {
-                        return m_Connection;
-                    }
-                    else
-                    {
-                        MySqlConnection newConn = new MySqlConnection(m_ConnectionString);
-                        newConn.Open();
-                        m_Connection = newConn;
-                        return newConn;
-                    }
+                    return conn;
+                }
+                else
+                {
+                    MySqlConnection newConn = new MySqlConnection(m_ConnectionString);
+                    newConn.Open();
+                    m_Connection = newConn;
+                    return newConn;
                 }
             }
         }

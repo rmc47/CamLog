@@ -740,7 +740,7 @@ namespace UI
                 string filename;
                 using (OpenFileDialog ofd = new OpenFileDialog())
                 {
-                    ofd.Filter = "ADIF Files (*.*)|*.*";
+                    ofd.Filter = "ADIF Files (*.adi)|*.adi|All Files (*.*)|*.*";
                     ofd.CheckFileExists = true;
                     DialogResult dr = ofd.ShowDialog();
                     if (dr != System.Windows.Forms.DialogResult.OK)

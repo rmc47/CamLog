@@ -591,7 +591,7 @@ namespace UI
             this.Text = string.Format("{0} - CamLog", m_Station.Text);
         }
 
-        private void m_ImportCallsigns_Click(object sender, EventArgs e)
+        private void ImportKnownCallsigns(object sender, EventArgs e)
         {
             if (m_ContactStore == null)
                 return;
@@ -614,7 +614,7 @@ namespace UI
             }
         }
 
-        private void m_ExportAdif_Click(object sender, EventArgs e)
+        private void ExportAdif(object sender, EventArgs e)
         {
             using (SaveFileDialog sfd = new SaveFileDialog())
             {
@@ -625,7 +625,7 @@ namespace UI
             }
         }
 
-        private void m_ExportCabrillo_Click(object sender, EventArgs e)
+        private void ExportCabrillo(object sender, EventArgs e)
         {
             using (ExportCabrilloForm ef = new ExportCabrilloForm
             {

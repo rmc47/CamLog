@@ -53,10 +53,6 @@ namespace UI
             System.Windows.Forms.Label label30;
             System.Windows.Forms.Label label31;
             System.Windows.Forms.Label label32;
-            this.m_ExportCabrillo = new System.Windows.Forms.Button();
-            this.m_ExportAdif = new System.Windows.Forms.Button();
-            this.m_Export = new System.Windows.Forms.Button();
-            this.m_ImportCallsigns = new System.Windows.Forms.Button();
             this.m_Frequency = new System.Windows.Forms.TextBox();
             this.m_Station = new System.Windows.Forms.TextBox();
             this.m_OurMode = new System.Windows.Forms.ComboBox();
@@ -82,6 +78,13 @@ namespace UI
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aDIFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cabrilloToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rEG1TESTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aDIFToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.knownCallsignsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.m_OnlyMyQSOs = new System.Windows.Forms.ToolStripMenuItem();
             this.m_PerformQRZLookups = new System.Windows.Forms.ToolStripMenuItem();
@@ -116,10 +119,6 @@ namespace UI
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(this.m_ExportCabrillo);
-            groupBox1.Controls.Add(this.m_ExportAdif);
-            groupBox1.Controls.Add(this.m_Export);
-            groupBox1.Controls.Add(this.m_ImportCallsigns);
             groupBox1.Controls.Add(label7);
             groupBox1.Controls.Add(this.m_Frequency);
             groupBox1.Controls.Add(this.m_Station);
@@ -138,46 +137,6 @@ namespace UI
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Operator / Station details";
-            // 
-            // m_ExportCabrillo
-            // 
-            this.m_ExportCabrillo.Location = new System.Drawing.Point(297, 78);
-            this.m_ExportCabrillo.Name = "m_ExportCabrillo";
-            this.m_ExportCabrillo.Size = new System.Drawing.Size(89, 23);
-            this.m_ExportCabrillo.TabIndex = 17;
-            this.m_ExportCabrillo.Text = "Export &Cabrillo";
-            this.m_ExportCabrillo.UseVisualStyleBackColor = true;
-            this.m_ExportCabrillo.Click += new System.EventHandler(this.m_ExportCabrillo_Click);
-            // 
-            // m_ExportAdif
-            // 
-            this.m_ExportAdif.Location = new System.Drawing.Point(297, 104);
-            this.m_ExportAdif.Name = "m_ExportAdif";
-            this.m_ExportAdif.Size = new System.Drawing.Size(89, 23);
-            this.m_ExportAdif.TabIndex = 16;
-            this.m_ExportAdif.Text = "Export ADIF...";
-            this.m_ExportAdif.UseVisualStyleBackColor = true;
-            this.m_ExportAdif.Click += new System.EventHandler(this.m_ExportAdif_Click);
-            // 
-            // m_Export
-            // 
-            this.m_Export.Location = new System.Drawing.Point(193, 104);
-            this.m_Export.Name = "m_Export";
-            this.m_Export.Size = new System.Drawing.Size(95, 23);
-            this.m_Export.TabIndex = 15;
-            this.m_Export.Text = "Export REG1...";
-            this.m_Export.UseVisualStyleBackColor = true;
-            this.m_Export.Click += new System.EventHandler(this.m_Export_Click);
-            // 
-            // m_ImportCallsigns
-            // 
-            this.m_ImportCallsigns.Location = new System.Drawing.Point(193, 78);
-            this.m_ImportCallsigns.Name = "m_ImportCallsigns";
-            this.m_ImportCallsigns.Size = new System.Drawing.Size(95, 23);
-            this.m_ImportCallsigns.TabIndex = 14;
-            this.m_ImportCallsigns.Text = "Import known callsigns...";
-            this.m_ImportCallsigns.UseVisualStyleBackColor = true;
-            this.m_ImportCallsigns.Click += new System.EventHandler(this.m_ImportCallsigns_Click);
             // 
             // label7
             // 
@@ -638,7 +597,9 @@ namespace UI
             // logToolStripMenuItem
             // 
             this.logToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openLogToolStripMenuItem});
+            this.openLogToolStripMenuItem,
+            this.importToolStripMenuItem,
+            this.exportToolStripMenuItem});
             this.logToolStripMenuItem.Name = "logToolStripMenuItem";
             this.logToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.logToolStripMenuItem.Text = "&Log";
@@ -646,9 +607,61 @@ namespace UI
             // openLogToolStripMenuItem
             // 
             this.openLogToolStripMenuItem.Name = "openLogToolStripMenuItem";
-            this.openLogToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.openLogToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.openLogToolStripMenuItem.Text = "&Open log...";
             this.openLogToolStripMenuItem.Click += new System.EventHandler(this.openLogToolStripMenuItem_Click);
+            // 
+            // exportToolStripMenuItem
+            // 
+            this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aDIFToolStripMenuItem,
+            this.cabrilloToolStripMenuItem,
+            this.rEG1TESTToolStripMenuItem});
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exportToolStripMenuItem.Text = "&Export";
+            // 
+            // aDIFToolStripMenuItem
+            // 
+            this.aDIFToolStripMenuItem.Name = "aDIFToolStripMenuItem";
+            this.aDIFToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aDIFToolStripMenuItem.Text = "&ADIF...";
+            this.aDIFToolStripMenuItem.Click += new System.EventHandler(this.ExportAdif);
+            // 
+            // cabrilloToolStripMenuItem
+            // 
+            this.cabrilloToolStripMenuItem.Name = "cabrilloToolStripMenuItem";
+            this.cabrilloToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cabrilloToolStripMenuItem.Text = "&Cabrillo...";
+            this.cabrilloToolStripMenuItem.Click += new System.EventHandler(this.ExportCabrillo);
+            // 
+            // rEG1TESTToolStripMenuItem
+            // 
+            this.rEG1TESTToolStripMenuItem.Name = "rEG1TESTToolStripMenuItem";
+            this.rEG1TESTToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.rEG1TESTToolStripMenuItem.Text = "&REG1TEST...";
+            // 
+            // importToolStripMenuItem
+            // 
+            this.importToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aDIFToolStripMenuItem1,
+            this.knownCallsignsToolStripMenuItem});
+            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.importToolStripMenuItem.Text = "&Import";
+            // 
+            // aDIFToolStripMenuItem1
+            // 
+            this.aDIFToolStripMenuItem1.Name = "aDIFToolStripMenuItem1";
+            this.aDIFToolStripMenuItem1.Size = new System.Drawing.Size(170, 22);
+            this.aDIFToolStripMenuItem1.Text = "&ADIF...";
+            // 
+            // knownCallsignsToolStripMenuItem
+            // 
+            this.knownCallsignsToolStripMenuItem.Name = "knownCallsignsToolStripMenuItem";
+            this.knownCallsignsToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.knownCallsignsToolStripMenuItem.Text = "&Known Callsigns...";
+            this.knownCallsignsToolStripMenuItem.Click += new System.EventHandler(this.ImportKnownCallsigns);
             // 
             // viewToolStripMenuItem
             // 
@@ -757,10 +770,6 @@ namespace UI
         private System.Windows.Forms.TextBox m_Frequency;
         private System.Windows.Forms.ListBox m_MatchesThisContest;
         private System.Windows.Forms.ListBox m_MatchesKnownCalls;
-        private System.Windows.Forms.Button m_ImportCallsigns;
-        private System.Windows.Forms.Button m_Export;
-        private System.Windows.Forms.Button m_ExportAdif;
-        private System.Windows.Forms.Button m_ExportCabrillo;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem logToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openLogToolStripMenuItem;
@@ -771,6 +780,13 @@ namespace UI
         private System.Windows.Forms.ToolStripMenuItem m_OnlyMyQSOs;
         private System.Windows.Forms.ToolStripMenuItem rigControlToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem m_PerformQRZLookups;
+        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aDIFToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cabrilloToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rEG1TESTToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aDIFToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem knownCallsignsToolStripMenuItem;
         //private System.Windows.Forms.DataGridView m_QSOGrid;
         //private System.Windows.Forms.DataGridViewTextBoxColumn m_QBand;
         //private System.Windows.Forms.DataGridViewTextBoxColumn m_QTime;

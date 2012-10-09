@@ -27,7 +27,12 @@ namespace Engine
 
         public void Login()
         {
-            QrzDataResult result = new QrzDataResult(string.Format("{0}?username={1}&password={2}&agent={3}", c_ServerUrl, m_Username, m_Password, c_Agent), m_WebClient);
+            QrzDataResult result;
+            lock (m_WebClient)
+            {
+                result = new QrzDataResult(string.Format("{0}?username={1}&password={2}&agent={3}", c_ServerUrl, m_Username, m_Password, c_Agent), m_WebClient);
+            }
+
             XmlElement sessionElement = result.GetElement("/qrz:QRZDatabase/qrz:Session/qrz:Key");
             if (sessionElement != null)
             {
@@ -53,7 +58,12 @@ namespace Engine
         {
             if (m_Session == null)
                 Login();
-            QrzDataResult result = new QrzDataResult(string.Format ("{0}?s={1}&callsign={2}", c_ServerUrl, m_Session, callsign), m_WebClient);
+            QrzDataResult result;
+            lock (m_WebClient)
+            {
+                result = new QrzDataResult(string.Format("{0}?s={1}&callsign={2}", c_ServerUrl, m_Session, callsign), m_WebClient);
+            }
+
             XmlElement callsignElement = result.GetElement("/qrz:QRZDatabase/qrz:Callsign");
             if (callsignElement != null)
             {

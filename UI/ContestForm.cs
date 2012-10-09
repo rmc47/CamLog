@@ -339,8 +339,35 @@ namespace UI
                 station = m_Station.Text;
             else
                 station = null;
+            
+            int maxToFetch = m_ContactTable.RowCount - 2;
 
-            List<Contact> contacts = m_ContactStore.GetLatestContacts(m_ContactTable.RowCount - 2, station);
+            ThreadPool.QueueUserWorkItem((dummy) =>
+            {
+                try
+                {
+                    List<Contact> contacts = m_ContactStore.GetLatestContacts(m_ContactTable.RowCount - 2, station);
+
+                    if (Disposing || IsDisposed)
+                        return;
+                    Invoke(new MethodInvoker(() =>
+                    {
+                        PopulatePreviousContactsGridCallback(contacts);
+                    }));
+                }
+                catch (Exception ex)
+                {
+                    Invoke(new MethodInvoker(() =>
+                    {
+                        MessageBox.Show("Exception populating previous contacts grid: " + ex);
+                    }));
+                }
+            });
+        }
+
+        private void PopulatePreviousContactsGridCallback(List<Contact> contacts)
+        {
+            
             Locator ourLocation = m_OurLocatorValue;
             //m_QSOGrid.Rows.Clear();
 

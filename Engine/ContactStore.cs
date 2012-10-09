@@ -9,9 +9,31 @@ namespace Engine
 {
     public class ContactStore : IDisposable
     {
+        private string m_ConnectionString;
         private MySqlConnection m_Connection;
         private int m_SourceId;
         private CallsignLookup m_CallsignLookup = new CallsignLookup("cty.xml.gz");
+
+        private MySqlConnection OpenConnection
+        {
+            get
+            {
+                lock (m_Connection) // Slightly tenuous locking, but want this to be Thread-Local soon anyway...
+                {
+                    if (m_Connection.State == System.Data.ConnectionState.Open && m_Connection.Ping())
+                    {
+                        return m_Connection;
+                    }
+                    else
+                    {
+                        MySqlConnection newConn = new MySqlConnection(m_ConnectionString);
+                        newConn.Open();
+                        m_Connection = newConn;
+                        return newConn;
+                    }
+                }
+            }
+        }
 
         public static ContactStore Create(string server, string database, string username, string password)
         {
@@ -98,6 +120,7 @@ namespace Engine
 
             // Now we know it exists, do something sensible with it!
             csb.Database = database;
+            m_ConnectionString = csb.ConnectionString;
             m_Connection = new MySqlConnection(csb.ConnectionString);
             m_Connection.Open();
 
@@ -130,9 +153,10 @@ namespace Engine
 
         public Contact LoadContact(int sourceId, int id)
         {
-            lock (m_Connection)
+            MySqlConnection conn = OpenConnection;
+            lock (conn)
             {
-                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                using (MySqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = "SELECT * FROM log WHERE id=?id AND sourceId=?sourceId;";
                     cmd.Parameters.AddWithValue("?id", id);
@@ -180,9 +204,10 @@ namespace Engine
 
         public void SaveContact(Contact c)
         {
-            lock (m_Connection)
+            MySqlConnection conn = OpenConnection;
+            lock (conn)
             {
-                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                using (MySqlCommand cmd = conn.CreateCommand())
                 {
                     if (c.Id > 0)
                         cmd.CommandText = @"UPDATE log SET lastModified=?lastModified, startTime=?startTime, endTime=?endTime,
@@ -228,11 +253,12 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
         public List<Contact> GetLatestContacts(int maxToFetch, string station)
         {
-            lock (m_Connection)
+            MySqlConnection conn = OpenConnection;
+            lock (conn)
             {
                 List<Contact> contacts = new List<Contact>();
                 List<KeyValuePair<int, int>> contactIds = new List<KeyValuePair<int, int>>();
-                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                using (MySqlCommand cmd = conn.CreateCommand())
                 {
                     if (string.IsNullOrEmpty(station))
                         cmd.CommandText = "SELECT sourceId, id FROM log ORDER BY endTime DESC LIMIT ?maxToFetch";
@@ -258,11 +284,12 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
         public int GetSerial(Band band)
         {
-            lock (m_Connection)
+            MySqlConnection conn = OpenConnection;
+            lock (conn)
             {
                 int nextSerial;
                 bool needToCreate;
-                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                using (MySqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = "SELECT nextSerial FROM serials WHERE band=?band;";
                     cmd.Parameters.AddWithValue("?band", BandHelper.ToString(band));
@@ -279,7 +306,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                     }
                 }
 
-                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                using (MySqlCommand cmd = conn.CreateCommand())
                 {
                     if (needToCreate)
                         cmd.CommandText = "INSERT INTO serials (band, nextSerial) VALUES (?band, ?nextSerial);";
@@ -321,10 +348,11 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
         public List<Contact> GetPreviousContacts(string callsign)
         {
-            lock (m_Connection)
+            MySqlConnection conn = OpenConnection;
+            lock (conn)
             {
                 List<KeyValuePair<int, int>> contactIds = new List<KeyValuePair<int, int>>();
-                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                using (MySqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = "SELECT callsign, sourceId, id FROM log WHERE callsign=?callsign OR substr(callsign, 1, length(callsign) - 2)=?callsign;";
                     cmd.Parameters.AddWithValue("?callsign", callsign);
@@ -353,10 +381,11 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
         public List<Contact> GetApproximateMatches(string callsign)
         {
-            lock (m_Connection)
+            MySqlConnection conn = OpenConnection;
+            lock (conn)
             {
                 List<KeyValuePair<int, int>> ids = new List<KeyValuePair<int, int>>();
-                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                using (MySqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = "SELECT sourceId, id FROM log WHERE callsign LIKE ?callsign";
                     MySqlParameter callsignParam = cmd.Parameters.Add("?callsign", MySqlDbType.String);
@@ -410,10 +439,11 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
         private List<string> GetPartialMatches(string callsign, string table)
         {
-            lock (m_Connection)
+            MySqlConnection conn = OpenConnection;
+            lock (conn)
             {
                 List<string> matches = new List<string>();
-                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                using (MySqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = "SELECT callsign, MAX(locator) AS loc FROM " + table + " WHERE callsign LIKE ?callsign GROUP BY callsign ORDER BY callsign";
                     cmd.Parameters.AddWithValue("?callsign", string.Format("%{0}%", callsign.ToUpperInvariant()));
@@ -437,10 +467,11 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
         private List<string> GetLocatorMatches(string locator, string table)
         {
-            lock (m_Connection)
+            MySqlConnection conn = OpenConnection;
+            lock (conn)
             {
                 List<string> matches = new List<string>();
-                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                using (MySqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = "SELECT callsign, MAX(locator) AS loc FROM " + table + " WHERE locator LIKE ?locator GROUP BY callsign ORDER BY callsign";
                     cmd.Parameters.AddWithValue("?locator", string.Format("%{0}%", locator.ToUpperInvariant()));
@@ -460,12 +491,13 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
         public bool IsNewSquare(string locator, Band band)
         {
-            lock (m_Connection)
+            MySqlConnection conn = OpenConnection;
+            lock (conn)
             {
                 if (locator.Length > 4)
                     locator = locator.Substring(0, 4);
 
-                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                using (MySqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = "SELECT COUNT(*) FROM log WHERE band LIKE ?band AND locator LIKE ?locator;";
                     cmd.Parameters.AddWithValue("?band", BandHelper.ToString(band));
@@ -482,10 +514,11 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
         public void ImportKnownCalls(string filename)
         {
-            lock (m_Connection)
+            MySqlConnection conn = OpenConnection;
+            lock (conn)
             {
                 string[] lines = File.ReadAllLines(filename);
-                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                using (MySqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = "INSERT IGNORE INTO knowncalls (callsign) VALUES (?callsign)";
                     cmd.Parameters.Add("?callsign", MySqlDbType.VarChar);
@@ -500,10 +533,11 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
         public List<Contact> GetAllContacts(string station)
         {
-            lock (m_Connection)
+            MySqlConnection conn = OpenConnection;
+            lock (conn)
             {
                 List<KeyValuePair<int, int>> contactIDs = new List<KeyValuePair<int, int>>();
-                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                using (MySqlCommand cmd = conn.CreateCommand())
                 {
                     if (station != null)
                     cmd.CommandText = "SELECT sourceId, id FROM log WHERE station LIKE ?station ORDER BY endTime";
@@ -526,9 +560,10 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
         public Dictionary<string, int> GetFrequencies()
         {
-            lock (m_Connection)
+            MySqlConnection conn = OpenConnection;
+            lock (conn)
             {
-                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                using (MySqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = "SELECT station, frequency FROM frequencies ORDER BY frequency ASC";
                     using (MySqlDataReader reader = cmd.ExecuteReader())
@@ -544,9 +579,10 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
         public void SetFrequency(string station, int frequency)
         {
-            lock (m_Connection)
+            MySqlConnection conn = OpenConnection;
+            lock (conn)
             {
-                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                using (MySqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = "UPDATE frequencies SET frequency=?frequency WHERE station=?station";
                     cmd.Parameters.AddWithValue("?station", station);
@@ -558,9 +594,10 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
         public List<Band> GetAllBands()
         {
-            lock (m_Connection)
+            MySqlConnection conn = OpenConnection;
+            lock (conn)
             {
-                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                using (MySqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = "SELECT DISTINCT band FROM log;";
                     using (MySqlDataReader reader = cmd.ExecuteReader())
@@ -576,10 +613,11 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
         public string ExportLog(Locator sourceLocator, Band band)
         {
-            lock (m_Connection)
+            MySqlConnection conn = OpenConnection;
+            lock (conn)
             {
                 List<KeyValuePair<int, int>> contactIDs = new List<KeyValuePair<int, int>>();
-                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                using (MySqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = "SELECT sourceId, id FROM log WHERE band=?band ORDER BY startTime";
                     cmd.Parameters.AddWithValue("?band", BandHelper.ToString(band));
@@ -731,9 +769,10 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
         public List<SourceCallsign> GetSources()
         {
-            lock (m_Connection)
+            MySqlConnection conn = OpenConnection;
+            lock (conn)
             {
-                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                using (MySqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = "SELECT id, callsign FROM sources;";
                     using (MySqlDataReader reader = cmd.ExecuteReader())
@@ -754,9 +793,10 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
         public List<List<Contact>> GetContactsToQsl(int sourceId)
         {
             List<int> idsToPrint = new List<int>();
-            lock (m_Connection)
+            MySqlConnection conn = OpenConnection;
+            lock (conn)
             {
-                using (MySqlCommand cmd = m_Connection.CreateCommand())
+                using (MySqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = "SELECT id FROM log WHERE qslRxDate IS NOT NULL and qslTxDate IS NULL AND sourceId=?sourceId ORDER BY callsign, startTime;";
                     cmd.Parameters.AddWithValue("?sourceId", sourceId);
@@ -801,11 +841,12 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
         public void MarkQslsSent(List<Contact> contacts)
         {
-            lock (m_Connection)
+            MySqlConnection conn = OpenConnection;
+            lock (conn)
             {
-                using (MySqlTransaction tran = m_Connection.BeginTransaction())
+                using (MySqlTransaction tran = conn.BeginTransaction())
                 {
-                    using (MySqlCommand cmd = m_Connection.CreateCommand())
+                    using (MySqlCommand cmd = conn.CreateCommand())
                     {
                         cmd.Transaction = tran;
                         cmd.CommandText = "UPDATE log SET qslTxDate=?txDate WHERE id=?id AND sourceId=?sourceId;";

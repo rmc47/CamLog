@@ -655,6 +655,7 @@ namespace UI
             this.aDIFToolStripMenuItem1.Name = "aDIFToolStripMenuItem1";
             this.aDIFToolStripMenuItem1.Size = new System.Drawing.Size(170, 22);
             this.aDIFToolStripMenuItem1.Text = "&ADIF...";
+            this.aDIFToolStripMenuItem1.Click += new System.EventHandler(this.ImportAdif);
             // 
             // knownCallsignsToolStripMenuItem
             // 

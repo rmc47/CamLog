@@ -732,5 +732,30 @@ namespace UI
                 key.SetValue("PerformQRZLookups", m_PerformQRZLookups.Checked.ToString());
             }
         }
+
+        private void ImportAdif(object sender, EventArgs e)
+        {
+            try
+            {
+                string filename;
+                using (OpenFileDialog ofd = new OpenFileDialog())
+                {
+                    ofd.Filter = "ADIF Files (*.*)|*.*";
+                    ofd.CheckFileExists = true;
+                    DialogResult dr = ofd.ShowDialog();
+                    if (dr != System.Windows.Forms.DialogResult.OK)
+                        return;
+
+                    filename = ofd.FileName;
+                }
+                List<Contact> contacts = AdifHandler.ImportAdif(filename, "IMPORT", m_ContactStore.SourceId, "IMPORT");
+                contacts.ForEach(m_ContactStore.SaveContact);
+                MessageBox.Show(string.Format("Import of {0} contacts successful", contacts.Count), "CamLog | ADIF Import");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("Import failed: {0}", ex.Message), "CamLog | ADIF Import");
+            }
+        }
     }
 }

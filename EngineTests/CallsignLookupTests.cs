@@ -29,8 +29,9 @@ namespace EngineTests
         [TestCase("5J/M4A", "COLOMBIA")]
         [TestCase("ms0sdc/p", "SCOTLAND")]
         [TestCase("g3vfc/qrp", "ENGLAND")]
-        [TestCase("SP1ABC/2", "POLAND")]
-        [TestCase("SP1ABC/2E", "ENGLAND")]
+        [TestCase("SP1ABC/2", "POLAND")] // Check 2 doesn't get counted as ENGLAND or similar
+        [TestCase("SP1ABC/2E", "ENGLAND")] // Check we're not getting 2E as a regional portable indicator
+        [TestCase("M1ACB", "ENGLAND")] // Fails with SAN MARINO if date ranges aren't working
         public void TestCallsigns(string callsign, string entity)
         {
             CallsignLookup lookup = new CallsignLookup ("cty.xml.gz");

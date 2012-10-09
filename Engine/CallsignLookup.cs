@@ -30,9 +30,14 @@ namespace Engine
 
             m_PrefixRecords = new Dictionary<string,PrefixRecord> ();
             XmlNodeList prefixes = doc.DocumentElement["prefixes"].ChildNodes;
+            DateTime now = DateTime.UtcNow;
             foreach (XmlElement prefixElement in prefixes)
             {
                 PrefixRecord record = new PrefixRecord(prefixElement);
+                if (record.StartDate != null && record.StartDate > now)
+                    continue;
+                if (record.EndDate != null && record.EndDate < now)
+                    continue;
                 m_PrefixRecords[record.Call] = record;
             }
         }
@@ -80,6 +85,8 @@ namespace Engine
         private string m_Continent;
         private double m_Latitude;
         private double m_Longitude;
+        private DateTime? m_StartDate;
+        private DateTime? m_EndDate;
 
         public PrefixRecord(XmlElement prefixRecord)
         {
@@ -98,6 +105,10 @@ namespace Engine
                 m_Longitude = double.Parse(prefixRecord["long"].InnerText);
             if (prefixRecord["lat"] != null)
                 m_Latitude = double.Parse(prefixRecord["lat"].InnerText);
+            if (prefixRecord["start"] != null)
+                m_StartDate = DateTime.Parse(prefixRecord["start"].InnerText);
+            if (prefixRecord["end"] != null)
+                m_EndDate = DateTime.Parse(prefixRecord["end"].InnerText);
         }
 
         public string Call { get { return m_Call; } }
@@ -108,5 +119,7 @@ namespace Engine
         public string Continent { get { return m_Continent; } }
         public double Latitude { get { return m_Latitude; } }
         public double Longitude { get { return m_Longitude; } }
+        public DateTime? StartDate { get { return m_StartDate; } }
+        public DateTime? EndDate { get { return m_EndDate; } }
     }
 }

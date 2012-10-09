@@ -4,12 +4,14 @@ using System.Text;
 using System.IO;
 using System.Xml;
 using System.IO.Compression;
+using System.Text.RegularExpressions;
 
 namespace Engine
 {
     public class CallsignLookup
     {
         private Dictionary<string, PrefixRecord> m_PrefixRecords;
+        private static readonly Regex s_IgnoredPartRegex = new Regex("^([0-9]|A|M|P|AM|MM|QRP)$");
 
         public CallsignLookup(string countryXmlFile)
         {
@@ -43,21 +45,7 @@ namespace Engine
             string[] callsignParts = callsign.Split('/');
 
             // Ignore mobile suffixes etc if they're the last part
-            bool ignoreLastPart;
-            switch (callsignParts[callsignParts.Length - 1].ToUpperInvariant())
-            {
-                case "A":
-                case "M":
-                case "P":
-                case "AM":
-                case "MM":
-                case "QRP":
-                    ignoreLastPart = true;
-                    break;
-                default:
-                    ignoreLastPart = false;
-                    break;
-            }
+            bool ignoreLastPart = s_IgnoredPartRegex.IsMatch(callsignParts[callsignParts.Length - 1].ToUpperInvariant());
 
             // Get the sorted list of indices - starting with the shortest part
             List<int> partOrder = new List<int>();

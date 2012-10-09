@@ -451,6 +451,7 @@ namespace UI
             this.m_Time.TabIndex = 1;
             this.m_Time.TabStop = false;
             this.m_Time.Text = "2359";
+            this.m_Time.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             // 
             // m_Band
             // 
@@ -461,6 +462,7 @@ namespace UI
             this.m_Band.TabIndex = 0;
             this.m_Band.TabStop = false;
             this.m_Band.Text = "70cm";
+            this.m_Band.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             // 
             // m_Callsign
             // 
@@ -470,8 +472,8 @@ namespace UI
             this.m_Callsign.TabIndex = 2;
             this.m_Callsign.Text = "GB100CAM/P";
             this.m_Callsign.TextChanged += new System.EventHandler(this.m_Callsign_TextChanged);
+            this.m_Callsign.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             this.m_Callsign.Leave += new System.EventHandler(this.m_Callsign_Leave);
-            this.m_Callsign.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ContactControls_PreviewKeyDown);
             // 
             // m_RstSent
             // 
@@ -480,7 +482,7 @@ namespace UI
             this.m_RstSent.Size = new System.Drawing.Size(45, 20);
             this.m_RstSent.TabIndex = 3;
             this.m_RstSent.Text = "59+40";
-            this.m_RstSent.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ContactControls_PreviewKeyDown);
+            this.m_RstSent.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             // 
             // m_SerialSent
             // 
@@ -491,6 +493,7 @@ namespace UI
             this.m_SerialSent.TabIndex = 4;
             this.m_SerialSent.TabStop = false;
             this.m_SerialSent.Text = "1234";
+            this.m_SerialSent.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             // 
             // m_RstReceived
             // 
@@ -499,7 +502,7 @@ namespace UI
             this.m_RstReceived.Size = new System.Drawing.Size(45, 20);
             this.m_RstReceived.TabIndex = 5;
             this.m_RstReceived.Text = "59+40";
-            this.m_RstReceived.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ContactControls_PreviewKeyDown);
+            this.m_RstReceived.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             // 
             // m_Locator
             // 
@@ -509,8 +512,8 @@ namespace UI
             this.m_Locator.TabIndex = 7;
             this.m_Locator.Text = "AB12CD";
             this.m_Locator.TextChanged += new System.EventHandler(this.m_Locator_TextChanged);
+            this.m_Locator.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             this.m_Locator.KeyUp += new System.Windows.Forms.KeyEventHandler(this.m_Locator_KeyUp);
-            this.m_Locator.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ContactControls_PreviewKeyDown);
             // 
             // m_SerialReceived
             // 
@@ -519,7 +522,7 @@ namespace UI
             this.m_SerialReceived.Size = new System.Drawing.Size(45, 20);
             this.m_SerialReceived.TabIndex = 6;
             this.m_SerialReceived.Text = "0001";
-            this.m_SerialReceived.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ContactControls_PreviewKeyDown);
+            this.m_SerialReceived.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             // 
             // m_Comments
             // 
@@ -528,7 +531,7 @@ namespace UI
             this.m_Comments.Size = new System.Drawing.Size(172, 20);
             this.m_Comments.TabIndex = 10;
             this.m_Comments.Text = "This was a very nice QSO";
-            this.m_Comments.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ContactControls_PreviewKeyDown);
+            this.m_Comments.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             // 
             // m_Distance
             // 
@@ -539,6 +542,7 @@ namespace UI
             this.m_Distance.TabIndex = 8;
             this.m_Distance.TabStop = false;
             this.m_Distance.Text = "23km";
+            this.m_Distance.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             // 
             // m_Beam
             // 
@@ -549,6 +553,7 @@ namespace UI
             this.m_Beam.TabIndex = 9;
             this.m_Beam.TabStop = false;
             this.m_Beam.Text = "090";
+            this.m_Beam.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             // 
             // m_Notes
             // 

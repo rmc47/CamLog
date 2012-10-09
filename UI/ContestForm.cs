@@ -270,12 +270,13 @@ namespace UI
             Controller.OpenLog();
         }
 
-        private void ContactControls_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        private void CurrentQSOKeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
                 if (ValidateContact())
                 {
+                    e.SuppressKeyPress = true;
                     m_ContactStore.SaveContact(Contact);
                     ClearContactRow(true);
                     PopulatePreviousContactsGrid();
@@ -359,7 +360,7 @@ namespace UI
                 {
                     Invoke(new MethodInvoker(() =>
                     {
-                        MessageBox.Show("Exception populating previous contacts grid: " + ex);
+                        MessageBox.Show("Exception populating previous contacts grid: " + ex.Message, "CamLog", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }));
                 }
             });

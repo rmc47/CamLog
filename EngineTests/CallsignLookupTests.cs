@@ -23,7 +23,7 @@ namespace EngineTests
         [TestCase("2W1EVJ", "WALES")]
         [TestCase("MM/F1ABC", "SCOTLAND")]
         [TestCase("M0VFC/DE", "INVALID")]
-        [TestCase("M0VFC/DJ", "GERMANY")]
+        [TestCase("M0VFC/DJ", "FED REP OF GERMANY")]
         [TestCase("M0VFC/MM", "ENGLAND")]
         [TestCase("HB9/M4A", "SWITZERLAND")]
         [TestCase("5J/M4A", "COLOMBIA")]

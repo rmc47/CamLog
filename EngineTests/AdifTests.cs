@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Engine;
+using System.Diagnostics;
 
 namespace EngineTests
 {
@@ -13,8 +14,8 @@ namespace EngineTests
         [Test]
         public void TryImportAdif()
         {
-            List<Contact> contacts = AdifHandler.ImportAdif(@"\\server.dx\share\Lunga2012\lunga2012.adi", "LUNGA", 2, "GS6PYE/P");
-            ContactStore store = new ContactStore("server.dx", "mull2012", "g3pye", "flossie");
+            List<Contact> contacts = AdifHandler.ImportAdif(@"c:\users\rob\Documents\win-test\DXPED-HF-ALL_2012@ZD9UW\ZD9-2012-10-04-1230.ADI", "LUNGA", 2, "GS6PYE/P");
+            ContactStore store = new ContactStore("localhost", "zd92012", "root", "g3pyeflossie");
             contacts.ForEach(store.SaveContact);
         }
 
@@ -41,29 +42,44 @@ namespace EngineTests
             }
         }
 
+        [Test]
         public void CountCountries()
         {
-            ContactStore store = new ContactStore("server.dx", "mull2012", "g3pye", "flossie");
+            ContactStore store = new ContactStore("localhost", "zd92012", "root", "g3pyeflossie");
             List<Contact> contacts = store.GetAllContacts(null);
             CallsignLookup cl = new CallsignLookup("cty.xml.gz");
-            Dictionary<string, object> countries = new Dictionary<string,object>();
+            Dictionary<string, int> countries = new Dictionary<string,int>();
             foreach (Contact c in contacts)
             {
                 try
                 {
                     PrefixRecord pr = cl.LookupPrefix(c.Callsign);
-                    countries[pr.Entity] = new object();
+                    int count;
+                    if (countries.TryGetValue(pr.Entity, out count))
+                    {
+                        countries[pr.Entity] = count + 1;
+                    }
+                    else
+                    {
+                        countries[pr.Entity] = 1;
+                    }
                 }
                 catch
                 {
-                    ;
+                    Debug.WriteLine("Unable to get entity: " + c.Callsign);
                 }
             }
-            List<string> countryList = new List<string>();
-            countryList.AddRange(countries.Keys);
-            countryList.Sort();
-            foreach (string country in countryList)
-                Console.WriteLine(country);
+            List<KeyValuePair<string, int>> countryList = new List<KeyValuePair<string,int>>();
+            foreach (var kvp in countries)
+                countryList.Add(kvp);
+            countryList.Sort((k1, k2) => {
+                if (k1.Value == k2.Value)
+                    return string.CompareOrdinal(k1.Key, k2.Key);
+                else
+                    return k2.Value - k1.Value;
+            });
+            foreach (var kvp in countryList)
+                Console.WriteLine("{0}: {1}", kvp.Key, kvp.Value);
         }
 
     }

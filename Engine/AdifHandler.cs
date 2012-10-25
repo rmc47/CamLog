@@ -47,7 +47,7 @@ namespace Engine
             WriteField("stx", contact.ReportSent, writer);
             WriteField("rst_rcvd", contact.ReportReceived, writer);
             WriteField("srx", contact.SerialReceived.ToString(), writer);
-            WriteField("gridsquare", contact.LocatorReceived.ToString(), writer);
+            WriteField("gridsquare", contact.LocatorReceivedString, writer);
             writer.WriteLine("<EOR>");
             writer.WriteLine("");
         }
@@ -57,7 +57,7 @@ namespace Engine
             writer.Write(string.Format("<{0}:{1}>{2}", fieldName.ToUpper(), val.Length, val.ToUpper() + " "));
         }
 
-        public static List<Contact> ImportAdif(string sourceFile)
+        public static List<Contact> ImportAdif(string sourceFile, string station, int sourceId, string defaultOperator)
         {
             string adifFile = File.ReadAllText(sourceFile);
 
@@ -70,21 +70,23 @@ namespace Engine
             while ((currentRecord = ReadRecord(adifFile, ref offset)) != null)
             {
                 Contact c = new Contact();
+                c.SourceId = sourceId;
                 c.Callsign = currentRecord["call"];
 
                 // This parsing is horrid. TODO: Figure out how to use IFormatProvider properly.
                 string dateStr = currentRecord["qso_date"];
                 string timeOnStr = currentRecord["time_on"];
-                DateTime date = new DateTime(int.Parse(dateStr.Substring(0, 4)), int.Parse(dateStr.Substring(2, 2)), int.Parse(dateStr.Substring(4, 2)), int.Parse(timeOnStr.Substring(0, 2)), int.Parse(timeOnStr.Substring(2, 2)), 0);
-                c.StartTime = date;
+                DateTime date = new DateTime(int.Parse(dateStr.Substring(0, 4)), int.Parse(dateStr.Substring(4, 2)), int.Parse(dateStr.Substring(6, 2)), int.Parse(timeOnStr.Substring(0, 2)), int.Parse(timeOnStr.Substring(2, 2)), 0);
+                c.StartTime = c.EndTime = date;
 
                 c.Band = BandHelper.Parse(currentRecord["band"]);
                 c.Frequency = (long)(decimal.Parse(currentRecord["freq"]) * 1000000);
                 c.ReportReceived = currentRecord["rst_rcvd"];
                 c.ReportSent = currentRecord["rst_sent"];
-                c.Operator = currentRecord["operator"];
+                c.Operator = currentRecord["operator"] ?? defaultOperator;
                 c.Mode = ModeHelper.Parse(currentRecord["mode"]);
-
+                c.Station = station;
+                c.LastModified = DateTime.UtcNow;
                 contacts.Add(c);
             }
 

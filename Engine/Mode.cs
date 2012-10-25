@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using RigCAT.NET;
 
 namespace Engine
 {
@@ -13,11 +14,15 @@ namespace Engine
         JT6m,
         JT65b,
         JT4Other,
+        JTMS,
         FSK441,
         PSK31,
+        PSK63,
+        PSK125,
         RTTY,
         SSTV,
-        DStar
+        DStar,
+        ISCAT,
     }
 
     public static class ModeHelper
@@ -33,10 +38,29 @@ namespace Engine
                 case Mode.JT65b: return "JT65b";
                 case Mode.JT4Other: return "JT4*";
                 case Mode.PSK31: return "PSK31";
+                case Mode.PSK63: return "PSK63";
+                case Mode.PSK125: return "PSK125";
                 case Mode.FSK441: return "FSK441";
                 case Mode.RTTY: return "RTTY";
                 case Mode.DStar: return "D-STAR";
                 case Mode.SSTV: return "SSTV";
+                case Mode.ISCAT: return "ISCAT";
+                default: return "Unknown";
+            }
+        }
+
+        public static string ToString(OperatingMode m)
+        {
+            switch (m)
+            {
+                case OperatingMode.AM: return "AM";
+                case OperatingMode.CW: return "CW";
+                case OperatingMode.CWRev: return "CW";
+                case OperatingMode.Data: return "Data";
+                case OperatingMode.DataRev: return "Data";
+                case OperatingMode.FM: return "FM";
+                case OperatingMode.LSB: return "SSB";
+                case OperatingMode.USB: return "SSB";
                 default: return "Unknown";
             }
         }
@@ -72,14 +96,18 @@ namespace Engine
                 case "CW": return Mode.CW;
                 case "SSB": return Mode.SSB;
                 case "FM": return Mode.FM;
+                case "JTMS": return Mode.JTMS;
                 case "JT6M": return Mode.JT6m;
                 case "JT65B": return Mode.JT65b;
                 case "JT4*": return Mode.JT4Other;
                 case "PSK31": return Mode.PSK31;
+                case "PSK63": return Mode.PSK63;
+                case "PSK125": return Mode.PSK125;
                 case "FSK441": return Mode.FSK441;
                 case "RTTY": return Mode.RTTY;
                 case "DSTAR": return Mode.DStar;
                 case "SSTV": return Mode.SSTV;
+                case "ISCAT": return Mode.ISCAT;
                 default: return Mode.Unknown;
             }
         }
@@ -90,6 +118,15 @@ namespace Engine
             {
                 case Mode.CW:
                     return "599";
+                case Mode.JT6m:
+                case Mode.FSK441:
+                case Mode.JTMS:
+                    return "26";
+                case Mode.JT4Other:
+                case Mode.JT65b:
+                    return "00";
+                case Mode.ISCAT:
+                    return "-15";
                 default:
                     return "59";
             }

@@ -38,7 +38,6 @@ namespace Engine.DBMigrations
 
         private static List<int> GetMigrationVersions(DatabaseType type)
         {
-            throw new NotImplementedException();
             Assembly ass = Assembly.GetExecutingAssembly();
             string[] resources = ass.GetManifestResourceNames();
             string resourcePrefix = string.Format("Engine.DBMigrations.{0}.", type.ToString());
@@ -47,6 +46,7 @@ namespace Engine.DBMigrations
                 if (resourceName.StartsWith(resourcePrefix))
                     migrationNames.Add(resourceName);
             //return migrationNames;
+            throw new NotImplementedException();
         }
 
         private static string GetMigration(DatabaseType type, int version)

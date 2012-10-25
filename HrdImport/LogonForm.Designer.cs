@@ -34,18 +34,21 @@ namespace HrdImport
             System.Windows.Forms.Label label1;
             System.Windows.Forms.Label label3;
             System.Windows.Forms.Label label5;
+            System.Windows.Forms.Label label6;
             this.m_Password = new System.Windows.Forms.TextBox();
             this.m_Username = new System.Windows.Forms.TextBox();
             this.m_Database = new System.Windows.Forms.TextBox();
             this.m_Server = new System.Windows.Forms.TextBox();
             this.m_Connect = new System.Windows.Forms.Button();
-            this.m_SerialPort = new System.Windows.Forms.ComboBox();
+            this.m_Station = new System.Windows.Forms.TextBox();
+            this.m_ConnString = new System.Windows.Forms.TextBox();
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             label4 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label1 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
+            label6 = new System.Windows.Forms.Label();
             tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,25 +68,28 @@ namespace HrdImport
             tableLayoutPanel1.Controls.Add(this.m_Server, 1, 0);
             tableLayoutPanel1.Controls.Add(label1, 0, 0);
             tableLayoutPanel1.Controls.Add(label3, 0, 3);
-            tableLayoutPanel1.Controls.Add(this.m_Connect, 1, 5);
+            tableLayoutPanel1.Controls.Add(this.m_Connect, 1, 6);
             tableLayoutPanel1.Controls.Add(label5, 0, 4);
-            tableLayoutPanel1.Controls.Add(this.m_SerialPort, 1, 4);
+            tableLayoutPanel1.Controls.Add(this.m_Station, 1, 4);
+            tableLayoutPanel1.Controls.Add(this.m_ConnString, 1, 5);
+            tableLayoutPanel1.Controls.Add(label6, 0, 5);
             tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 6;
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            tableLayoutPanel1.RowCount = 7;
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
             tableLayoutPanel1.Size = new System.Drawing.Size(328, 174);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // m_Password
             // 
             this.m_Password.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_Password.Location = new System.Drawing.Point(167, 91);
+            this.m_Password.Location = new System.Drawing.Point(167, 75);
             this.m_Password.Name = "m_Password";
             this.m_Password.PasswordChar = '*';
             this.m_Password.Size = new System.Drawing.Size(158, 20);
@@ -92,7 +98,7 @@ namespace HrdImport
             // m_Username
             // 
             this.m_Username.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_Username.Location = new System.Drawing.Point(167, 62);
+            this.m_Username.Location = new System.Drawing.Point(167, 51);
             this.m_Username.Name = "m_Username";
             this.m_Username.Size = new System.Drawing.Size(158, 20);
             this.m_Username.TabIndex = 5;
@@ -100,7 +106,7 @@ namespace HrdImport
             // m_Database
             // 
             this.m_Database.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_Database.Location = new System.Drawing.Point(167, 33);
+            this.m_Database.Location = new System.Drawing.Point(167, 27);
             this.m_Database.Name = "m_Database";
             this.m_Database.Size = new System.Drawing.Size(158, 20);
             this.m_Database.TabIndex = 3;
@@ -109,7 +115,7 @@ namespace HrdImport
             // 
             label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label4.AutoSize = true;
-            label4.Location = new System.Drawing.Point(3, 66);
+            label4.Location = new System.Drawing.Point(3, 53);
             label4.Name = "label4";
             label4.Size = new System.Drawing.Size(58, 13);
             label4.TabIndex = 4;
@@ -119,7 +125,7 @@ namespace HrdImport
             // 
             label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(3, 37);
+            label2.Location = new System.Drawing.Point(3, 29);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(56, 13);
             label2.TabIndex = 2;
@@ -128,7 +134,7 @@ namespace HrdImport
             // m_Server
             // 
             this.m_Server.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_Server.Location = new System.Drawing.Point(167, 4);
+            this.m_Server.Location = new System.Drawing.Point(167, 3);
             this.m_Server.Name = "m_Server";
             this.m_Server.Size = new System.Drawing.Size(158, 20);
             this.m_Server.TabIndex = 1;
@@ -137,7 +143,7 @@ namespace HrdImport
             // 
             label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(3, 8);
+            label1.Location = new System.Drawing.Point(3, 5);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(41, 13);
             label1.TabIndex = 0;
@@ -147,7 +153,7 @@ namespace HrdImport
             // 
             label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label3.AutoSize = true;
-            label3.Location = new System.Drawing.Point(3, 95);
+            label3.Location = new System.Drawing.Point(3, 77);
             label3.Name = "label3";
             label3.Size = new System.Drawing.Size(56, 13);
             label3.TabIndex = 6;
@@ -156,7 +162,7 @@ namespace HrdImport
             // m_Connect
             // 
             this.m_Connect.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.m_Connect.Location = new System.Drawing.Point(250, 148);
+            this.m_Connect.Location = new System.Drawing.Point(250, 147);
             this.m_Connect.Name = "m_Connect";
             this.m_Connect.Size = new System.Drawing.Size(75, 23);
             this.m_Connect.TabIndex = 8;
@@ -168,20 +174,37 @@ namespace HrdImport
             // 
             label5.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label5.AutoSize = true;
-            label5.Location = new System.Drawing.Point(3, 124);
+            label5.Location = new System.Drawing.Point(3, 101);
             label5.Name = "label5";
-            label5.Size = new System.Drawing.Size(81, 13);
+            label5.Size = new System.Drawing.Size(43, 13);
             label5.TabIndex = 9;
-            label5.Text = "C-IV Serial Port:";
+            label5.Text = "Station:";
             // 
-            // m_SerialPort
+            // m_Station
             // 
-            this.m_SerialPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_SerialPort.FormattingEnabled = true;
-            this.m_SerialPort.Location = new System.Drawing.Point(167, 120);
-            this.m_SerialPort.Name = "m_SerialPort";
-            this.m_SerialPort.Size = new System.Drawing.Size(158, 21);
-            this.m_SerialPort.TabIndex = 10;
+            this.m_Station.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_Station.Location = new System.Drawing.Point(167, 99);
+            this.m_Station.Name = "m_Station";
+            this.m_Station.Size = new System.Drawing.Size(158, 20);
+            this.m_Station.TabIndex = 10;
+            // 
+            // m_ConnString
+            // 
+            this.m_ConnString.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_ConnString.Location = new System.Drawing.Point(167, 123);
+            this.m_ConnString.Name = "m_ConnString";
+            this.m_ConnString.Size = new System.Drawing.Size(158, 20);
+            this.m_ConnString.TabIndex = 11;
+            // 
+            // label6
+            // 
+            label6.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            label6.AutoSize = true;
+            label6.Location = new System.Drawing.Point(3, 125);
+            label6.Name = "label6";
+            label6.Size = new System.Drawing.Size(92, 13);
+            label6.TabIndex = 12;
+            label6.Text = "Connection string:";
             // 
             // LogonForm
             // 
@@ -210,6 +233,7 @@ namespace HrdImport
         private System.Windows.Forms.TextBox m_Database;
         private System.Windows.Forms.TextBox m_Server;
         private System.Windows.Forms.Button m_Connect;
-        private System.Windows.Forms.ComboBox m_SerialPort;
+        private System.Windows.Forms.TextBox m_Station;
+        private System.Windows.Forms.TextBox m_ConnString;
     }
 }

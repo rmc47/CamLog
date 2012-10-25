@@ -17,7 +17,7 @@ namespace Engine
         private string m_Username;
         private string m_Password;
 
-        private readonly WebClient m_WebClient = new WebClient();
+        private ThreadDataStore<WebClient> m_WebClientStore = new ThreadDataStore<WebClient>();
 
         public QrzServer(string username, string password)
         {
@@ -25,9 +25,23 @@ namespace Engine
             m_Password = password;
         }
 
+        private WebClient ThreadWebClient
+        {
+            get
+            {
+                WebClient client = m_WebClientStore.Object;
+                if (client == null)
+                    client = m_WebClientStore.Object = new WebClient();
+                return client;
+            }
+        }
+
         public void Login()
         {
-            QrzDataResult result = new QrzDataResult(string.Format("{0}?username={1}&password={2}&agent={3}", c_ServerUrl, m_Username, m_Password, c_Agent), m_WebClient);
+            QrzDataResult result;
+            WebClient webClient = ThreadWebClient;
+            result = new QrzDataResult(string.Format("{0}?username={1}&password={2}&agent={3}", c_ServerUrl, m_Username, m_Password, c_Agent), webClient);
+
             XmlElement sessionElement = result.GetElement("/qrz:QRZDatabase/qrz:Session/qrz:Key");
             if (sessionElement != null)
             {
@@ -53,7 +67,8 @@ namespace Engine
         {
             if (m_Session == null)
                 Login();
-            QrzDataResult result = new QrzDataResult(string.Format ("{0}?s={1}&callsign={2}", c_ServerUrl, m_Session, callsign), m_WebClient);
+            QrzDataResult result = new QrzDataResult(string.Format("{0}?s={1}&callsign={2}", c_ServerUrl, m_Session, callsign), ThreadWebClient);
+
             XmlElement callsignElement = result.GetElement("/qrz:QRZDatabase/qrz:Callsign");
             if (callsignElement != null)
             {

@@ -146,4 +146,4 @@ CREATE TABLE IF NOT EXISTS `setup` (
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO setup (`key`, `val`) VALUES (`schemaVersion`, `1`);
+INSERT INTO setup (`key`, `val`) VALUES ('schemaVersion', '1');

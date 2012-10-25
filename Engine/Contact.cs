@@ -35,7 +35,7 @@ namespace Engine
         public Contact()
         {
             m_Id = -1;
-            m_LastModified = DateTime.Now;
+            m_LastModified = DateTime.UtcNow;
         }
 
         public int Id
@@ -102,6 +102,11 @@ namespace Engine
         {
             get { return m_LocatorReceived; }
             set { m_LocatorReceived = value; }
+        }
+
+        public string LocatorReceivedString
+        {
+            get { return LocatorReceived == null ? string.Empty : m_LocatorReceived.ToString().ToUpperInvariant(); }
         }
 
         public string IotaRef
@@ -172,7 +177,7 @@ namespace Engine
 
         public override string ToString()
         {
-            return string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10}", Id, StartTime, Callsign, ReportSent, ReportReceived, SerialSent, SerialReceived, LocatorReceived, Band, Mode, Operator);
+            return string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10}", Id, StartTime, Callsign, ReportSent, ReportReceived, SerialSent, SerialReceived, LocatorReceivedString, Band, Mode, Operator);
         }
     }
 }

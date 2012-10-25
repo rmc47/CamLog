@@ -13,11 +13,9 @@ namespace UI
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (m_CivServer != null)
+            if (m_RadioCAT != null)
             {
-                m_CivServer.FrequencyChanged -= m_CivServer_FrequencyChanged;
-                m_CivServer.ModeChanged -= m_CivServer_ModeChanged;
-                m_CivServer.Dispose();
+                m_RadioCAT.FrequencyChanged -= m_CivServer_FrequencyChanged;
             }
 
             if (disposing && (components != null))
@@ -55,10 +53,6 @@ namespace UI
             System.Windows.Forms.Label label30;
             System.Windows.Forms.Label label31;
             System.Windows.Forms.Label label32;
-            this.m_ExportCabrillo = new System.Windows.Forms.Button();
-            this.m_ExportAdif = new System.Windows.Forms.Button();
-            this.m_Export = new System.Windows.Forms.Button();
-            this.m_ImportCallsigns = new System.Windows.Forms.Button();
             this.m_Frequency = new System.Windows.Forms.TextBox();
             this.m_Station = new System.Windows.Forms.TextBox();
             this.m_OurMode = new System.Windows.Forms.ComboBox();
@@ -81,6 +75,24 @@ namespace UI
             this.m_Notes = new System.Windows.Forms.Label();
             this.m_ContactTable = new System.Windows.Forms.TableLayoutPanel();
             this.m_RedrawTimer = new System.Windows.Forms.Timer(this.components);
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aDIFToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.knownCallsignsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aDIFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cabrilloToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rEG1TESTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_OnlyMyQSOs = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_PerformQRZLookups = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.winKeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rigControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.wipeQSOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.multipleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             groupBox1 = new System.Windows.Forms.GroupBox();
             label7 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
@@ -103,14 +115,11 @@ namespace UI
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             this.m_ContactTable.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(this.m_ExportCabrillo);
-            groupBox1.Controls.Add(this.m_ExportAdif);
-            groupBox1.Controls.Add(this.m_Export);
-            groupBox1.Controls.Add(this.m_ImportCallsigns);
             groupBox1.Controls.Add(label7);
             groupBox1.Controls.Add(this.m_Frequency);
             groupBox1.Controls.Add(this.m_Station);
@@ -123,52 +132,12 @@ namespace UI
             groupBox1.Controls.Add(this.m_OurLocator);
             groupBox1.Controls.Add(this.m_OurBand);
             groupBox1.Controls.Add(this.m_OurOperator);
-            groupBox1.Location = new System.Drawing.Point(400, 12);
+            groupBox1.Location = new System.Drawing.Point(400, 27);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new System.Drawing.Size(392, 147);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Operator / Station details";
-            // 
-            // m_ExportCabrillo
-            // 
-            this.m_ExportCabrillo.Location = new System.Drawing.Point(297, 78);
-            this.m_ExportCabrillo.Name = "m_ExportCabrillo";
-            this.m_ExportCabrillo.Size = new System.Drawing.Size(89, 23);
-            this.m_ExportCabrillo.TabIndex = 17;
-            this.m_ExportCabrillo.Text = "Export &Cabrillo";
-            this.m_ExportCabrillo.UseVisualStyleBackColor = true;
-            this.m_ExportCabrillo.Click += new System.EventHandler(this.m_ExportCabrillo_Click);
-            // 
-            // m_ExportAdif
-            // 
-            this.m_ExportAdif.Location = new System.Drawing.Point(297, 104);
-            this.m_ExportAdif.Name = "m_ExportAdif";
-            this.m_ExportAdif.Size = new System.Drawing.Size(89, 23);
-            this.m_ExportAdif.TabIndex = 16;
-            this.m_ExportAdif.Text = "Export ADIF...";
-            this.m_ExportAdif.UseVisualStyleBackColor = true;
-            this.m_ExportAdif.Click += new System.EventHandler(this.m_ExportAdif_Click);
-            // 
-            // m_Export
-            // 
-            this.m_Export.Location = new System.Drawing.Point(193, 104);
-            this.m_Export.Name = "m_Export";
-            this.m_Export.Size = new System.Drawing.Size(95, 23);
-            this.m_Export.TabIndex = 15;
-            this.m_Export.Text = "Export REG1...";
-            this.m_Export.UseVisualStyleBackColor = true;
-            this.m_Export.Click += new System.EventHandler(this.m_Export_Click);
-            // 
-            // m_ImportCallsigns
-            // 
-            this.m_ImportCallsigns.Location = new System.Drawing.Point(193, 78);
-            this.m_ImportCallsigns.Name = "m_ImportCallsigns";
-            this.m_ImportCallsigns.Size = new System.Drawing.Size(95, 23);
-            this.m_ImportCallsigns.TabIndex = 14;
-            this.m_ImportCallsigns.Text = "Import known callsigns...";
-            this.m_ImportCallsigns.UseVisualStyleBackColor = true;
-            this.m_ImportCallsigns.Click += new System.EventHandler(this.m_ImportCallsigns_Click);
             // 
             // label7
             // 
@@ -289,7 +258,7 @@ namespace UI
             // 
             groupBox2.Controls.Add(this.m_MatchesKnownCalls);
             groupBox2.Controls.Add(this.m_MatchesThisContest);
-            groupBox2.Location = new System.Drawing.Point(12, 12);
+            groupBox2.Location = new System.Drawing.Point(12, 27);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new System.Drawing.Size(382, 147);
             groupBox2.TabIndex = 14;
@@ -442,6 +411,7 @@ namespace UI
             this.m_Time.TabIndex = 1;
             this.m_Time.TabStop = false;
             this.m_Time.Text = "2359";
+            this.m_Time.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             // 
             // m_Band
             // 
@@ -452,6 +422,7 @@ namespace UI
             this.m_Band.TabIndex = 0;
             this.m_Band.TabStop = false;
             this.m_Band.Text = "70cm";
+            this.m_Band.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             // 
             // m_Callsign
             // 
@@ -461,8 +432,8 @@ namespace UI
             this.m_Callsign.TabIndex = 2;
             this.m_Callsign.Text = "GB100CAM/P";
             this.m_Callsign.TextChanged += new System.EventHandler(this.m_Callsign_TextChanged);
+            this.m_Callsign.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             this.m_Callsign.Leave += new System.EventHandler(this.m_Callsign_Leave);
-            this.m_Callsign.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ContactControls_PreviewKeyDown);
             // 
             // m_RstSent
             // 
@@ -471,7 +442,7 @@ namespace UI
             this.m_RstSent.Size = new System.Drawing.Size(45, 20);
             this.m_RstSent.TabIndex = 3;
             this.m_RstSent.Text = "59+40";
-            this.m_RstSent.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ContactControls_PreviewKeyDown);
+            this.m_RstSent.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             // 
             // m_SerialSent
             // 
@@ -482,6 +453,7 @@ namespace UI
             this.m_SerialSent.TabIndex = 4;
             this.m_SerialSent.TabStop = false;
             this.m_SerialSent.Text = "1234";
+            this.m_SerialSent.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             // 
             // m_RstReceived
             // 
@@ -490,7 +462,7 @@ namespace UI
             this.m_RstReceived.Size = new System.Drawing.Size(45, 20);
             this.m_RstReceived.TabIndex = 5;
             this.m_RstReceived.Text = "59+40";
-            this.m_RstReceived.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ContactControls_PreviewKeyDown);
+            this.m_RstReceived.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             // 
             // m_Locator
             // 
@@ -500,8 +472,8 @@ namespace UI
             this.m_Locator.TabIndex = 7;
             this.m_Locator.Text = "AB12CD";
             this.m_Locator.TextChanged += new System.EventHandler(this.m_Locator_TextChanged);
+            this.m_Locator.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             this.m_Locator.KeyUp += new System.Windows.Forms.KeyEventHandler(this.m_Locator_KeyUp);
-            this.m_Locator.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ContactControls_PreviewKeyDown);
             // 
             // m_SerialReceived
             // 
@@ -510,7 +482,7 @@ namespace UI
             this.m_SerialReceived.Size = new System.Drawing.Size(45, 20);
             this.m_SerialReceived.TabIndex = 6;
             this.m_SerialReceived.Text = "0001";
-            this.m_SerialReceived.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ContactControls_PreviewKeyDown);
+            this.m_SerialReceived.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             // 
             // m_Comments
             // 
@@ -519,7 +491,7 @@ namespace UI
             this.m_Comments.Size = new System.Drawing.Size(172, 20);
             this.m_Comments.TabIndex = 10;
             this.m_Comments.Text = "This was a very nice QSO";
-            this.m_Comments.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ContactControls_PreviewKeyDown);
+            this.m_Comments.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             // 
             // m_Distance
             // 
@@ -530,6 +502,7 @@ namespace UI
             this.m_Distance.TabIndex = 8;
             this.m_Distance.TabStop = false;
             this.m_Distance.Text = "23km";
+            this.m_Distance.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             // 
             // m_Beam
             // 
@@ -540,10 +513,11 @@ namespace UI
             this.m_Beam.TabIndex = 9;
             this.m_Beam.TabStop = false;
             this.m_Beam.Text = "090";
+            this.m_Beam.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
             // 
             // m_Notes
             // 
-            this.m_Notes.Location = new System.Drawing.Point(12, 384);
+            this.m_Notes.Location = new System.Drawing.Point(12, 399);
             this.m_Notes.Name = "m_Notes";
             this.m_Notes.Size = new System.Drawing.Size(780, 18);
             this.m_Notes.TabIndex = 13;
@@ -587,7 +561,7 @@ namespace UI
             this.m_ContactTable.Controls.Add(this.m_RstReceived, 5, 9);
             this.m_ContactTable.Controls.Add(this.m_SerialReceived, 6, 9);
             this.m_ContactTable.Controls.Add(this.m_Locator, 7, 9);
-            this.m_ContactTable.Location = new System.Drawing.Point(12, 165);
+            this.m_ContactTable.Location = new System.Drawing.Point(12, 180);
             this.m_ContactTable.Name = "m_ContactTable";
             this.m_ContactTable.RowCount = 10;
             this.m_ContactTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -608,28 +582,177 @@ namespace UI
             this.m_RedrawTimer.Interval = 2500;
             this.m_RedrawTimer.Tick += new System.EventHandler(this.m_RedrawTimer_Tick);
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.logToolStripMenuItem,
+            this.viewToolStripMenuItem,
+            this.optionsToolStripMenuItem,
+            this.wipeQSOToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(796, 24);
+            this.menuStrip1.TabIndex = 15;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // logToolStripMenuItem
+            // 
+            this.logToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openLogToolStripMenuItem,
+            this.importToolStripMenuItem,
+            this.exportToolStripMenuItem});
+            this.logToolStripMenuItem.Name = "logToolStripMenuItem";
+            this.logToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.logToolStripMenuItem.Text = "&Log";
+            // 
+            // openLogToolStripMenuItem
+            // 
+            this.openLogToolStripMenuItem.Name = "openLogToolStripMenuItem";
+            this.openLogToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openLogToolStripMenuItem.Text = "&Open log...";
+            this.openLogToolStripMenuItem.Click += new System.EventHandler(this.openLogToolStripMenuItem_Click);
+            // 
+            // importToolStripMenuItem
+            // 
+            this.importToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aDIFToolStripMenuItem1,
+            this.knownCallsignsToolStripMenuItem});
+            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.importToolStripMenuItem.Text = "&Import";
+            // 
+            // aDIFToolStripMenuItem1
+            // 
+            this.aDIFToolStripMenuItem1.Name = "aDIFToolStripMenuItem1";
+            this.aDIFToolStripMenuItem1.Size = new System.Drawing.Size(170, 22);
+            this.aDIFToolStripMenuItem1.Text = "&ADIF...";
+            this.aDIFToolStripMenuItem1.Click += new System.EventHandler(this.ImportAdif);
+            // 
+            // knownCallsignsToolStripMenuItem
+            // 
+            this.knownCallsignsToolStripMenuItem.Name = "knownCallsignsToolStripMenuItem";
+            this.knownCallsignsToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.knownCallsignsToolStripMenuItem.Text = "&Known Callsigns...";
+            this.knownCallsignsToolStripMenuItem.Click += new System.EventHandler(this.ImportKnownCallsigns);
+            // 
+            // exportToolStripMenuItem
+            // 
+            this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aDIFToolStripMenuItem,
+            this.cabrilloToolStripMenuItem,
+            this.rEG1TESTToolStripMenuItem,
+            this.multipleToolStripMenuItem});
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exportToolStripMenuItem.Text = "&Export";
+            // 
+            // aDIFToolStripMenuItem
+            // 
+            this.aDIFToolStripMenuItem.Name = "aDIFToolStripMenuItem";
+            this.aDIFToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aDIFToolStripMenuItem.Text = "&ADIF...";
+            this.aDIFToolStripMenuItem.Click += new System.EventHandler(this.ExportAdif);
+            // 
+            // cabrilloToolStripMenuItem
+            // 
+            this.cabrilloToolStripMenuItem.Name = "cabrilloToolStripMenuItem";
+            this.cabrilloToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cabrilloToolStripMenuItem.Text = "&Cabrillo...";
+            this.cabrilloToolStripMenuItem.Click += new System.EventHandler(this.ExportCabrillo);
+            // 
+            // rEG1TESTToolStripMenuItem
+            // 
+            this.rEG1TESTToolStripMenuItem.Name = "rEG1TESTToolStripMenuItem";
+            this.rEG1TESTToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.rEG1TESTToolStripMenuItem.Text = "&REG1TEST...";
+            this.rEG1TESTToolStripMenuItem.Click += new System.EventHandler(this.m_Export_Click);
+            // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_OnlyMyQSOs,
+            this.m_PerformQRZLookups});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "&View";
+            // 
+            // m_OnlyMyQSOs
+            // 
+            this.m_OnlyMyQSOs.Name = "m_OnlyMyQSOs";
+            this.m_OnlyMyQSOs.Size = new System.Drawing.Size(169, 22);
+            this.m_OnlyMyQSOs.Text = "Only my QSOs";
+            this.m_OnlyMyQSOs.Click += new System.EventHandler(this.OnlyMyQSOsClicked);
+            // 
+            // m_PerformQRZLookups
+            // 
+            this.m_PerformQRZLookups.CheckOnClick = true;
+            this.m_PerformQRZLookups.Name = "m_PerformQRZLookups";
+            this.m_PerformQRZLookups.Size = new System.Drawing.Size(169, 22);
+            this.m_PerformQRZLookups.Text = "QRZ.com lookups";
+            this.m_PerformQRZLookups.CheckedChanged += new System.EventHandler(this.m_PerformQRZLookups_CheckedChanged);
+            // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.winKeyToolStripMenuItem,
+            this.rigControlToolStripMenuItem});
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.optionsToolStripMenuItem.Text = "&Options";
+            // 
+            // winKeyToolStripMenuItem
+            // 
+            this.winKeyToolStripMenuItem.Name = "winKeyToolStripMenuItem";
+            this.winKeyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.winKeyToolStripMenuItem.Text = "WinKey...";
+            // 
+            // rigControlToolStripMenuItem
+            // 
+            this.rigControlToolStripMenuItem.Name = "rigControlToolStripMenuItem";
+            this.rigControlToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.rigControlToolStripMenuItem.Text = "Rig Control...";
+            // 
+            // wipeQSOToolStripMenuItem
+            // 
+            this.wipeQSOToolStripMenuItem.Name = "wipeQSOToolStripMenuItem";
+            this.wipeQSOToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
+            this.wipeQSOToolStripMenuItem.Text = "&Wipe QSO";
+            this.wipeQSOToolStripMenuItem.Click += new System.EventHandler(this.WipeQSOClicked);
+            // 
+            // multipleToolStripMenuItem
+            // 
+            this.multipleToolStripMenuItem.Name = "multipleToolStripMenuItem";
+            this.multipleToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.multipleToolStripMenuItem.Text = "Multiple...";
+            // 
             // ContestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(796, 398);
+            this.ClientSize = new System.Drawing.Size(796, 423);
             this.Controls.Add(this.m_ContactTable);
             this.Controls.Add(groupBox2);
             this.Controls.Add(this.m_Notes);
             this.Controls.Add(groupBox1);
+            this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.KeyPreview = true;
+            this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(812, 436);
-            this.MinimumSize = new System.Drawing.Size(812, 436);
             this.Name = "ContestForm";
-            this.Text = "M0VFC Contest Log";
+            this.Text = "CamLog";
             this.Load += new System.EventHandler(this.ContestForm_Load);
             this.Shown += new System.EventHandler(this.ContestForm_Shown);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ContestForm_KeyDown);
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);
             this.m_ContactTable.ResumeLayout(false);
             this.m_ContactTable.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -657,10 +780,36 @@ namespace UI
         private System.Windows.Forms.TextBox m_Frequency;
         private System.Windows.Forms.ListBox m_MatchesThisContest;
         private System.Windows.Forms.ListBox m_MatchesKnownCalls;
-        private System.Windows.Forms.Button m_ImportCallsigns;
-        private System.Windows.Forms.Button m_Export;
-        private System.Windows.Forms.Button m_ExportAdif;
-        private System.Windows.Forms.Button m_ExportCabrillo;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem logToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openLogToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem winKeyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem wipeQSOToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem m_OnlyMyQSOs;
+        private System.Windows.Forms.ToolStripMenuItem rigControlToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem m_PerformQRZLookups;
+        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aDIFToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cabrilloToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rEG1TESTToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aDIFToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem knownCallsignsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem multipleToolStripMenuItem;
+        //private System.Windows.Forms.DataGridView m_QSOGrid;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QBand;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QTime;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QCallsign;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QSent;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QSentSerial;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QReceived;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QReceivedSerial;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QLocator;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QDistance;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QBeam;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn m_QComments;
     }
 }
 

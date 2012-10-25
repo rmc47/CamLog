@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Engine;
 using Microsoft.Win32;
 using System.Threading;
+using RigCAT.NET;
 
 namespace UI
 {
@@ -16,9 +17,10 @@ namespace UI
         private static readonly Color c_DupeColor = Color.Red;
         private static readonly Color c_WorkedOtherBandsColor = Color.Green;
 
+        private Controller Controller { get; set; }
         private ContactStore m_ContactStore;
-        private CivServer m_CivServer;
-        private CallsignLookup m_CallsignLookup = new CallsignLookup("cty.xml");
+        private IRadio m_RadioCAT;
+        private CallsignLookup m_CallsignLookup = new CallsignLookup("cty.xml.gz");
         private Locator m_OurLocatorValue = new Locator("JO01GI");
         private Label[][] m_ContactTableLabels;
         private KeyValuePair<int, int>[] m_ContactIds;
@@ -27,10 +29,36 @@ namespace UI
         
         public ContestForm()
         {
+            Controller = Program.Controller;
             InitializeComponent();
+
+            Controller.ContactStoreChanged += new EventHandler(ContactStoreChanged);
+            Controller.CivServerChanged += new EventHandler(CivServerChanged);
         }
 
-        private void ClearContactRow()
+        private void CivServerChanged(object sender, EventArgs e)
+        {
+            if (m_RadioCAT != null)
+            {
+                m_RadioCAT.FrequencyChanged -= m_CivServer_FrequencyChanged;
+            }
+
+            m_RadioCAT = Controller.Radio;
+            if (m_RadioCAT != null)
+            {
+                m_RadioCAT.FrequencyChanged += m_CivServer_FrequencyChanged;
+            }
+        }
+
+        private void ContactStoreChanged(object sender, EventArgs e)
+        {
+            m_ContactStore = Controller.ContactStore;
+
+            m_RedrawTimer.Enabled = true;
+            m_SerialSent.Text = m_ContactStore.GetSerial(Band.Unknown).ToString().PadLeft(3, '0');
+        }
+
+        private void ClearContactRow(bool newSerial)
         {
             m_Callsign.Text = string.Empty;
             m_RstReceived.Text = m_RstSent.Text = ModeHelper.GetDefaultReport(ModeHelper.Parse(m_OurMode.Text));
@@ -38,7 +66,7 @@ namespace UI
             m_Locator.Text = string.Empty;
             m_Comments.Text = string.Empty;
 
-            if (m_ContactStore != null) // Can't do this before we connect to the DB
+            if (newSerial && m_ContactStore != null) // Can't do this before we connect to the DB
                 m_SerialSent.Text = m_ContactStore.GetSerial(BandHelper.Parse(m_Band.Text)).ToString().PadLeft(3, '0'); // For IOTA just use unknown band
 
             m_LocatorSetManually = false;
@@ -202,7 +230,7 @@ namespace UI
             InitialisePreviousContactsGrid();
 
             // Clear stuff out ready for use
-            ClearContactRow();
+            ClearContactRow(true);
 
             // Get our station number from the registry
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\M0VFC Contest Log", false))
@@ -212,24 +240,21 @@ namespace UI
                     m_Station.Text = (string)key.GetValue("StationNumber", "1");
                     m_OurLocator.Text = (string)key.GetValue("Locator", "JO02BG");
                     m_OurOperator.Text = (string)key.GetValue("Operator", "UNKNOWN");
+                    bool performQRZLookups;
+                    string performQRZLookupsObj = (string)key.GetValue("PerformQRZLookups", "True");
+                    bool.TryParse(performQRZLookupsObj, out performQRZLookups);
+                    m_PerformQRZLookups.Checked = performQRZLookups;
                 }
             }
-        }
-
-        void m_CivServer_ModeChanged(object sender, EventArgs e)
-        {
-            Invoke(new MethodInvoker(delegate
-            {
-                m_OurMode.SelectedItem = ModeHelper.ToString(m_CivServer.Mode);
-            }));
         }
 
         void m_CivServer_FrequencyChanged(object sender, EventArgs e)
         {
             Invoke(new MethodInvoker(delegate
             {
-                m_Frequency.Text = FrequencyHelper.ToString(m_CivServer.Frequency);
-                m_OurBand.SelectedItem = BandHelper.ToString(BandHelper.FromFrequency(m_CivServer.Frequency));
+                m_Frequency.Text = FrequencyHelper.ToString(m_RadioCAT.PrimaryFrequency);
+                m_OurBand.SelectedItem = BandHelper.ToString(BandHelper.FromFrequency(m_RadioCAT.PrimaryFrequency));
+                m_OurMode.SelectedItem = ModeHelper.ToString(m_RadioCAT.PrimaryMode);
             }));
         }
 
@@ -242,40 +267,18 @@ namespace UI
 
         private void ContestForm_Shown(object sender, EventArgs e)
         {
-            // Get the login details
-            using (LogonForm lf = new LogonForm())
-            {
-                DialogResult dr = lf.ShowDialog(this);
-                if (dr != DialogResult.OK)
-                    Close();
-                else
-                {
-                    m_ContactStore = new ContactStore(lf.Server, lf.Database, lf.Username, lf.Password);
-
-                    m_RedrawTimer.Enabled = true;
-                    m_SerialSent.Text = m_ContactStore.GetSerial(Band.Unknown).ToString().PadLeft(3, '0');
-                    if (!string.IsNullOrEmpty(lf.CivSerialPort))
-                    {
-                        m_CivServer = new CivServer(lf.CivSerialPort, lf.CivDtr, lf.CivRts);
-                        // Hook up to the frequency and mode change events
-                        m_CivServer.FrequencyChanged += new EventHandler<EventArgs>(m_CivServer_FrequencyChanged);
-                        m_CivServer.ModeChanged += new EventHandler<EventArgs>(m_CivServer_ModeChanged);
-
-                        // Force a frequency query
-                        m_CivServer.QueryFrequency();
-                    }
-                }
-            }
+            Controller.OpenLog();
         }
 
-        private void ContactControls_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        private void CurrentQSOKeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
                 if (ValidateContact())
                 {
+                    e.SuppressKeyPress = true;
                     m_ContactStore.SaveContact(Contact);
-                    ClearContactRow();
+                    ClearContactRow(true);
                     PopulatePreviousContactsGrid();
                 }
             }
@@ -331,8 +334,44 @@ namespace UI
         {
             if (m_ContactStore == null)
                 return;
-            List<Contact> contacts = m_ContactStore.GetLatestContacts(m_ContactTable.RowCount - 2);
+
+            string station;
+            if (m_OnlyMyQSOs.Checked)
+                station = m_Station.Text;
+            else
+                station = null;
+            
+            int maxToFetch = m_ContactTable.RowCount - 2;
+
+            ThreadPool.QueueUserWorkItem((dummy) =>
+            {
+                try
+                {
+                    List<Contact> contacts = m_ContactStore.GetLatestContacts(m_ContactTable.RowCount - 2, station);
+
+                    if (Disposing || IsDisposed)
+                        return;
+                    Invoke(new MethodInvoker(() =>
+                    {
+                        PopulatePreviousContactsGridCallback(contacts);
+                    }));
+                }
+                catch (Exception ex)
+                {
+                    Invoke(new MethodInvoker(() =>
+                    {
+                        MessageBox.Show("Exception populating previous contacts grid: " + ex.Message, "CamLog", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }));
+                }
+            });
+        }
+
+        private void PopulatePreviousContactsGridCallback(List<Contact> contacts)
+        {
+            
             Locator ourLocation = m_OurLocatorValue;
+            //m_QSOGrid.Rows.Clear();
+
             for (int i = 1; i < m_ContactTable.RowCount - 1; i++)
             {
                 int contactsIndex = m_ContactTable.RowCount - i-2;
@@ -360,7 +399,7 @@ namespace UI
 
                     rowLabels[(int)ContactTableColumns.Callsign].Text = c.Callsign;
                     rowLabels[(int)ContactTableColumns.Comments].Text = c.Notes;
-                    rowLabels[(int)ContactTableColumns.LocatorReceived].Text = c.LocatorReceived.ToString().ToUpper();
+                    rowLabels[(int)ContactTableColumns.LocatorReceived].Text = c.LocatorReceivedString;
                     rowLabels[(int)ContactTableColumns.RstReceived].Text = c.ReportReceived;
                     rowLabels[(int)ContactTableColumns.RstSent].Text = c.ReportSent;
                     rowLabels[(int)ContactTableColumns.SerialReceived].Text = c.SerialReceived.ToString().PadLeft(3, '0');
@@ -368,6 +407,28 @@ namespace UI
                     rowLabels[(int)ContactTableColumns.Time].Text = c.StartTime.ToString("HHmm");
                     m_ContactIds[i - 1] = new KeyValuePair<int, int>(c.SourceId, c.Id);
 
+                    if (string.Equals(c.Station, m_Station.Text, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        Array.ForEach(rowLabels, l => l.ForeColor = Color.Black);
+                    }
+                    else
+                    {
+                        Array.ForEach(rowLabels, l => l.ForeColor = Color.DarkGray);
+                    }
+
+                    //DataGridViewRow row = new DataGridViewRow();
+                    //m_QSOGrid.Rows.Add(row);
+                    //row.Cells[(int)ContactTableColumns.Beam].Value = Geographics.BeamHeading(ourLocation, theirLocator).ToString().PadLeft(3, '0');
+                    //row.Cells[(int)ContactTableColumns.Distance].Value = ((int)Math.Ceiling(Geographics.GeodesicDistance(ourLocation, theirLocator) / 1000)).ToString();
+
+                    //row.Cells[(int)ContactTableColumns.Callsign].Value = c.Callsign;
+                    //row.Cells[(int)ContactTableColumns.Comments].Value = c.Notes;
+                    //row.Cells[(int)ContactTableColumns.LocatorReceived].Value = c.LocatorReceivedString;
+                    //row.Cells[(int)ContactTableColumns.RstReceived].Value = c.ReportReceived;
+                    //row.Cells[(int)ContactTableColumns.RstSent].Value = c.ReportSent;
+                    //row.Cells[(int)ContactTableColumns.SerialReceived].Value = c.SerialReceived.ToString().PadLeft(3, '0');
+                    //row.Cells[(int)ContactTableColumns.SerialSent].Value = c.SerialSent.ToString().PadLeft(3, '0');
+                    //row.Cells[(int)ContactTableColumns.Time].Value = c.StartTime.ToString("HHmm");
                 }
                 else
                 {
@@ -396,58 +457,111 @@ namespace UI
             if (m_ContactStore == null)
                 return;
 
+            ThreadPool.QueueUserWorkItem(_ => CallsignChangedWorker(m_Callsign.Text, m_Band.Text, m_OurLocatorValue));
+        }
+
+        private void CallsignChangedWorker(string callsign, string ourBandText, Locator ourLocatorValue)
+        {
+            string notesText = null;
+            Color notesBackColor = Color.Transparent;
+            string locatorText = null;
+            string beamText = null, distanceText = null, commentsText = null;
+            object[] matchesKnownCalls = null, matchesThisContest = null, locatorMatchesThisContest = null;
 
             Locator existingLocator;
-            List<Band> bands = m_ContactStore.GetPreviousBands(m_Callsign.Text, out existingLocator);
-            Band ourBand = BandHelper.Parse(m_Band.Text);
-            if (bands.Contains(ourBand))
+            if (callsign.Length > 2)
             {
-                m_Notes.BackColor = c_DupeColor;
-                m_Notes.Text = string.Format("Already worked {0} on {1}", m_Callsign.Text, BandHelper.ToString(ourBand));
-            }
-            else if (bands.Count > 0)
-            {
-                m_Notes.BackColor = c_WorkedOtherBandsColor;
-                string bandString = string.Empty;
-                foreach (Band b in bands)
+                List<Band> bands = m_ContactStore.GetPreviousBands(callsign, out existingLocator);
+                Band ourBand = BandHelper.Parse(ourBandText);
+                if (bands.Contains(ourBand))
                 {
-                    bandString += BandHelper.ToString(b) + ", ";
+                    notesBackColor = c_DupeColor;
+                    notesText = string.Format("Already worked {0} on {1}", callsign, BandHelper.ToString(ourBand));
                 }
-                m_Notes.Text = string.Format("Worked {0} on {1} - {2}", m_Callsign.Text, bandString, existingLocator);
-                if (existingLocator != null)
-                    m_Locator.Text = existingLocator.ToString();
-            }
-            else
-            {
-                m_Notes.Text = string.Empty;
-                m_Notes.BackColor = BackColor;
-            }
+                else if (bands.Count > 0)
+                {
+                    notesBackColor = c_WorkedOtherBandsColor;
+                    string bandString = string.Empty;
+                    foreach (Band b in bands)
+                    {
+                        bandString += BandHelper.ToString(b) + ", ";
+                    }
+                    notesText = string.Format("Worked {0} on {1} - {2}", callsign, bandString, existingLocator);
+                    if (existingLocator != null)
+                        locatorText = existingLocator.ToString();
+                }
+                else
+                {
+                    notesText = string.Empty;
+                    notesBackColor = Color.Transparent;
+                }
 
-            // Do a first guess beam heading etc
-            PrefixRecord pfx = m_CallsignLookup.LookupPrefix(m_Callsign.Text);
-            if (pfx != null)
-            {
-                Locator theirLocator = new Locator(pfx.Latitude, pfx.Longitude);
-                m_Beam.Text = Geographics.BeamHeading(m_OurLocatorValue, theirLocator).ToString();
-                m_Distance.Text = Math.Ceiling(Geographics.GeodesicDistance(m_OurLocatorValue, theirLocator) / 1000).ToString();
-                m_Comments.Text = pfx.Entity;
+                // Do a first guess beam heading etc
+                PrefixRecord pfx = m_CallsignLookup.LookupPrefix(callsign);
+                if (pfx != null)
+                {
+                    Locator theirLocator = new Locator(pfx.Latitude, pfx.Longitude);
+                    beamText = Geographics.BeamHeading(ourLocatorValue, theirLocator).ToString();
+                    distanceText = Math.Ceiling(Geographics.GeodesicDistance(ourLocatorValue, theirLocator) / 1000).ToString();
+                    commentsText = pfx.Entity;
+                }
             }
 
             // Populate the lists of partial callsign matches
-            if (m_Callsign.TextLength > 0)
+            if (callsign.Length > 0)
             {
-                m_MatchesKnownCalls.Items.Clear();
-                m_MatchesThisContest.Items.Clear();
-                m_MatchesKnownCalls.Items.AddRange(m_ContactStore.GetPartialMatchesKnownCalls(m_Callsign.Text).ToArray());
-                m_MatchesThisContest.Items.AddRange(m_ContactStore.GetPartialMatchesThisContest(m_Callsign.Text).ToArray());
+                matchesKnownCalls = m_ContactStore.GetPartialMatchesKnownCalls(callsign).ToArray();
+                matchesThisContest = m_ContactStore.GetPartialMatchesThisContest(callsign).ToArray();
             }
 
             // Also search locators if we've got enough digits for it to be sensibly 
             // distinguished from a callsign
-            if (m_Callsign.TextLength > 2)
+            if (callsign.Length > 2)
             {
-                m_MatchesThisContest.Items.AddRange(m_ContactStore.GetLocatorMatchesThisContest(m_Callsign.Text).ToArray());
+                locatorMatchesThisContest = m_ContactStore.GetLocatorMatchesThisContest(callsign).ToArray();
             }
+
+            // Actually populate everything back on the UI thread!
+            if (Disposing || IsDisposed || !IsHandleCreated)
+                return;
+            Invoke(new MethodInvoker(() =>
+            {
+                // If the callsign has been changed while we've been doing this work, don't do the update - another request
+                // will have been kicked off since, and we don't want to trample on the later update
+                if (m_Callsign.Text != callsign)
+                    return;
+
+                if (notesText != null)
+                {
+                    m_Notes.Text = notesText;
+                    m_Notes.BackColor = notesBackColor;
+                }
+
+                if (locatorText != null) m_Locator.Text = locatorText;
+
+                if (beamText != null) m_Beam.Text = beamText;
+                if (distanceText != null) m_Distance.Text = distanceText;
+                if (commentsText != null) m_Comments.Text = commentsText;
+
+                if (matchesKnownCalls != null || locatorMatchesThisContest != null)
+                {
+                    m_MatchesKnownCalls.BeginUpdate();
+                    m_MatchesKnownCalls.Items.Clear();
+
+                    if (matchesKnownCalls != null)
+                        m_MatchesKnownCalls.Items.AddRange(matchesKnownCalls);
+                    if (locatorMatchesThisContest != null)
+                        m_MatchesKnownCalls.Items.AddRange(locatorMatchesThisContest);
+                    m_MatchesKnownCalls.EndUpdate();
+                }
+                if (matchesThisContest != null)
+                {
+                    m_MatchesThisContest.BeginUpdate();
+                    m_MatchesThisContest.Items.Clear();
+                    m_MatchesThisContest.Items.AddRange(matchesThisContest);
+                    m_MatchesThisContest.EndUpdate();
+                }
+            }));
         }
 
         private void m_OurMode_SelectedIndexChanged(object sender, EventArgs e)
@@ -474,9 +588,10 @@ namespace UI
             {
                 key.SetValue("StationNumber", m_Station.Text);
             }
+            this.Text = string.Format("{0} - CamLog", m_Station.Text);
         }
 
-        private void m_ImportCallsigns_Click(object sender, EventArgs e)
+        private void ImportKnownCallsigns(object sender, EventArgs e)
         {
             if (m_ContactStore == null)
                 return;
@@ -499,18 +614,18 @@ namespace UI
             }
         }
 
-        private void m_ExportAdif_Click(object sender, EventArgs e)
+        private void ExportAdif(object sender, EventArgs e)
         {
             using (SaveFileDialog sfd = new SaveFileDialog())
             {
                 if (sfd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
                     return;
-                AdifHandler.ExportContacts(m_ContactStore.GetAllContacts("%"), sfd.FileName);
+                AdifHandler.ExportContacts(m_ContactStore.GetAllContacts(null), sfd.FileName);
                 MessageBox.Show("Export complete!");
             }
         }
 
-        private void m_ExportCabrillo_Click(object sender, EventArgs e)
+        private void ExportCabrillo(object sender, EventArgs e)
         {
             using (ExportCabrilloForm ef = new ExportCabrilloForm
             {
@@ -521,7 +636,7 @@ namespace UI
             {
                 DialogResult dr = ef.ShowDialog();
                 if (dr == DialogResult.OK)
-                    CabrilloExporter.ExportContacts(m_ContactStore.GetAllContacts("1"), ef.ExportPath, ef.SourceLocator.ToString(), ef.CallSent, ef.Operators, ef.Contest, ef.ClaimedScore, ef.CustomHeaders);
+                    CabrilloExporter.ExportContacts(m_ContactStore.GetAllContacts(null), ef.ExportPath, ef.SourceLocator.ToString(), ef.CallSent, ef.Operators, ef.Contest, ef.ClaimedScore);
             }
         }
 
@@ -529,7 +644,7 @@ namespace UI
 
         private void m_Callsign_Leave(object sender, EventArgs e)
         {
-            if (m_Callsign.TextLength > 2)
+            if (m_Callsign.TextLength > 2 && m_PerformQRZLookups.Checked)
             {
                 // Fire off a thread to try and grab the locator from qrz.com
                 string targetCall = m_Callsign.Text;
@@ -578,5 +693,69 @@ namespace UI
             }
         }
 
+        private void openLogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Controller.OpenLog();
+        }
+
+        private void WipeQSOClicked(object sender, EventArgs e)
+        {
+            ClearContactRow(false);
+        }
+
+        private void ContestForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode >= Keys.F1 && e.KeyCode <= Keys.F12 && e.Modifiers == Keys.None)
+            {
+                e.SuppressKeyPress = true;
+                try
+                {
+                    Controller.CWMacro.SendMacro(e.KeyCode - Keys.F1, new Dictionary<string, string>());
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error sending CW macro: " + ex.Message);
+                }
+            }
+        }
+
+        private void OnlyMyQSOsClicked(object sender, EventArgs e)
+        {
+            m_OnlyMyQSOs.Checked = !m_OnlyMyQSOs.Checked;
+            PopulatePreviousContactsGrid();
+        }
+
+        private void m_PerformQRZLookups_CheckedChanged(object sender, EventArgs e)
+        {
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\M0VFC Contest Log"))
+            {
+                key.SetValue("PerformQRZLookups", m_PerformQRZLookups.Checked.ToString());
+            }
+        }
+
+        private void ImportAdif(object sender, EventArgs e)
+        {
+            try
+            {
+                string filename;
+                using (OpenFileDialog ofd = new OpenFileDialog())
+                {
+                    ofd.Filter = "ADIF Files (*.adi)|*.adi|All Files (*.*)|*.*";
+                    ofd.CheckFileExists = true;
+                    DialogResult dr = ofd.ShowDialog();
+                    if (dr != System.Windows.Forms.DialogResult.OK)
+                        return;
+
+                    filename = ofd.FileName;
+                }
+                List<Contact> contacts = AdifHandler.ImportAdif(filename, "IMPORT", m_ContactStore.SourceId, "IMPORT");
+                contacts.ForEach(m_ContactStore.SaveContact);
+                MessageBox.Show(string.Format("Import of {0} contacts successful", contacts.Count), "CamLog | ADIF Import");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("Import failed: {0}", ex.Message), "CamLog | ADIF Import");
+            }
+        }
     }
 }

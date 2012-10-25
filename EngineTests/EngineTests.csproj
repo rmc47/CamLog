@@ -64,7 +64,6 @@
     <Compile Include="AdifTests.cs" />
     <Compile Include="BandTests.cs" />
     <Compile Include="CallsignLookupTests.cs" />
-    <Compile Include="CivTests.cs" />
     <Compile Include="FrequencyTests.cs" />
     <Compile Include="GeographicsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

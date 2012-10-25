@@ -84,6 +84,11 @@ namespace QslManager
 
         private void UpdateGrid()
         {
+            UpdateGrid(false);
+        }
+
+        private void UpdateGrid(bool deepSearch)
+        {
             m_ContactsGrid.Rows.Clear();
             
             // If the callsign's long enough, see if we can get any exact matches for it
@@ -94,12 +99,15 @@ namespace QslManager
             }
 
             // Get the previous contacts, filtering according to the selected source
-            m_VisibleContacts = m_ContactStore.GetPreviousContacts(m_TxtCallsign.Text).FindAll(c => c.SourceId == m_SelectedSource.SourceID);
+            if (!deepSearch)
+                m_VisibleContacts = m_ContactStore.GetPreviousContacts(m_TxtCallsign.Text).FindAll(c => c.SourceId == m_SelectedSource.SourceID);
+            else
+                m_VisibleContacts = m_ContactStore.GetApproximateMatches(m_TxtCallsign.Text).FindAll(c => c.SourceId == m_SelectedSource.SourceID);
             
             foreach (Contact c in m_VisibleContacts)
             {
                 m_ContactsGrid.Rows.Add(new object[] { 
-                    c.QslRxDate == null, 
+                    c.QslRxDate == null && !deepSearch, 
                     c.Callsign, 
                     c.StartTime, 
                     BandHelper.ToString(c.Band), 
@@ -239,6 +247,11 @@ namespace QslManager
         private void m_Layouts_SelectedIndexChanged(object sender, EventArgs e)
         {
             m_PageLayout = (IPageLayout)m_Layouts.SelectedItem;
+        }
+
+        private void m_DeepSearch_Click(object sender, EventArgs e)
+        {
+            UpdateGrid(true);
         }
     }
 }

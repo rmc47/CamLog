@@ -66,9 +66,9 @@
     <Compile Include="Band.cs" />
     <Compile Include="CabrilloExporter.cs" />
     <Compile Include="CallsignLookup.cs" />
-    <Compile Include="CivServer.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="ContactStore.cs" />
+    <Compile Include="CWMacro.cs" />
     <Compile Include="DatabaseType.cs" />
     <Compile Include="DBMigrations\DbMigrator.cs" />
     <Compile Include="FrequencyHelper.cs" />
@@ -85,11 +85,10 @@
     <Compile Include="Registry.cs" />
     <Compile Include="SerialProvider.cs" />
     <Compile Include="SourceCallsign.cs" />
+    <Compile Include="ThreadDataStore.cs" />
+    <Compile Include="WinKey.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="cty.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <EmbeddedResource Include="DBMigrations\MySQL\2.sql" />
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +110,20 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CloudlogCAT\RigCAT.NET\RigCAT.NET.csproj">
+      <Project>{71135AC1-AB0B-4E4E-9F7A-6090CD9F246F}</Project>
+      <Name>RigCAT.NET</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cty.xml.gz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cty.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

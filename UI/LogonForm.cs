@@ -9,6 +9,7 @@ using MySql.Data.MySqlClient;
 using Microsoft.Win32;
 using System.IO.Ports;
 using Engine;
+using RigCAT.NET;
 
 namespace UI
 {
@@ -48,6 +49,8 @@ namespace UI
                             key.SetValue("SerialPort", string.Empty);
                         key.SetValue("CivDtr", CivDtr.ToString());
                         key.SetValue("CivRts", CivRts.ToString());
+                        key.SetValue("CivSpeed", m_Speed.Text);
+                        key.SetValue("RadioModel", m_RadioModel.Text);
                     }
                 }
 
@@ -104,6 +107,25 @@ namespace UI
             get { return m_SerialPort.SelectedItem as string; }
         }
 
+        public int CivSpeed
+        {
+            get {
+                int speed;
+                int.TryParse(m_Speed.Text, out speed);
+                return speed;
+            }
+        }
+
+        public RadioModel? RadioModel
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(m_RadioModel.Text))
+                    return null;
+                return (RadioModel)Enum.Parse(typeof(RadioModel), m_RadioModel.Text, true);
+            }
+        }
+
         public bool CivDtr
         {
             get { return m_DTR.Checked; }
@@ -121,6 +143,10 @@ namespace UI
             foreach (string port in SerialPort.GetPortNames())
                 m_SerialPort.Items.Add(port);
 
+            m_RadioModel.Items.Clear();
+            foreach (string val in Enum.GetNames(typeof(RadioModel)))
+                m_RadioModel.Items.Add(val);
+
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\M0VFC Contest Log", false))
             {
                 if (key != null)
@@ -137,6 +163,8 @@ namespace UI
                     bool.TryParse((string)key.GetValue("CivRts", "True"), out civRts);
                     m_RTS.Checked = civRts;
                     m_DTR.Checked = civDtr;
+                    m_RadioModel.SelectedText = (string)key.GetValue("RadioModel", string.Empty);
+                    m_Speed.Text = (string)key.GetValue("CivSpeed", "19200");
                 }
             }
         }

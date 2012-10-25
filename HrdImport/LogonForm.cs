@@ -41,10 +41,8 @@ namespace HrdImport
                         key.SetValue("Database", Database);
                         key.SetValue("Username", Username);
                         key.SetValue("Password", Password);
-                        if (CivSerialPort != null)
-                            key.SetValue("SerialPort", CivSerialPort);
-                        else
-                            key.SetValue("SerialPort", string.Empty);
+                        key.SetValue("Station", Station);
+                        key.SetValue("ConnString", ConnString);
                     }
                 }
                 DialogResult = DialogResult.OK;
@@ -76,18 +74,18 @@ namespace HrdImport
             get { return m_Password.Text; }
         }
 
-        public string CivSerialPort
+        public string Station
         {
-            get { return m_SerialPort.SelectedItem as string; }
+            get { return m_Station.Text; }
+        }
+
+        public string ConnString
+        {
+            get { return m_ConnString.Text; }
         }
 
         private void LogonForm_Load(object sender, EventArgs e)
         {
-            // Grab list of serial ports
-            m_SerialPort.Items.Clear();
-            foreach (string port in SerialPort.GetPortNames())
-                m_SerialPort.Items.Add(port);
-
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\M0VFC Contest Log", false))
             {
                 if (key != null)
@@ -96,9 +94,8 @@ namespace HrdImport
                     m_Database.Text = (string)key.GetValue("Database", "");
                     m_Username.Text = (string)key.GetValue("Username", "gs3pye");
                     m_Password.Text = (string)key.GetValue("Password", "gs3pye");
-                    string savedSerialPort = (string)key.GetValue("SerialPort", "");
-                    if (savedSerialPort != null && m_SerialPort.Items.Contains(savedSerialPort))
-                        m_SerialPort.SelectedItem = savedSerialPort;
+                    m_Station.Text = (string)key.GetValue("Station", "DATA");
+                    m_ConnString.Text = (string)key.GetValue("ConnString", "DSN=HRD My Logbook - Access");
                 }
             }
         }

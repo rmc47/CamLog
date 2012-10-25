@@ -7,7 +7,7 @@ namespace Engine
 {
     public static class CabrilloExporter
     {
-        public static void ExportContacts(IEnumerable<Contact> contacts, string exportLocation, string c_LocatorSent, string c_CallUsed, string c_Operators, string c_Contest, string c_ClaimedScore, string c_CustomHeaders)
+        public static void ExportContacts(IEnumerable<Contact> contacts, string exportLocation, string c_LocatorSent, string c_CallUsed, string c_Operators, string c_Contest, string c_ClaimedScore)
         {
             using (StreamWriter writer = new StreamWriter(exportLocation))
             {
@@ -30,17 +30,6 @@ namespace Engine
                 {
                     writer.WriteLine("OPERATORS: " + c_CallUsed.ToUpper());
                 }
-                if (!string.IsNullOrEmpty(c_CustomHeaders))
-                {
-                    string[] c_CustomHeaders1 = c_CustomHeaders.Split('\n');
-                    foreach (string header in c_CustomHeaders1)
-                    {
-                        if (!string.IsNullOrEmpty(header))
-                        {
-                            writer.WriteLine(header.ToUpper());
-                        }
-                    }
-                }
                 writer.WriteLine();
                 foreach (Contact c in contacts)
                     ExportContact(c, writer, c_LocatorSent, c_CallUsed);
@@ -58,7 +47,7 @@ namespace Engine
                  c.ReportSent.PadRight(3),
                  c.SerialSent.ToString().PadLeft(3),
                  c.Callsign.PadRight(15).ToUpper(),
-                 c.LocatorReceived.ToString().ToUpper(),
+                 c.LocatorReceivedString,
                  c.ReportReceived.PadRight(3),
                  c.SerialReceived.ToString().PadLeft(3));
         }

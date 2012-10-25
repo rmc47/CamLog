@@ -53,6 +53,7 @@
             this.m_ChangeDB = new System.Windows.Forms.Button();
             this.m_Layouts = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.m_DeepSearch = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.m_ContactsGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -297,12 +298,23 @@
             this.label5.TabIndex = 15;
             this.label5.Text = "&Label Format:";
             // 
+            // m_DeepSearch
+            // 
+            this.m_DeepSearch.Location = new System.Drawing.Point(446, 63);
+            this.m_DeepSearch.Name = "m_DeepSearch";
+            this.m_DeepSearch.Size = new System.Drawing.Size(115, 23);
+            this.m_DeepSearch.TabIndex = 17;
+            this.m_DeepSearch.Text = "&Deep Search";
+            this.m_DeepSearch.UseVisualStyleBackColor = true;
+            this.m_DeepSearch.Click += new System.EventHandler(this.m_DeepSearch_Click);
+            // 
             // MainForm
             // 
             this.AcceptButton = this.m_MarkSelectedAsReceived;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(694, 454);
+            this.Controls.Add(this.m_DeepSearch);
             this.Controls.Add(this.m_Layouts);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.m_ChangeDB);
@@ -355,6 +367,7 @@
         private System.Windows.Forms.Button m_ChangeDB;
         private System.Windows.Forms.ComboBox m_Layouts;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button m_DeepSearch;
 
     }
 }

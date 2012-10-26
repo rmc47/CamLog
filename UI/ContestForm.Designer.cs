@@ -85,6 +85,7 @@ namespace UI
             this.aDIFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cabrilloToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rEG1TESTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.multipleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.m_OnlyMyQSOs = new System.Windows.Forms.ToolStripMenuItem();
             this.m_PerformQRZLookups = new System.Windows.Forms.ToolStripMenuItem();
@@ -92,7 +93,6 @@ namespace UI
             this.winKeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rigControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wipeQSOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.multipleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             groupBox1 = new System.Windows.Forms.GroupBox();
             label7 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
@@ -667,6 +667,13 @@ namespace UI
             this.rEG1TESTToolStripMenuItem.Text = "&REG1TEST...";
             this.rEG1TESTToolStripMenuItem.Click += new System.EventHandler(this.m_Export_Click);
             // 
+            // multipleToolStripMenuItem
+            // 
+            this.multipleToolStripMenuItem.Name = "multipleToolStripMenuItem";
+            this.multipleToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.multipleToolStripMenuItem.Text = "Multiple...";
+            this.multipleToolStripMenuItem.Click += new System.EventHandler(this.ExportMultiple);
+            // 
             // viewToolStripMenuItem
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -703,13 +710,13 @@ namespace UI
             // winKeyToolStripMenuItem
             // 
             this.winKeyToolStripMenuItem.Name = "winKeyToolStripMenuItem";
-            this.winKeyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.winKeyToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.winKeyToolStripMenuItem.Text = "WinKey...";
             // 
             // rigControlToolStripMenuItem
             // 
             this.rigControlToolStripMenuItem.Name = "rigControlToolStripMenuItem";
-            this.rigControlToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.rigControlToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.rigControlToolStripMenuItem.Text = "Rig Control...";
             // 
             // wipeQSOToolStripMenuItem
@@ -718,12 +725,6 @@ namespace UI
             this.wipeQSOToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
             this.wipeQSOToolStripMenuItem.Text = "&Wipe QSO";
             this.wipeQSOToolStripMenuItem.Click += new System.EventHandler(this.WipeQSOClicked);
-            // 
-            // multipleToolStripMenuItem
-            // 
-            this.multipleToolStripMenuItem.Name = "multipleToolStripMenuItem";
-            this.multipleToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.multipleToolStripMenuItem.Text = "Multiple...";
             // 
             // ContestForm
             // 

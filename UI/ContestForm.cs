@@ -618,6 +618,8 @@ namespace UI
         {
             using (SaveFileDialog sfd = new SaveFileDialog())
             {
+                sfd.DefaultExt = "adi";
+                sfd.Filter = "ADIF files (*.adi)|*.adi|All files (*.*)|*.*"; 
                 if (sfd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
                     return;
                 AdifHandler.ExportContacts(m_ContactStore.GetAllContacts(null), sfd.FileName);
@@ -637,6 +639,30 @@ namespace UI
                 DialogResult dr = ef.ShowDialog();
                 if (dr == DialogResult.OK)
                     CabrilloExporter.ExportContacts(m_ContactStore.GetAllContacts(null), ef.ExportPath, ef.SourceLocator.ToString(), ef.CallSent, ef.Operators, ef.Contest, ef.ClaimedScore);
+            }
+        }
+
+        private void ExportMultiple(object sender, EventArgs e)
+        {
+            using (ExportMultiple ef = new ExportMultiple
+            {
+                CallSent = m_OurOperator.Text,
+                SourceLocator = m_OurLocatorValue,
+                AvailableBands = m_ContactStore.GetAllBands()
+            })
+            {
+                DialogResult dr = ef.ShowDialog();
+                if (dr == DialogResult.OK)
+                {
+                    string exportFileName = ef.ExportPath + "\\" + ef.FileName;
+                    if(ef.ExportADIF == true)
+                        AdifHandler.ExportContacts(m_ContactStore.GetAllContacts(null), exportFileName + ".adi");
+                    if (ef.ExportCabrillo == true)
+                        CabrilloExporter.ExportContacts(m_ContactStore.GetAllContacts(null), exportFileName + ".log", ef.SourceLocator.ToString(), ef.CallSent, ef.Operators, ef.Contest, ef.ClaimedScore);
+                    if (ef.ExportREG1TEST == true)
+                        System.IO.File.WriteAllText(exportFileName + ".txt", m_ContactStore.ExportLog(ef.SourceLocator, ef.Band));
+                    MessageBox.Show("Export complete!");
+                }
             }
         }
 

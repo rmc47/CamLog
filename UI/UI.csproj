@@ -91,6 +91,12 @@
     <Compile Include="ExportForm.Designer.cs">
       <DependentUpon>ExportForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ExportMultiple.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExportMultiple.Designer.cs">
+      <DependentUpon>ExportMultiple.cs</DependentUpon>
+    </Compile>
     <Compile Include="NewLogForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,6 +125,9 @@
     <EmbeddedResource Include="ExportForm.resx">
       <DependentUpon>ExportForm.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExportMultiple.resx">
+      <DependentUpon>ExportMultiple.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="NewLogForm.resx">
       <DependentUpon>NewLogForm.cs</DependentUpon>

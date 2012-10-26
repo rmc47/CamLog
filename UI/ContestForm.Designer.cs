@@ -85,6 +85,7 @@ namespace UI
             this.aDIFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cabrilloToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rEG1TESTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.multipleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.m_OnlyMyQSOs = new System.Windows.Forms.ToolStripMenuItem();
             this.m_PerformQRZLookups = new System.Windows.Forms.ToolStripMenuItem();
@@ -639,7 +640,8 @@ namespace UI
             this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aDIFToolStripMenuItem,
             this.cabrilloToolStripMenuItem,
-            this.rEG1TESTToolStripMenuItem});
+            this.rEG1TESTToolStripMenuItem,
+            this.multipleToolStripMenuItem});
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             this.exportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exportToolStripMenuItem.Text = "&Export";
@@ -664,6 +666,13 @@ namespace UI
             this.rEG1TESTToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.rEG1TESTToolStripMenuItem.Text = "&REG1TEST...";
             this.rEG1TESTToolStripMenuItem.Click += new System.EventHandler(this.m_Export_Click);
+            // 
+            // multipleToolStripMenuItem
+            // 
+            this.multipleToolStripMenuItem.Name = "multipleToolStripMenuItem";
+            this.multipleToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.multipleToolStripMenuItem.Text = "Multiple...";
+            this.multipleToolStripMenuItem.Click += new System.EventHandler(this.ExportMultiple);
             // 
             // viewToolStripMenuItem
             // 
@@ -789,6 +798,7 @@ namespace UI
         private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aDIFToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem knownCallsignsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem multipleToolStripMenuItem;
         //private System.Windows.Forms.DataGridView m_QSOGrid;
         //private System.Windows.Forms.DataGridViewTextBoxColumn m_QBand;
         //private System.Windows.Forms.DataGridViewTextBoxColumn m_QTime;

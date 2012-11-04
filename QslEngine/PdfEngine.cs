@@ -26,7 +26,7 @@ namespace QslEngine
         private readonly string m_OurCallsign;
         private readonly IPageLayout m_Layout;
 
-        public PdfEngine(IPageLayout layout, string ourCallsign)
+        public PdfEngine(IPageLayout layout, string ourCallsign, int firstPageOffset)
         {
             m_OurCallsign = ourCallsign;
             m_Layout = layout;
@@ -36,6 +36,11 @@ namespace QslEngine
             for (int i = 0; i < m_Layout.Columns; i++)
                 widths[i] = 1;
             m_MainTable.SetWidths(widths);
+
+            // Offset the first page by an appropriate number of cells
+            for (int i = 0; i < firstPageOffset; i++)
+                m_MainTable.AddCell(PopulateCell(new TableEntry[0]));
+            m_LabelsUsed += firstPageOffset;
         }
 
         public int CalculateLabelCount(List<Contact> entries)
@@ -119,27 +124,30 @@ namespace QslEngine
             PdfPTable qsoTable = new PdfPTable(5);
             qsoTable.SetWidths(m_Layout.ColumnRelativeWidths);
             qsoTable.WidthPercentage = 100f;
-            
-            AddCell(qsoTable, s_HeaderFont, "Date");
-            AddCell(qsoTable, s_HeaderFont, "UTC");
-            AddCell(qsoTable, s_HeaderFont, "MHz");
-            AddCell(qsoTable, s_HeaderFont, "RST");
-            AddCell(qsoTable, s_HeaderFont, "Mode");
 
-            Phrase titlePhrase = new Phrase();
-            titlePhrase.Leading = 14.0f;
-            titlePhrase.Add(new Chunk(entries[0].MyCall, s_MyCallFont));
-            titlePhrase.Add(new Chunk(" confirms the following QSO(s) with ", s_TitleTextFont));
-            titlePhrase.Add(new Chunk(entries[0].Callsign, s_MyCallFont));
-            titlePhrase.Add(new Chunk(":", s_TitleTextFont));
-            cell.AddElement(titlePhrase);
-            foreach (TableEntry qso in entries)
+            if (entries.Length > 0)
             {
-                AddCell(qsoTable, s_TableFont, qso.UtcTime.ToString("yyyy-MM-dd"));
-                AddCell(qsoTable, s_TableFont, qso.UtcTime.ToString("HHmm"));
-                AddCell(qsoTable, s_TableFont, qso.Band);
-                AddCell(qsoTable, s_TableFont, qso.Rst);
-                AddCell(qsoTable, s_TableFont, qso.Mode);
+                AddCell(qsoTable, s_HeaderFont, "Date");
+                AddCell(qsoTable, s_HeaderFont, "UTC");
+                AddCell(qsoTable, s_HeaderFont, "MHz");
+                AddCell(qsoTable, s_HeaderFont, "RST");
+                AddCell(qsoTable, s_HeaderFont, "Mode");
+
+                Phrase titlePhrase = new Phrase();
+                titlePhrase.Leading = 14.0f;
+                titlePhrase.Add(new Chunk(entries[0].MyCall, s_MyCallFont));
+                titlePhrase.Add(new Chunk(" confirms the following QSO(s) with ", s_TitleTextFont));
+                titlePhrase.Add(new Chunk(entries[0].Callsign, s_MyCallFont));
+                titlePhrase.Add(new Chunk(":", s_TitleTextFont));
+                cell.AddElement(titlePhrase);
+                foreach (TableEntry qso in entries)
+                {
+                    AddCell(qsoTable, s_TableFont, qso.UtcTime.ToString("yyyy-MM-dd"));
+                    AddCell(qsoTable, s_TableFont, qso.UtcTime.ToString("HHmm"));
+                    AddCell(qsoTable, s_TableFont, qso.Band);
+                    AddCell(qsoTable, s_TableFont, qso.Rst);
+                    AddCell(qsoTable, s_TableFont, qso.Mode);
+                }
             }
             cell.AddElement(qsoTable);
             return cell;

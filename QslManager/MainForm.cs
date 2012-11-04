@@ -125,7 +125,7 @@ namespace QslManager
             if (m_VisibleContacts == null || m_VisibleContacts.Count == 0)
                 return;
 
-            PdfEngine engine = new PdfEngine(m_PageLayout, m_SelectedSource.Callsign);
+            PdfEngine engine = new PdfEngine(m_PageLayout, m_SelectedSource.Callsign, 0);
             List<Contact> contactsToPrint = new List<Contact>();
             for (int row = 0; row < m_VisibleContacts.Count; row++)
             {
@@ -151,7 +151,7 @@ namespace QslManager
 
         private void m_UpdateLabelsUsed_Click(object sender, EventArgs e)
         {
-            PdfEngine engine = new PdfEngine(m_PageLayout, m_SelectedSource.Callsign);
+            PdfEngine engine = new PdfEngine(m_PageLayout, m_SelectedSource.Callsign, 0);
             List<List<Contact>> contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource.SourceID);
             int labelsUsed = 0;
             foreach (List<Contact> contacts in contactsToPrint)
@@ -166,7 +166,7 @@ namespace QslManager
         private void m_PrintQueuedCards_Click(object sender, EventArgs e)
         {
             string myCall = m_SelectedSource.Callsign;
-            PdfEngine engine = new PdfEngine(m_PageLayout, myCall);
+            PdfEngine engine = new PdfEngine(m_PageLayout, myCall, (int)m_LabelOffset.Value);
             List<List<Contact>> contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource.SourceID);
             if (contactsToPrint.Count == 0)
             {

@@ -54,7 +54,10 @@
             this.m_Layouts = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.m_DeepSearch = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.m_LabelOffset = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.m_ContactsGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.m_LabelOffset)).BeginInit();
             this.SuspendLayout();
             // 
             // m_TxtCallsign
@@ -92,9 +95,9 @@
             this.QSLRX,
             this.QSLTX,
             this.QSLMethod});
-            this.m_ContactsGrid.Location = new System.Drawing.Point(12, 99);
+            this.m_ContactsGrid.Location = new System.Drawing.Point(12, 127);
             this.m_ContactsGrid.Name = "m_ContactsGrid";
-            this.m_ContactsGrid.Size = new System.Drawing.Size(670, 343);
+            this.m_ContactsGrid.Size = new System.Drawing.Size(670, 315);
             this.m_ContactsGrid.TabIndex = 10;
             // 
             // QSL
@@ -308,12 +311,35 @@
             this.m_DeepSearch.UseVisualStyleBackColor = true;
             this.m_DeepSearch.Click += new System.EventHandler(this.m_DeepSearch_Click);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(12, 95);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(60, 13);
+            this.label6.TabIndex = 18;
+            this.label6.Text = "L&able offet:";
+            // 
+            // m_LabelOffset
+            // 
+            this.m_LabelOffset.Location = new System.Drawing.Point(88, 93);
+            this.m_LabelOffset.Maximum = new decimal(new int[] {
+            21,
+            0,
+            0,
+            0});
+            this.m_LabelOffset.Name = "m_LabelOffset";
+            this.m_LabelOffset.Size = new System.Drawing.Size(100, 20);
+            this.m_LabelOffset.TabIndex = 19;
+            // 
             // MainForm
             // 
             this.AcceptButton = this.m_MarkSelectedAsReceived;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(694, 454);
+            this.Controls.Add(this.m_LabelOffset);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.m_DeepSearch);
             this.Controls.Add(this.m_Layouts);
             this.Controls.Add(this.label5);
@@ -335,6 +361,7 @@
             this.Text = "CamLog | QSL Manager";
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.m_ContactsGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.m_LabelOffset)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -368,6 +395,8 @@
         private System.Windows.Forms.ComboBox m_Layouts;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button m_DeepSearch;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown m_LabelOffset;
 
     }
 }

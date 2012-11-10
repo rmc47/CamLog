@@ -85,6 +85,7 @@ namespace UI
             this.aDIFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cabrilloToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rEG1TESTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.multipleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.m_OnlyMyQSOs = new System.Windows.Forms.ToolStripMenuItem();
             this.m_PerformQRZLookups = new System.Windows.Forms.ToolStripMenuItem();
@@ -607,7 +608,7 @@ namespace UI
             // openLogToolStripMenuItem
             // 
             this.openLogToolStripMenuItem.Name = "openLogToolStripMenuItem";
-            this.openLogToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openLogToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.openLogToolStripMenuItem.Text = "&Open log...";
             this.openLogToolStripMenuItem.Click += new System.EventHandler(this.openLogToolStripMenuItem_Click);
             // 
@@ -617,7 +618,7 @@ namespace UI
             this.aDIFToolStripMenuItem1,
             this.knownCallsignsToolStripMenuItem});
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.importToolStripMenuItem.Text = "&Import";
             // 
             // aDIFToolStripMenuItem1
@@ -639,31 +640,39 @@ namespace UI
             this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aDIFToolStripMenuItem,
             this.cabrilloToolStripMenuItem,
-            this.rEG1TESTToolStripMenuItem});
+            this.rEG1TESTToolStripMenuItem,
+            this.multipleToolStripMenuItem});
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.exportToolStripMenuItem.Text = "&Export";
             // 
             // aDIFToolStripMenuItem
             // 
             this.aDIFToolStripMenuItem.Name = "aDIFToolStripMenuItem";
-            this.aDIFToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aDIFToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.aDIFToolStripMenuItem.Text = "&ADIF...";
             this.aDIFToolStripMenuItem.Click += new System.EventHandler(this.ExportAdif);
             // 
             // cabrilloToolStripMenuItem
             // 
             this.cabrilloToolStripMenuItem.Name = "cabrilloToolStripMenuItem";
-            this.cabrilloToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cabrilloToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.cabrilloToolStripMenuItem.Text = "&Cabrillo...";
             this.cabrilloToolStripMenuItem.Click += new System.EventHandler(this.ExportCabrillo);
             // 
             // rEG1TESTToolStripMenuItem
             // 
             this.rEG1TESTToolStripMenuItem.Name = "rEG1TESTToolStripMenuItem";
-            this.rEG1TESTToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.rEG1TESTToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.rEG1TESTToolStripMenuItem.Text = "&REG1TEST...";
             this.rEG1TESTToolStripMenuItem.Click += new System.EventHandler(this.m_Export_Click);
+            // 
+            // multipleToolStripMenuItem
+            // 
+            this.multipleToolStripMenuItem.Name = "multipleToolStripMenuItem";
+            this.multipleToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.multipleToolStripMenuItem.Text = "Multiple...";
+            this.multipleToolStripMenuItem.Click += new System.EventHandler(this.ExportMultiple);
             // 
             // viewToolStripMenuItem
             // 
@@ -789,6 +798,7 @@ namespace UI
         private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aDIFToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem knownCallsignsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem multipleToolStripMenuItem;
         //private System.Windows.Forms.DataGridView m_QSOGrid;
         //private System.Windows.Forms.DataGridViewTextBoxColumn m_QBand;
         //private System.Windows.Forms.DataGridViewTextBoxColumn m_QTime;

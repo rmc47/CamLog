@@ -38,6 +38,32 @@ namespace Engine
 
         private static void ExportContact(Contact c, StreamWriter writer, string c_LocatorSent, string c_CallUsed)
         {
+            // Munge the comments field for Club Calls
+            string[] notesParts = c.Notes.Split(' ');
+            string notes;
+            if (notesParts[0] == "CS")
+                notes = "CLUB   " + notesParts[1];
+            else if (notesParts[0] == "CM")
+                notes = "MEMBER " + notesParts[1];
+            else
+                notes = "NONE   ----";
+
+            writer.WriteLine("QSO: {0} {1} {2} {3} {4} {5} {6} {7} {8} {9}",
+                 BandHelper.ToMHzString(c.Band).PadRight(4),
+                 ModeHelper.ToCabrilloString(c.Mode),
+                 c.StartTime.ToString("yyyy-MM-dd HHmm"),
+                 c_CallUsed.PadRight(15).ToUpper(),
+                 c.ReportSent.PadRight(3),
+                 c.SerialSent.ToString().PadLeft(3),
+                 c.Callsign.PadRight(15).ToUpper(),
+                 c.ReportReceived.PadRight(3),
+                 c.SerialReceived.ToString().PadLeft(3),
+                 notes);
+        }
+
+        /*
+         private static void ExportContact(Contact c, StreamWriter writer, string c_LocatorSent, string c_CallUsed)
+        {
             writer.WriteLine("QSO: {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10}",
                  BandHelper.ToMHzString(c.Band).PadRight(4),
                  ModeHelper.ToCabrilloString(c.Mode),
@@ -51,5 +77,6 @@ namespace Engine
                  c.ReportReceived.PadRight(3),
                  c.SerialReceived.ToString().PadLeft(3));
         }
+         */
     }
 }

@@ -39,7 +39,7 @@ namespace Engine
         private static void ExportContact(Contact c, StreamWriter writer, string c_LocatorSent, string c_CallUsed)
         {
             // Munge the comments field for Club Calls
-            string[] notesParts = c.Notes.Split(' ');
+            string[] notesParts = c.Notes.ToUpper().Split(' ');
             string notes;
             if (notesParts[0] == "CS")
                 notes = "CLUB   " + notesParts[1];

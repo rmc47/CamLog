@@ -742,7 +742,12 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                 }
             }
 
-            string square4 = c.LocatorReceivedString.Substring(0, 4);
+            string square4;
+            if (c.LocatorReceivedString != null && c.LocatorReceivedString.Length >= 4)
+                square4 = c.LocatorReceivedString.Substring(0, 4);
+            else
+                square4 = string.Empty;
+
             bool newSquare = qualifiesForMult && !locator4SquaresSeen.Contains(square4.ToLowerInvariant());
             if (newSquare)
                 locator4SquaresSeen.Add(square4.ToLowerInvariant());

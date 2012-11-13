@@ -168,5 +168,12 @@ namespace UI
                 }
             }
         }
+
+        private void DatabaseDroppedDown(object sender, EventArgs e)
+        {
+            // When the DB combo is opened, try and populate it with a list of DBs for the server, if the credentials are valid
+            m_Database.Items.Add("Foo");
+            m_Database.Items.Add("Bar");
+        }
     }
 }

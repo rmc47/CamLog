@@ -76,21 +76,48 @@ namespace Engine
                 // This parsing is horrid. TODO: Figure out how to use IFormatProvider properly.
                 string dateStr = currentRecord["qso_date"];
                 string timeOnStr = currentRecord["time_on"];
-                DateTime date = new DateTime(int.Parse(dateStr.Substring(0, 4)), int.Parse(dateStr.Substring(4, 2)), int.Parse(dateStr.Substring(6, 2)), int.Parse(timeOnStr.Substring(0, 2)), int.Parse(timeOnStr.Substring(2, 2)), 0);
+                DateTime date = ParseAdifDate(dateStr, timeOnStr);
                 c.StartTime = c.EndTime = date;
 
                 c.Band = BandHelper.Parse(currentRecord["band"]);
-                c.Frequency = (long)(decimal.Parse(currentRecord["freq"]) * 1000000);
+                if (currentRecord["freq"] != null)
+                    c.Frequency = (long)(decimal.Parse(currentRecord["freq"]) * 1000000);
                 c.ReportReceived = currentRecord["rst_rcvd"];
                 c.ReportSent = currentRecord["rst_sent"];
                 c.Operator = currentRecord["operator"] ?? defaultOperator;
                 c.Mode = ModeHelper.Parse(currentRecord["mode"]);
                 c.Station = station;
                 c.LastModified = DateTime.UtcNow;
+
+                // QSL info...
+                if (currentRecord["qslrdate"] != null)
+                {
+                    c.QslRxDate = ParseAdifDate(currentRecord["qslrdate"], null);
+                }
+                if (currentRecord["qsl_rcvd_via"] != null && c.QslRxDate != null)
+                {
+                    if (currentRecord["qsl_rcvd_via"].Trim() == "D")
+                        c.QslMethod = "Direct";
+                    else if (currentRecord["qsl_rcvd_via"].Trim() == "B")
+                        c.QslMethod = "Bureau";
+                }
+                if (currentRecord["qslsdate"] != null)
+                {
+                    c.QslTxDate = ParseAdifDate(currentRecord["qslsdate"], null);
+                }
+
                 contacts.Add(c);
             }
 
             return contacts;
+        }
+
+        private static DateTime ParseAdifDate(string dateField, string timeField)
+        {
+            if (timeField != null)
+                return new DateTime(int.Parse(dateField.Substring(0, 4)), int.Parse(dateField.Substring(4, 2)), int.Parse(dateField.Substring(6, 2)), int.Parse(timeField.Substring(0, 2)), int.Parse(timeField.Substring(2, 2)), 0);
+            else
+                return new DateTime(int.Parse(dateField.Substring(0, 4)), int.Parse(dateField.Substring(4, 2)), int.Parse(dateField.Substring(6, 2)));
         }
 
         private static AdifField ReadField(string str, int maxOffset, ref int offset)

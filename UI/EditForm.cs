@@ -37,8 +37,11 @@ namespace UI
                 //m_Contact.Points = int.Parse(m_Distance.Text);
                 m_Contact.ReportReceived = m_RstReceived.Text;
                 m_Contact.ReportSent = m_RstSent.Text;
-                //m_Contact.SerialReceived = int.Parse(m_SerialReceived.Text);
-                //m_Contact.SerialSent = int.Parse(m_SerialSent.Text);
+                int serialSent, serialReceived;
+                if (int.TryParse(m_SerialSent.Text, out serialSent))
+                    m_Contact.SerialSent = serialSent;
+                if (int.TryParse(m_SerialReceived.Text, out serialReceived))
+                    m_Contact.SerialReceived = serialReceived;
 #warning Need sep start and end times here
                 m_Contact.StartTime = m_Contact.EndTime = DateTime.Parse(m_Time.Text);
                 return m_Contact;

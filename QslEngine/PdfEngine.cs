@@ -21,6 +21,9 @@ namespace QslEngine
         private static readonly Font s_MyCallFont = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
         private static readonly Font s_TitleTextFont = new Font(Font.FontFamily.TIMES_ROMAN, 9, Font.NORMAL);
 
+        private static readonly BaseFont s_AddressBaseFont = BaseFont.CreateFont(@"C:\Windows\Fonts\arialuni.ttf", BaseFont.IDENTITY_H, true);
+        private static readonly Font s_AddressFont = new Font(s_AddressBaseFont, 9, Font.NORMAL);
+
         private PdfPTable m_MainTable;
         private int m_LabelsUsed = 0;
         private readonly string m_OurCallsign;
@@ -74,6 +77,17 @@ namespace QslEngine
                 labelsUsedHere++;
             }
             return labelsUsedHere;
+        }
+
+        public void AddAddressLabel(Address address)
+        {
+            PdfPCell cell = GetCell();
+            PdfPTable table = new PdfPTable(1);
+            AddCell(table, s_AddressFont, string.Format("{0} ({1})", address.Name, address.Callsign));
+            Array.ForEach(address.AddressLines, line => AddCell(table, s_AddressFont, line));
+            cell.AddElement(table);
+            m_MainTable.AddCell(cell);
+            m_LabelsUsed++;
         }
 
         public void PrintDocument(string filename)

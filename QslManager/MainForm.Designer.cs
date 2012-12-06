@@ -319,7 +319,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(60, 13);
             this.label6.TabIndex = 18;
-            this.label6.Text = "L&able offet:";
+            this.label6.Text = "L&abel offet:";
             // 
             // m_LabelOffset
             // 

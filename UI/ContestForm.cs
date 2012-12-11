@@ -14,17 +14,17 @@ namespace UI
 {
     public partial class ContestForm : Form
     {
-        private static readonly Color c_DupeColor = Color.Red;
-        private static readonly Color c_WorkedOtherBandsColor = Color.Green;
+        private static readonly Color c_DupeColor = Color.Tomato;
+        private static readonly Color c_WorkedOtherBandsColor = Color.LightGreen;
 
         private Controller Controller { get; set; }
         private ContactStore m_ContactStore;
         private IRadio m_RadioCAT;
         private CallsignLookup m_CallsignLookup = new CallsignLookup("cty.xml.gz");
-        private Locator m_OurLocatorValue = new Locator("JO01GI");
+        private Locator m_OurLocatorValue = new Locator(Settings.Get("Locator", "JO02ce"));
         private Label[][] m_ContactTableLabels;
         private KeyValuePair<int, int>[] m_ContactIds;
-        private QrzServer m_QrzServer = new QrzServer("M0VFC", "g3pyeflossie");
+        private QrzServer m_QrzServer = new QrzServer(Settings.Get("QRZUsername", "M0VFC"), Settings.Get("QRZPassword", ""));
         private bool m_LocatorSetManually;
 
         private string m_lastComment;
@@ -478,7 +478,16 @@ namespace UI
                 if (bands.Contains(ourBand))
                 {
                     notesBackColor = c_DupeColor;
-                    notesText = string.Format("Already worked {0} on {1}", callsign, BandHelper.ToString(ourBand));
+                    List<Contact> previousQsos = m_ContactStore.GetPreviousContacts(callsign);
+                    if (previousQsos.Count > 0)
+                    {
+                        Contact previousQso = previousQsos[previousQsos.Count - 1];
+                        notesText = string.Format("Already worked {0} on {1} (Last: TX: {2} {3:000} / RX: {4} {5:000} on {6})", callsign, BandHelper.ToString(ourBand), previousQso.ReportSent, previousQso.SerialSent, previousQso.ReportReceived, previousQso.SerialReceived, previousQso.StartTime.ToString("d MMM hh:mm"));
+                    }
+                    else
+                    {
+                        notesText = string.Format("Already worked {0} on {1} (Missing QSO details?)", callsign, BandHelper.ToString(ourBand));
+                    }
                 }
                 else if (bands.Count > 0)
                 {
@@ -701,7 +710,7 @@ namespace UI
                             }
                             else
                             {
-                                m_Notes.Text = "QRZ.com: Locator used (" + qrz.Locator + ")";
+                                m_Notes.Text = "QRZ.com: Locator used (" + qrz.Locator + ") - " + qrz.Name;
                                 m_Locator.Text = qrz.Locator.ToString();
                             }
                         }));

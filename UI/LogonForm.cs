@@ -37,7 +37,7 @@ namespace UI
                     conn.Open();
                     conn.Close();
 
-                    using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\M0VFC Contest Log"))
+                    using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\M0VFC\CamLog"))
                     {
                         key.SetValue("Server", Server);
                         key.SetValue("Database", Database);
@@ -147,7 +147,7 @@ namespace UI
             foreach (string val in Enum.GetNames(typeof(RadioModel)))
                 m_RadioModel.Items.Add(val);
 
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\M0VFC Contest Log", false))
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\M0VFC\CamLog", false))
             {
                 if (key != null)
                 {

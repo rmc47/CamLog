@@ -151,6 +151,12 @@ namespace QslManager
 
         private void m_UpdateLabelsUsed_Click(object sender, EventArgs e)
         {
+            UpdateLabelsUsed();
+            m_TxtCallsign.Focus();
+        }
+
+        private void UpdateLabelsUsed()
+        {
             PdfEngine engine = new PdfEngine(m_PageLayout, m_SelectedSource.Callsign, 0);
             List<List<Contact>> contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource.SourceID);
             int labelsUsed = 0;
@@ -160,7 +166,6 @@ namespace QslManager
             }
             m_LabelsUsed = labelsUsed;
             m_UpdateLabelsUsed.Text = string.Format("&Labels used: {0}", labelsUsed);
-            m_TxtCallsign.Focus();
         }
 
         private void m_PrintQueuedCards_Click(object sender, EventArgs e)
@@ -221,7 +226,10 @@ namespace QslManager
             if (!contacts1[0].QslRxDate.HasValue)
                 return 1;
 
-            return contacts1[0].QslRxDate.Value.CompareTo(contacts2[0].QslRxDate);
+            if (contacts1[0].QslRxDate.Equals(contacts2[0].QslRxDate))
+                return contacts1[0].Id.CompareTo(contacts2[0].Id);
+            else
+                return contacts1[0].QslRxDate.Value.CompareTo(contacts2[0].QslRxDate);
         }
 
         private void m_OutputPathBrowse_Click(object sender, EventArgs e)
@@ -252,6 +260,30 @@ namespace QslManager
         private void m_DeepSearch_Click(object sender, EventArgs e)
         {
             UpdateGrid(true);
+        }
+
+        private void ImportClubLog(object sender, EventArgs e)
+        {
+            PdfEngine addressLabelEngine = new PdfEngine (new LayoutAvery7160(), m_OurCallsign.Text, (int)m_LabelOffset.Value);
+            ClubLogCSVHandler csvHandler = new ClubLogCSVHandler (m_ContactStore, addressLabelEngine);
+
+            string importPath;
+            using (OpenFileDialog ofd = new OpenFileDialog ())
+            {
+                ofd.Filter = "CSV Files (*.csv)|*.csv";
+                DialogResult dr = ofd.ShowDialog();
+                if (dr != System.Windows.Forms.DialogResult.OK)
+                    return;
+                importPath = ofd.FileName;
+            }
+
+            int labelsToPrint = csvHandler.ProcessFile(importPath);
+            if (labelsToPrint > 0)
+                addressLabelEngine.PrintDocument(Path.Combine(m_OutputPath.Text, string.Format("Address-{0}-{1}.pdf", m_OurCallsign.Text.Replace('/', '_'), DateTime.UtcNow.ToString("yyyy-MM-dd-HHmm"))));
+            else
+                MessageBox.Show("No new QSOs to print");
+
+            UpdateLabelsUsed();
         }
     }
 }

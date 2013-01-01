@@ -512,8 +512,13 @@ namespace UI
                 if (pfx != null)
                 {
                     Locator theirLocator = new Locator(pfx.Latitude, pfx.Longitude);
-                    beamText = Geographics.BeamHeading(ourLocatorValue, theirLocator).ToString();
-                    distanceText = Math.Ceiling(Geographics.GeodesicDistance(ourLocatorValue, theirLocator) / 1000).ToString();
+
+                    // Only use the DXCC if it's a substantial distance (500km) away from us
+                    if (Geographics.GeodesicDistance(ourLocatorValue, theirLocator) > 500 * 1000)
+                    {
+                        beamText = Geographics.BeamHeading(ourLocatorValue, theirLocator).ToString();
+                        distanceText = Math.Ceiling(Geographics.GeodesicDistance(ourLocatorValue, theirLocator) / 1000).ToString();
+                    }
                     
                     // Only change comments field if it has not been manually changed
                     if ((m_Comments.Text == m_lastComment) || (m_Comments.Text == ""))
@@ -555,8 +560,8 @@ namespace UI
 
                 if (locatorText != null) m_Locator.Text = locatorText;
 
-                if (beamText != null) m_Beam.Text = beamText;
-                if (distanceText != null) m_Distance.Text = distanceText;
+                m_Beam.Text = beamText ?? string.Empty;
+                m_Distance.Text = distanceText ?? string.Empty;
                 if (commentsText != null) m_Comments.Text = commentsText;
 
                 if (matchesKnownCalls != null || locatorMatchesThisContest != null)

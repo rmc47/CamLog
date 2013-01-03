@@ -804,5 +804,19 @@ namespace UI
                 MessageBox.Show(string.Format("Import failed: {0}", ex.Message), "CamLog | ADIF Import");
             }
         }
+
+        private void QrzUserSetupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (QrzUserSetup QrzSetup = new QrzUserSetup{})
+            {
+                DialogResult dr = QrzSetup.ShowDialog();
+                if (dr == DialogResult.OK)
+                {
+                    Settings.Set("QRZUsername", QrzSetup.QrzUsername);
+                    Settings.Set("QRZPassword", QrzSetup.QrzPassword);
+                    m_QrzServer = new QrzServer(Settings.Get("QRZUsername", ""), Settings.Get("QRZPassword", ""));
+                }
+            }
+        }
     }
 }

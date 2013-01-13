@@ -275,6 +275,15 @@ namespace UI
                     PopulatePreviousContactsGrid();
                 }
             }
+            else if (sender == m_SerialReceived)
+            {
+                if (m_SerialReceived.Text == "")
+                    m_SerialReceived.Text = "0";
+                if (e.KeyCode == Keys.Up)
+                    m_SerialReceived.Text = (int.Parse(m_SerialReceived.Text) + 1).ToString().PadLeft(3, '0');
+                else if ((e.KeyCode == Keys.Down) && (int.Parse(m_SerialReceived.Text) > 0))
+                    m_SerialReceived.Text = (int.Parse(m_SerialReceived.Text) - 1).ToString().PadLeft(3,'0');
+            }
         }
 
         private void EditLabel_Click(object sender, EventArgs args)

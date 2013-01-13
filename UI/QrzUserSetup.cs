@@ -21,6 +21,15 @@ namespace UI
             m_TxtQrzPassword.Text = Settings.Get("QRZPassword", "");
         }
 
+        private void KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+        }
+
         public string QrzUsername
         {
             get

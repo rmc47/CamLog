@@ -147,11 +147,6 @@ namespace UI
             Operators = m_TxtOperators.Text;
         }
 
-        private void m_TxtContest_TextChanged(object sender, EventArgs e)
-        {
-           // Contest = m_TxtContest.Text;
-        }
-
         private void m_CmbContest_SelectedIndexChanged(object sender, EventArgs e)
         {
             Contest = m_CmbContest.SelectedItem.ToString();

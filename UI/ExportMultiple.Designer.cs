@@ -42,7 +42,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.m_TxtClaimedScore = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.m_TxtContest = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.m_TxtOperators = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -51,6 +50,7 @@
             this.m_TxtFileName = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.m_CmbContest = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // m_ChkAdif
@@ -146,7 +146,7 @@
             this.m_CmbBand.FormattingEnabled = true;
             this.m_CmbBand.Location = new System.Drawing.Point(83, 40);
             this.m_CmbBand.Name = "m_CmbBand";
-            this.m_CmbBand.Size = new System.Drawing.Size(100, 21);
+            this.m_CmbBand.Size = new System.Drawing.Size(120, 21);
             this.m_CmbBand.TabIndex = 10;
             this.m_CmbBand.SelectedIndexChanged += new System.EventHandler(this.m_CmbBand_SelectedIndexChanged);
             // 
@@ -185,14 +185,6 @@
             this.label7.TabIndex = 25;
             this.label7.Text = "Claimed score:";
             // 
-            // m_TxtContest
-            // 
-            this.m_TxtContest.Location = new System.Drawing.Point(83, 93);
-            this.m_TxtContest.Name = "m_TxtContest";
-            this.m_TxtContest.Size = new System.Drawing.Size(100, 20);
-            this.m_TxtContest.TabIndex = 21;
-            this.m_TxtContest.TextChanged += new System.EventHandler(this.m_TxtContest_TextChanged);
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -223,7 +215,7 @@
             // 
             this.m_TxtCallSent.Location = new System.Drawing.Point(83, 67);
             this.m_TxtCallSent.Name = "m_TxtCallSent";
-            this.m_TxtCallSent.Size = new System.Drawing.Size(100, 20);
+            this.m_TxtCallSent.Size = new System.Drawing.Size(120, 20);
             this.m_TxtCallSent.TabIndex = 18;
             this.m_TxtCallSent.TextChanged += new System.EventHandler(this.m_TxtCallSent_TextChanged);
             // 
@@ -263,17 +255,25 @@
             this.label9.TabIndex = 27;
             this.label9.Text = "(Requires specific band to be chosen)";
             // 
+            // m_CmbContest
+            // 
+            this.m_CmbContest.FormattingEnabled = true;
+            this.m_CmbContest.Location = new System.Drawing.Point(83, 94);
+            this.m_CmbContest.Name = "m_CmbContest";
+            this.m_CmbContest.Size = new System.Drawing.Size(120, 21);
+            this.m_CmbContest.TabIndex = 28;
+            // 
             // ExportMultiple
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(402, 214);
+            this.Controls.Add(this.m_CmbContest);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.m_TxtFileName);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.m_TxtClaimedScore);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.m_TxtContest);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.m_TxtOperators);
             this.Controls.Add(this.label5);
@@ -314,7 +314,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox m_TxtClaimedScore;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox m_TxtContest;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox m_TxtOperators;
         private System.Windows.Forms.Label label5;
@@ -323,5 +322,6 @@
         private System.Windows.Forms.TextBox m_TxtFileName;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.ComboBox m_CmbContest;
     }
 }

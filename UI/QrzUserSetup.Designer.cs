@@ -43,6 +43,7 @@
             this.m_TxtQrzUsername.Size = new System.Drawing.Size(168, 20);
             this.m_TxtQrzUsername.TabIndex = 0;
             this.m_TxtQrzUsername.TextChanged += new System.EventHandler(this.m_TxtQrzUsername_TextChanged);
+            this.m_TxtQrzUsername.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyDown);
             // 
             // m_TxtQrzPassword
             // 
@@ -52,6 +53,7 @@
             this.m_TxtQrzPassword.TabIndex = 1;
             this.m_TxtQrzPassword.UseSystemPasswordChar = true;
             this.m_TxtQrzPassword.TextChanged += new System.EventHandler(this.m_TxtQrzPassword_TextChanged);
+            this.m_TxtQrzPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyDown);
             // 
             // label1
             // 

@@ -8,7 +8,7 @@ namespace Engine
 {
     public static class RegistryHelper
     {
-        private const string c_RegistryRoot = @"SOFTWARE\M0VFC Contest Log";
+        private const string c_RegistryRoot = @"SOFTWARE\M0VFC\CamLog";
 
         public static string GetString(RegistryValue key, string defaultVal)
         {

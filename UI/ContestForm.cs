@@ -197,10 +197,7 @@ namespace UI
                 {
                     m_OurLocatorValue = new Locator(m_OurLocator.Text);
 
-                    using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\M0VFC Contest Log"))
-                    {
-                        key.SetValue("Locator", m_OurLocator.Text);
-                    }
+                    Settings.Set("Locator", m_OurLocator.Text);
                 }
                 catch (ArgumentException)
                 {
@@ -235,19 +232,13 @@ namespace UI
             ClearContactRow(true);
 
             // Get our station number from the registry
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\M0VFC Contest Log", false))
-            {
-                if (key != null)
-                {
-                    m_Station.Text = (string)key.GetValue("StationNumber", "1");
-                    m_OurLocator.Text = (string)key.GetValue("Locator", "JO02BG");
-                    m_OurOperator.Text = (string)key.GetValue("Operator", "UNKNOWN");
-                    bool performQRZLookups;
-                    string performQRZLookupsObj = (string)key.GetValue("PerformQRZLookups", "True");
-                    bool.TryParse(performQRZLookupsObj, out performQRZLookups);
-                    m_PerformQRZLookups.Checked = performQRZLookups;
-                }
-            }
+            m_Station.Text = (string)Settings.Get("StationNumber", "1");
+            m_OurLocator.Text = (string)Settings.Get("Locator", "JO02BG");
+            m_OurOperator.Text = (string)Settings.Get("Operator", "UNKNOWN");
+            bool performQRZLookups;
+            string performQRZLookupsObj = (string)Settings.Get("PerformQRZLookups", "True");
+            bool.TryParse(performQRZLookupsObj, out performQRZLookups);
+            m_PerformQRZLookups.Checked = performQRZLookups;
         }
 
         void m_CivServer_FrequencyChanged(object sender, EventArgs e)
@@ -283,6 +274,15 @@ namespace UI
                     ClearContactRow(true);
                     PopulatePreviousContactsGrid();
                 }
+            }
+            else if (sender == m_SerialReceived)
+            {
+                if (m_SerialReceived.Text == "")
+                    m_SerialReceived.Text = "0";
+                if (e.KeyCode == Keys.Up)
+                    m_SerialReceived.Text = (int.Parse(m_SerialReceived.Text) + 1).ToString().PadLeft(3, '0');
+                else if ((e.KeyCode == Keys.Down) && (int.Parse(m_SerialReceived.Text) > 0))
+                    m_SerialReceived.Text = (int.Parse(m_SerialReceived.Text) - 1).ToString().PadLeft(3,'0');
             }
         }
 
@@ -605,10 +605,7 @@ namespace UI
 
         private void m_Station_TextChanged(object sender, EventArgs e)
         {
-            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\M0VFC Contest Log"))
-            {
-                key.SetValue("StationNumber", m_Station.Text);
-            }
+            Settings.Set("StationNumber", m_Station.Text);
             this.Text = string.Format("{0} - CamLog", m_Station.Text);
         }
 
@@ -629,10 +626,7 @@ namespace UI
 
         private void m_OurOperator_TextChanged(object sender, EventArgs e)
         {
-            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\M0VFC Contest Log"))
-            {
-                key.SetValue("Operator", m_OurOperator.Text);
-            }
+            Settings.Set("Operator", m_OurOperator.Text);
         }
 
         private void ExportAdif(object sender, EventArgs e)
@@ -774,10 +768,7 @@ namespace UI
 
         private void m_PerformQRZLookups_CheckedChanged(object sender, EventArgs e)
         {
-            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\M0VFC Contest Log"))
-            {
-                key.SetValue("PerformQRZLookups", m_PerformQRZLookups.Checked.ToString());
-            }
+            Settings.Set("PerformQRZLookups", m_PerformQRZLookups.Checked.ToString());
         }
 
         private void ImportAdif(object sender, EventArgs e)
@@ -802,6 +793,20 @@ namespace UI
             catch (Exception ex)
             {
                 MessageBox.Show(string.Format("Import failed: {0}", ex.Message), "CamLog | ADIF Import");
+            }
+        }
+
+        private void QrzUserSetupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (QrzUserSetup QrzSetup = new QrzUserSetup{})
+            {
+                DialogResult dr = QrzSetup.ShowDialog();
+                if (dr == DialogResult.OK)
+                {
+                    Settings.Set("QRZUsername", QrzSetup.QrzUsername);
+                    Settings.Set("QRZPassword", QrzSetup.QrzPassword);
+                    m_QrzServer = new QrzServer(Settings.Get("QRZUsername", ""), Settings.Get("QRZPassword", ""));
+                }
             }
         }
     }

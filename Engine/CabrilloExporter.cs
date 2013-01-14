@@ -77,7 +77,7 @@ namespace Engine
         private static void Export_80mAFS(Contact c, StreamWriter writer, string c_LocatorSent, string c_CallUsed)
         {
             writer.WriteLine("QSO: {0} {1} {2} {3} {4} {5} {6} {7} {8}",
-                 BandHelper.ToMHzString(c.Band).PadRight(4),
+                 c.Frequency.ToString().Substring(0, 4),
                  ModeHelper.ToCabrilloString(c.Mode),
                  c.StartTime.ToString("yyyy-MM-dd HHmm"),
                  c_CallUsed.PadRight(15).ToUpper(),

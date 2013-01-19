@@ -171,6 +171,15 @@ namespace UI
             }
         }
 
+        private void m_SerialReceived_KeyUp(object sender, KeyEventArgs e)
+        {
+            if ((m_SerialReceived.Text == "") && ((e.KeyCode == Keys.Up) || (e.KeyCode == Keys.Down)))
+                m_SerialReceived.Text = "0";
+            if (e.KeyCode == Keys.Up)
+                m_SerialReceived.Text = (int.Parse(m_SerialReceived.Text) + 1).ToString().PadLeft(3, '0');
+            else if ((e.KeyCode == Keys.Down) && (int.Parse(m_SerialReceived.Text) > 0))
+                m_SerialReceived.Text = (int.Parse(m_SerialReceived.Text) - 1).ToString().PadLeft(3,'0');
+        }
 
         private void m_Locator_KeyUp(object sender, KeyEventArgs e)
         {
@@ -274,15 +283,6 @@ namespace UI
                     ClearContactRow(true);
                     PopulatePreviousContactsGrid();
                 }
-            }
-            else if (sender == m_SerialReceived)
-            {
-                if (m_SerialReceived.Text == "")
-                    m_SerialReceived.Text = "0";
-                if (e.KeyCode == Keys.Up)
-                    m_SerialReceived.Text = (int.Parse(m_SerialReceived.Text) + 1).ToString().PadLeft(3, '0');
-                else if ((e.KeyCode == Keys.Down) && (int.Parse(m_SerialReceived.Text) > 0))
-                    m_SerialReceived.Text = (int.Parse(m_SerialReceived.Text) - 1).ToString().PadLeft(3,'0');
             }
         }
 

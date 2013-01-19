@@ -92,8 +92,8 @@ namespace UI
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.winKeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rigControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.wipeQSOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.QrzUserSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.wipeQSOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             groupBox1 = new System.Windows.Forms.GroupBox();
             label7 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
@@ -484,6 +484,7 @@ namespace UI
             this.m_SerialReceived.TabIndex = 6;
             this.m_SerialReceived.Text = "0001";
             this.m_SerialReceived.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
+            this.m_SerialReceived.KeyUp += new System.Windows.Forms.KeyEventHandler(this.m_SerialReceived_KeyUp);
             // 
             // m_Comments
             // 
@@ -721,19 +722,19 @@ namespace UI
             this.rigControlToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.rigControlToolStripMenuItem.Text = "Rig Control...";
             // 
-            // wipeQSOToolStripMenuItem
-            // 
-            this.wipeQSOToolStripMenuItem.Name = "wipeQSOToolStripMenuItem";
-            this.wipeQSOToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
-            this.wipeQSOToolStripMenuItem.Text = "&Wipe QSO";
-            this.wipeQSOToolStripMenuItem.Click += new System.EventHandler(this.WipeQSOClicked);
-            // 
             // QrzUserSetupToolStripMenuItem
             // 
             this.QrzUserSetupToolStripMenuItem.Name = "QrzUserSetupToolStripMenuItem";
             this.QrzUserSetupToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.QrzUserSetupToolStripMenuItem.Text = "QRZ.com User Setup...";
             this.QrzUserSetupToolStripMenuItem.Click += new System.EventHandler(this.QrzUserSetupToolStripMenuItem_Click);
+            // 
+            // wipeQSOToolStripMenuItem
+            // 
+            this.wipeQSOToolStripMenuItem.Name = "wipeQSOToolStripMenuItem";
+            this.wipeQSOToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
+            this.wipeQSOToolStripMenuItem.Text = "&Wipe QSO";
+            this.wipeQSOToolStripMenuItem.Click += new System.EventHandler(this.WipeQSOClicked);
             // 
             // ContestForm
             // 

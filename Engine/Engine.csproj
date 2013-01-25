@@ -73,6 +73,8 @@
     <Compile Include="DBMigrations\DbMigrator.cs" />
     <Compile Include="FrequencyHelper.cs" />
     <Compile Include="Geographics.cs" />
+    <Compile Include="KstEvent.cs" />
+    <Compile Include="KstServer.cs" />
     <Compile Include="Locator.cs" />
     <Compile Include="Mode.cs" />
     <Compile Include="MySqlDbHelper.cs" />

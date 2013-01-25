@@ -14,17 +14,17 @@ namespace UI
 {
     public partial class ContestForm : Form
     {
-        private static readonly Color c_DupeColor = Color.Red;
-        private static readonly Color c_WorkedOtherBandsColor = Color.Green;
+        private static readonly Color c_DupeColor = Color.Tomato;
+        private static readonly Color c_WorkedOtherBandsColor = Color.LightGreen;
 
         private Controller Controller { get; set; }
         private ContactStore m_ContactStore;
         private IRadio m_RadioCAT;
         private CallsignLookup m_CallsignLookup = new CallsignLookup("cty.xml.gz");
-        private Locator m_OurLocatorValue = new Locator("JO01GI");
+        private Locator m_OurLocatorValue = new Locator(Settings.Get("Locator", "JO02ce"));
         private Label[][] m_ContactTableLabels;
         private KeyValuePair<int, int>[] m_ContactIds;
-        private QrzServer m_QrzServer = new QrzServer("M0VFC", "g3pyeflossie");
+        private QrzServer m_QrzServer = new QrzServer(Settings.Get("QRZUsername", "M0VFC"), Settings.Get("QRZPassword", ""));
         private bool m_LocatorSetManually;
 
         private string m_lastComment;
@@ -171,6 +171,15 @@ namespace UI
             }
         }
 
+        private void m_SerialReceived_KeyUp(object sender, KeyEventArgs e)
+        {
+            if ((m_SerialReceived.Text == "") && ((e.KeyCode == Keys.Up) || (e.KeyCode == Keys.Down)))
+                m_SerialReceived.Text = "0";
+            if (e.KeyCode == Keys.Up)
+                m_SerialReceived.Text = (int.Parse(m_SerialReceived.Text) + 1).ToString().PadLeft(3, '0');
+            else if ((e.KeyCode == Keys.Down) && (int.Parse(m_SerialReceived.Text) > 0))
+                m_SerialReceived.Text = (int.Parse(m_SerialReceived.Text) - 1).ToString().PadLeft(3,'0');
+        }
 
         private void m_Locator_KeyUp(object sender, KeyEventArgs e)
         {
@@ -197,10 +206,7 @@ namespace UI
                 {
                     m_OurLocatorValue = new Locator(m_OurLocator.Text);
 
-                    using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\M0VFC Contest Log"))
-                    {
-                        key.SetValue("Locator", m_OurLocator.Text);
-                    }
+                    Settings.Set("Locator", m_OurLocator.Text);
                 }
                 catch (ArgumentException)
                 {
@@ -235,19 +241,13 @@ namespace UI
             ClearContactRow(true);
 
             // Get our station number from the registry
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\M0VFC Contest Log", false))
-            {
-                if (key != null)
-                {
-                    m_Station.Text = (string)key.GetValue("StationNumber", "1");
-                    m_OurLocator.Text = (string)key.GetValue("Locator", "JO02BG");
-                    m_OurOperator.Text = (string)key.GetValue("Operator", "UNKNOWN");
-                    bool performQRZLookups;
-                    string performQRZLookupsObj = (string)key.GetValue("PerformQRZLookups", "True");
-                    bool.TryParse(performQRZLookupsObj, out performQRZLookups);
-                    m_PerformQRZLookups.Checked = performQRZLookups;
-                }
-            }
+            m_Station.Text = (string)Settings.Get("StationNumber", "1");
+            m_OurLocator.Text = (string)Settings.Get("Locator", "JO02BG");
+            m_OurOperator.Text = (string)Settings.Get("Operator", "UNKNOWN");
+            bool performQRZLookups;
+            string performQRZLookupsObj = (string)Settings.Get("PerformQRZLookups", "True");
+            bool.TryParse(performQRZLookupsObj, out performQRZLookups);
+            m_PerformQRZLookups.Checked = performQRZLookups;
         }
 
         void m_CivServer_FrequencyChanged(object sender, EventArgs e)
@@ -478,7 +478,16 @@ namespace UI
                 if (bands.Contains(ourBand))
                 {
                     notesBackColor = c_DupeColor;
-                    notesText = string.Format("Already worked {0} on {1}", callsign, BandHelper.ToString(ourBand));
+                    List<Contact> previousQsos = m_ContactStore.GetPreviousContacts(callsign);
+                    if (previousQsos.Count > 0)
+                    {
+                        Contact previousQso = previousQsos[previousQsos.Count - 1];
+                        notesText = string.Format("Already worked {0} on {1} (Last: TX: {2} {3:000} / RX: {4} {5:000} on {6})", callsign, BandHelper.ToString(ourBand), previousQso.ReportSent, previousQso.SerialSent, previousQso.ReportReceived, previousQso.SerialReceived, previousQso.StartTime.ToString("d MMM hh:mm"));
+                    }
+                    else
+                    {
+                        notesText = string.Format("Already worked {0} on {1} (Missing QSO details?)", callsign, BandHelper.ToString(ourBand));
+                    }
                 }
                 else if (bands.Count > 0)
                 {
@@ -503,8 +512,13 @@ namespace UI
                 if (pfx != null)
                 {
                     Locator theirLocator = new Locator(pfx.Latitude, pfx.Longitude);
-                    beamText = Geographics.BeamHeading(ourLocatorValue, theirLocator).ToString();
-                    distanceText = Math.Ceiling(Geographics.GeodesicDistance(ourLocatorValue, theirLocator) / 1000).ToString();
+
+                    // Only use the DXCC if it's a substantial distance (500km) away from us
+                    if (Geographics.GeodesicDistance(ourLocatorValue, theirLocator) > 500 * 1000)
+                    {
+                        beamText = Geographics.BeamHeading(ourLocatorValue, theirLocator).ToString();
+                        distanceText = Math.Ceiling(Geographics.GeodesicDistance(ourLocatorValue, theirLocator) / 1000).ToString();
+                    }
                     
                     // Only change comments field if it has not been manually changed
                     if ((m_Comments.Text == m_lastComment) || (m_Comments.Text == ""))
@@ -546,8 +560,8 @@ namespace UI
 
                 if (locatorText != null) m_Locator.Text = locatorText;
 
-                if (beamText != null) m_Beam.Text = beamText;
-                if (distanceText != null) m_Distance.Text = distanceText;
+                m_Beam.Text = beamText ?? string.Empty;
+                m_Distance.Text = distanceText ?? string.Empty;
                 if (commentsText != null) m_Comments.Text = commentsText;
 
                 if (matchesKnownCalls != null || locatorMatchesThisContest != null)
@@ -591,10 +605,7 @@ namespace UI
 
         private void m_Station_TextChanged(object sender, EventArgs e)
         {
-            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\M0VFC Contest Log"))
-            {
-                key.SetValue("StationNumber", m_Station.Text);
-            }
+            Settings.Set("StationNumber", m_Station.Text);
             this.Text = string.Format("{0} - CamLog", m_Station.Text);
         }
 
@@ -615,10 +626,7 @@ namespace UI
 
         private void m_OurOperator_TextChanged(object sender, EventArgs e)
         {
-            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\M0VFC Contest Log"))
-            {
-                key.SetValue("Operator", m_OurOperator.Text);
-            }
+            Settings.Set("Operator", m_OurOperator.Text);
         }
 
         private void ExportAdif(object sender, EventArgs e)
@@ -701,7 +709,7 @@ namespace UI
                             }
                             else
                             {
-                                m_Notes.Text = "QRZ.com: Locator used (" + qrz.Locator + ")";
+                                m_Notes.Text = "QRZ.com: Locator used (" + qrz.Locator + ") - " + qrz.Name;
                                 m_Locator.Text = qrz.Locator.ToString();
                             }
                         }));
@@ -760,10 +768,7 @@ namespace UI
 
         private void m_PerformQRZLookups_CheckedChanged(object sender, EventArgs e)
         {
-            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\M0VFC Contest Log"))
-            {
-                key.SetValue("PerformQRZLookups", m_PerformQRZLookups.Checked.ToString());
-            }
+            Settings.Set("PerformQRZLookups", m_PerformQRZLookups.Checked.ToString());
         }
 
         private void ImportAdif(object sender, EventArgs e)
@@ -788,6 +793,20 @@ namespace UI
             catch (Exception ex)
             {
                 MessageBox.Show(string.Format("Import failed: {0}", ex.Message), "CamLog | ADIF Import");
+            }
+        }
+
+        private void QrzUserSetupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (QrzUserSetup QrzSetup = new QrzUserSetup{})
+            {
+                DialogResult dr = QrzSetup.ShowDialog();
+                if (dr == DialogResult.OK)
+                {
+                    Settings.Set("QRZUsername", QrzSetup.QrzUsername);
+                    Settings.Set("QRZPassword", QrzSetup.QrzPassword);
+                    m_QrzServer = new QrzServer(Settings.Get("QRZUsername", ""), Settings.Get("QRZPassword", ""));
+                }
             }
         }
     }

@@ -92,6 +92,7 @@ namespace UI
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.winKeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rigControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.QrzUserSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wipeQSOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             groupBox1 = new System.Windows.Forms.GroupBox();
             label7 = new System.Windows.Forms.Label();
@@ -483,6 +484,7 @@ namespace UI
             this.m_SerialReceived.TabIndex = 6;
             this.m_SerialReceived.Text = "0001";
             this.m_SerialReceived.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CurrentQSOKeyDown);
+            this.m_SerialReceived.KeyUp += new System.Windows.Forms.KeyEventHandler(this.m_SerialReceived_KeyUp);
             // 
             // m_Comments
             // 
@@ -702,7 +704,8 @@ namespace UI
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.winKeyToolStripMenuItem,
-            this.rigControlToolStripMenuItem});
+            this.rigControlToolStripMenuItem,
+            this.QrzUserSetupToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "&Options";
@@ -710,14 +713,21 @@ namespace UI
             // winKeyToolStripMenuItem
             // 
             this.winKeyToolStripMenuItem.Name = "winKeyToolStripMenuItem";
-            this.winKeyToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.winKeyToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.winKeyToolStripMenuItem.Text = "WinKey...";
             // 
             // rigControlToolStripMenuItem
             // 
             this.rigControlToolStripMenuItem.Name = "rigControlToolStripMenuItem";
-            this.rigControlToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.rigControlToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.rigControlToolStripMenuItem.Text = "Rig Control...";
+            // 
+            // QrzUserSetupToolStripMenuItem
+            // 
+            this.QrzUserSetupToolStripMenuItem.Name = "QrzUserSetupToolStripMenuItem";
+            this.QrzUserSetupToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.QrzUserSetupToolStripMenuItem.Text = "QRZ.com User Setup...";
+            this.QrzUserSetupToolStripMenuItem.Click += new System.EventHandler(this.QrzUserSetupToolStripMenuItem_Click);
             // 
             // wipeQSOToolStripMenuItem
             // 
@@ -799,6 +809,7 @@ namespace UI
         private System.Windows.Forms.ToolStripMenuItem aDIFToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem knownCallsignsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem multipleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem QrzUserSetupToolStripMenuItem;
         //private System.Windows.Forms.DataGridView m_QSOGrid;
         //private System.Windows.Forms.DataGridViewTextBoxColumn m_QBand;
         //private System.Windows.Forms.DataGridViewTextBoxColumn m_QTime;

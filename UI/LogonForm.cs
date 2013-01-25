@@ -37,21 +37,18 @@ namespace UI
                     conn.Open();
                     conn.Close();
 
-                    using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\M0VFC Contest Log"))
-                    {
-                        key.SetValue("Server", Server);
-                        key.SetValue("Database", Database);
-                        key.SetValue("Username", Username);
-                        key.SetValue("Password", Password);
-                        if (CivSerialPort != null)
-                            key.SetValue("SerialPort", CivSerialPort);
-                        else
-                            key.SetValue("SerialPort", string.Empty);
-                        key.SetValue("CivDtr", CivDtr.ToString());
-                        key.SetValue("CivRts", CivRts.ToString());
-                        key.SetValue("CivSpeed", m_Speed.Text);
-                        key.SetValue("RadioModel", m_RadioModel.Text);
-                    }
+                    Settings.Set("Server", Server);
+                    Settings.Set("Database", Database);
+                    Settings.Set("Username", Username);
+                    Settings.Set("Password", Password);
+                    if (CivSerialPort != null)
+                        Settings.Set("SerialPort", CivSerialPort);
+                    else
+                        Settings.Set("SerialPort", string.Empty);
+                    Settings.Set("CivDtr", CivDtr.ToString());
+                    Settings.Set("CivRts", CivRts.ToString());
+                    Settings.Set("CivSpeed", m_Speed.Text);
+                    Settings.Set("RadioModel", m_RadioModel.Text);
                 }
 
                 try
@@ -147,26 +144,27 @@ namespace UI
             foreach (string val in Enum.GetNames(typeof(RadioModel)))
                 m_RadioModel.Items.Add(val);
 
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\M0VFC Contest Log", false))
-            {
-                if (key != null)
-                {
-                    m_Server.Text = (string)key.GetValue("Server", "harris.local");
-                    m_Database.Text = (string)key.GetValue("Database", "");
-                    m_Username.Text = (string)key.GetValue("Username", "gs3pye");
-                    m_Password.Text = (string)key.GetValue("Password", "gs3pye");
-                    string savedSerialPort = (string)key.GetValue("SerialPort", "");
-                    if (savedSerialPort != null && m_SerialPort.Items.Contains(savedSerialPort))
-                        m_SerialPort.SelectedItem = savedSerialPort;
-                    bool civDtr, civRts;
-                    bool.TryParse((string)key.GetValue("CivDtr", "True"), out civDtr);
-                    bool.TryParse((string)key.GetValue("CivRts", "True"), out civRts);
-                    m_RTS.Checked = civRts;
-                    m_DTR.Checked = civDtr;
-                    m_RadioModel.SelectedText = (string)key.GetValue("RadioModel", string.Empty);
-                    m_Speed.Text = (string)key.GetValue("CivSpeed", "19200");
-                }
-            }
+            m_Server.Text = (string)Settings.Get("Server", "harris.local");
+            m_Database.Text = (string)Settings.Get("Database", "");
+            m_Username.Text = (string)Settings.Get("Username", "gs3pye");
+            m_Password.Text = (string)Settings.Get("Password", "gs3pye");
+            string savedSerialPort = (string)Settings.Get("SerialPort", "");
+            if (savedSerialPort != null && m_SerialPort.Items.Contains(savedSerialPort))
+                m_SerialPort.SelectedItem = savedSerialPort;
+            bool civDtr, civRts;
+            bool.TryParse((string)Settings.Get("CivDtr", "True"), out civDtr);
+            bool.TryParse((string)Settings.Get("CivRts", "True"), out civRts);
+            m_RTS.Checked = civRts;
+            m_DTR.Checked = civDtr;
+            m_RadioModel.SelectedText = (string)Settings.Get("RadioModel", string.Empty);
+            m_Speed.Text = (string)Settings.Get("CivSpeed", "19200");
+        }
+
+        private void DatabaseDroppedDown(object sender, EventArgs e)
+        {
+            // When the DB combo is opened, try and populate it with a list of DBs for the server, if the credentials are valid
+            m_Database.Items.Add("Foo");
+            m_Database.Items.Add("Bar");
         }
     }
 }

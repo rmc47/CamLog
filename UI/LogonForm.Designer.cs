@@ -38,7 +38,6 @@ namespace UI
             System.Windows.Forms.Label label7;
             this.m_Password = new System.Windows.Forms.TextBox();
             this.m_Username = new System.Windows.Forms.TextBox();
-            this.m_Database = new System.Windows.Forms.TextBox();
             this.m_Server = new System.Windows.Forms.TextBox();
             this.m_Connect = new System.Windows.Forms.Button();
             this.m_SerialPort = new System.Windows.Forms.ComboBox();
@@ -47,6 +46,7 @@ namespace UI
             this.m_RTS = new System.Windows.Forms.CheckBox();
             this.m_RadioModel = new System.Windows.Forms.ComboBox();
             this.m_Speed = new System.Windows.Forms.TextBox();
+            this.m_Database = new System.Windows.Forms.ComboBox();
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             label4 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
@@ -67,14 +67,8 @@ namespace UI
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            tableLayoutPanel1.Controls.Add(this.m_Password, 1, 3);
-            tableLayoutPanel1.Controls.Add(this.m_Username, 1, 2);
-            tableLayoutPanel1.Controls.Add(this.m_Database, 1, 1);
-            tableLayoutPanel1.Controls.Add(label4, 0, 2);
-            tableLayoutPanel1.Controls.Add(label2, 0, 1);
             tableLayoutPanel1.Controls.Add(this.m_Server, 1, 0);
             tableLayoutPanel1.Controls.Add(label1, 0, 0);
-            tableLayoutPanel1.Controls.Add(label3, 0, 3);
             tableLayoutPanel1.Controls.Add(this.m_Connect, 1, 8);
             tableLayoutPanel1.Controls.Add(label5, 0, 4);
             tableLayoutPanel1.Controls.Add(this.m_SerialPort, 1, 4);
@@ -83,6 +77,12 @@ namespace UI
             tableLayoutPanel1.Controls.Add(label6, 0, 6);
             tableLayoutPanel1.Controls.Add(label7, 0, 7);
             tableLayoutPanel1.Controls.Add(this.m_Speed, 1, 7);
+            tableLayoutPanel1.Controls.Add(label4, 0, 1);
+            tableLayoutPanel1.Controls.Add(this.m_Username, 1, 1);
+            tableLayoutPanel1.Controls.Add(label3, 0, 2);
+            tableLayoutPanel1.Controls.Add(this.m_Password, 1, 2);
+            tableLayoutPanel1.Controls.Add(label2, 0, 3);
+            tableLayoutPanel1.Controls.Add(this.m_Database, 1, 3);
             tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 9;
@@ -101,7 +101,7 @@ namespace UI
             // m_Password
             // 
             this.m_Password.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_Password.Location = new System.Drawing.Point(167, 98);
+            this.m_Password.Location = new System.Drawing.Point(167, 67);
             this.m_Password.Name = "m_Password";
             this.m_Password.PasswordChar = '*';
             this.m_Password.Size = new System.Drawing.Size(158, 20);
@@ -110,24 +110,16 @@ namespace UI
             // m_Username
             // 
             this.m_Username.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_Username.Location = new System.Drawing.Point(167, 67);
+            this.m_Username.Location = new System.Drawing.Point(167, 36);
             this.m_Username.Name = "m_Username";
             this.m_Username.Size = new System.Drawing.Size(158, 20);
             this.m_Username.TabIndex = 5;
-            // 
-            // m_Database
-            // 
-            this.m_Database.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_Database.Location = new System.Drawing.Point(167, 36);
-            this.m_Database.Name = "m_Database";
-            this.m_Database.Size = new System.Drawing.Size(158, 20);
-            this.m_Database.TabIndex = 3;
             // 
             // label4
             // 
             label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label4.AutoSize = true;
-            label4.Location = new System.Drawing.Point(3, 71);
+            label4.Location = new System.Drawing.Point(3, 40);
             label4.Name = "label4";
             label4.Size = new System.Drawing.Size(58, 13);
             label4.TabIndex = 4;
@@ -137,7 +129,7 @@ namespace UI
             // 
             label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(3, 40);
+            label2.Location = new System.Drawing.Point(3, 102);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(56, 13);
             label2.TabIndex = 2;
@@ -165,7 +157,7 @@ namespace UI
             // 
             label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label3.AutoSize = true;
-            label3.Location = new System.Drawing.Point(3, 102);
+            label3.Location = new System.Drawing.Point(3, 71);
             label3.Name = "label3";
             label3.Size = new System.Drawing.Size(56, 13);
             label3.TabIndex = 6;
@@ -272,6 +264,16 @@ namespace UI
             this.m_Speed.Size = new System.Drawing.Size(158, 20);
             this.m_Speed.TabIndex = 15;
             // 
+            // m_Database
+            // 
+            this.m_Database.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_Database.FormattingEnabled = true;
+            this.m_Database.Location = new System.Drawing.Point(167, 98);
+            this.m_Database.Name = "m_Database";
+            this.m_Database.Size = new System.Drawing.Size(158, 21);
+            this.m_Database.TabIndex = 16;
+            this.m_Database.DropDown += new System.EventHandler(this.DatabaseDroppedDown);
+            // 
             // LogonForm
             // 
             this.AcceptButton = this.m_Connect;
@@ -298,7 +300,6 @@ namespace UI
 
         private System.Windows.Forms.TextBox m_Password;
         private System.Windows.Forms.TextBox m_Username;
-        private System.Windows.Forms.TextBox m_Database;
         private System.Windows.Forms.TextBox m_Server;
         private System.Windows.Forms.Button m_Connect;
         private System.Windows.Forms.ComboBox m_SerialPort;
@@ -307,5 +308,6 @@ namespace UI
         private System.Windows.Forms.CheckBox m_RTS;
         private System.Windows.Forms.ComboBox m_RadioModel;
         private System.Windows.Forms.TextBox m_Speed;
+        private System.Windows.Forms.ComboBox m_Database;
     }
 }

@@ -6,6 +6,7 @@ using iTextSharp.text.pdf;
 using iTextSharp.text;
 using System.IO;
 using Engine;
+using System.Diagnostics;
 
 namespace QslEngine
 {
@@ -21,7 +22,7 @@ namespace QslEngine
         private static readonly Font s_MyCallFont = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
         private static readonly Font s_TitleTextFont = new Font(Font.FontFamily.TIMES_ROMAN, 9, Font.NORMAL);
 
-        private static readonly BaseFont s_AddressBaseFont = BaseFont.CreateFont(@"C:\Windows\Fonts\arialuni.ttf", BaseFont.IDENTITY_H, true);
+        private static readonly BaseFont s_AddressBaseFont = BaseFont.CreateFont(@"C:\Windows\Fonts\arial.ttf", BaseFont.IDENTITY_H, true);
         private static readonly Font s_AddressFont = new Font(s_AddressBaseFont, 9, Font.NORMAL);
 
         private PdfPTable m_MainTable;
@@ -118,6 +119,7 @@ namespace QslEngine
                     doc.Close();
                 }
             }
+            Process.Start(filename);
         }
 
         private PdfPCell GetCell()

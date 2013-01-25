@@ -7,44 +7,44 @@ namespace Engine
 {
     public static class CabrilloExporter
     {
-        public static void ExportContacts(IEnumerable<Contact> contacts, string exportLocation, string c_LocatorSent, string c_CallUsed, string c_Operators, string c_Contest, string c_ClaimedScore)
+        public static void ExportContacts(IEnumerable<Contact> contacts, string exportLocation, string locatorSent, string callUsed, string operators, string contest, string claimedScore)
         {
             using (StreamWriter writer = new StreamWriter(exportLocation))
             {
                 writer.WriteLine("START-OF-LOG: 2.0");
                 writer.WriteLine("CREATED-BY: M0VFC CamLog");
-                if (!string.IsNullOrEmpty(c_Contest))
+                if (!string.IsNullOrEmpty(contest))
                 {
-                    writer.WriteLine("CONTEST: " + c_Contest.ToUpper());
+                    writer.WriteLine("CONTEST: " + contest.ToUpper());
                 }
-                writer.WriteLine("CALLSIGN: " + c_CallUsed.ToUpper());
-                if (!string.IsNullOrEmpty(c_ClaimedScore))
+                writer.WriteLine("CALLSIGN: " + callUsed.ToUpper());
+                if (!string.IsNullOrEmpty(claimedScore))
                 {
-                    writer.WriteLine("CLAIMED SCORE: " + c_ClaimedScore);
+                    writer.WriteLine("CLAIMED SCORE: " + claimedScore);
                 }
-                if (!string.IsNullOrEmpty(c_Operators))
+                if (!string.IsNullOrEmpty(operators))
                 {
-                    writer.WriteLine("OPERATORS: " + c_Operators.ToUpper());
+                    writer.WriteLine("OPERATORS: " + operators.ToUpper());
                 }
                 else
                 {
-                    writer.WriteLine("OPERATORS: " + c_CallUsed.ToUpper());
+                    writer.WriteLine("OPERATORS: " + callUsed.ToUpper());
                 }
                 writer.WriteLine();
-                if (c_Contest == "RSGB AFS - Club Calls")
+                if (contest == "RSGB AFS - Club Calls")
                 {
                     foreach (Contact c in contacts)
-                        Export_ClubCalls(c, writer, c_LocatorSent, c_CallUsed);
+                        Export_ClubCalls(c, writer, locatorSent, callUsed);
                 }
-                else if (c_Contest == "RSGB AFS - 80m SSB/CW")
+                else if (contest == "RSGB AFS - 80m SSB/CW")
                 {
                     foreach (Contact c in contacts)
-                        Export_80mAFS(c, writer, c_LocatorSent, c_CallUsed);
+                        Export_80mAFS(c, writer, locatorSent, callUsed);
                 }
                 else
                 {
                     foreach (Contact c in contacts)
-                        Export_UKAC(c, writer, c_LocatorSent, c_CallUsed);
+                        Export_UKAC(c, writer, locatorSent, callUsed);
                 }
             }
         }

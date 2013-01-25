@@ -147,6 +147,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="QrzUserSetup.resx">
+      <DependentUpon>QrzUserSetup.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -156,6 +159,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="QrzUserSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="QrzUserSetup.Designer.cs">
+      <DependentUpon>QrzUserSetup.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="ValidationHelper.cs" />

@@ -28,6 +28,9 @@ namespace UI
         {
             InitializeComponent();
             checkFields();
+            m_CmbContest.Items.Add("RSGB AFS - Club Calls");
+            m_CmbContest.Items.Add("RSGB AFS - 80m SSB/CW");
+            m_CmbContest.Items.Add("RSGB UKAC");
         }
 
         public string ExportPath
@@ -199,9 +202,9 @@ namespace UI
             Operators = m_TxtOperators.Text;
         }
 
-        private void m_TxtContest_TextChanged(object sender, EventArgs e)
+        private void m_CmbContest_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Contest = m_TxtContest.Text;
+            Contest = m_CmbContest.SelectedItem.ToString();
         }
 
         private void m_TxtFileName_TextChanged(object sender, EventArgs e)

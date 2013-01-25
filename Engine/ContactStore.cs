@@ -245,7 +245,9 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                     
                     cmd.Parameters.AddWithValue("?id", c.Id);
                     cmd.ExecuteNonQuery();
-                    c.Id = (int)cmd.LastInsertedId;
+
+                    if (c.Id <= 0)
+                        c.Id = (int)cmd.LastInsertedId; // This is only valid for an insert, not an update
                 }
             }
         }

@@ -95,6 +95,7 @@ CREATE TABLE IF NOT EXISTS `log` (
   `qslRxDate` datetime DEFAULT NULL,
   `qslTxDate` datetime DEFAULT NULL,
   `qslMethod` varchar(20) DEFAULT NULL,
+  `location` int(11) not null default 0,
   PRIMARY KEY (`id`,`sourceId`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9054 ;
 
@@ -146,4 +147,15 @@ CREATE TABLE IF NOT EXISTS `setup` (
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO setup (`key`, `val`) VALUES ('schemaVersion', '1');
+--
+-- Table structure for table `locations`
+--
+CREATE TABLE IF NOT EXISTS `locations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `locator` varchar(10) not null default '',
+  `wab` varchar(6) not null default '',
+  `club` varchar(30) not null default '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO setup (`key`, `val`) VALUES ('schemaVersion', '2');

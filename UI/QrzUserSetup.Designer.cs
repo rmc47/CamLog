@@ -43,17 +43,16 @@
             this.m_TxtQrzUsername.Size = new System.Drawing.Size(168, 20);
             this.m_TxtQrzUsername.TabIndex = 0;
             this.m_TxtQrzUsername.TextChanged += new System.EventHandler(this.m_TxtQrzUsername_TextChanged);
-            this.m_TxtQrzUsername.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyDown);
             // 
             // m_TxtQrzPassword
             // 
             this.m_TxtQrzPassword.Location = new System.Drawing.Point(76, 38);
             this.m_TxtQrzPassword.Name = "m_TxtQrzPassword";
+            this.m_TxtQrzPassword.PasswordChar = '*';
             this.m_TxtQrzPassword.Size = new System.Drawing.Size(168, 20);
             this.m_TxtQrzPassword.TabIndex = 1;
             this.m_TxtQrzPassword.UseSystemPasswordChar = true;
             this.m_TxtQrzPassword.TextChanged += new System.EventHandler(this.m_TxtQrzPassword_TextChanged);
-            this.m_TxtQrzPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyDown);
             // 
             // label1
             // 
@@ -62,7 +61,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(58, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Username:";
+            this.label1.Text = "&Username:";
             // 
             // label2
             // 
@@ -71,7 +70,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(56, 13);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Password:";
+            this.label2.Text = "&Password:";
             // 
             // m_BtnOK
             // 
@@ -95,8 +94,10 @@
             // 
             // QrzUserSetup
             // 
+            this.AcceptButton = this.m_BtnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.m_BtnCancel;
             this.ClientSize = new System.Drawing.Size(256, 100);
             this.Controls.Add(this.m_BtnCancel);
             this.Controls.Add(this.m_BtnOK);
@@ -104,8 +105,11 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.m_TxtQrzPassword);
             this.Controls.Add(this.m_TxtQrzUsername);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "QrzUserSetup";
-            this.Text = "QRZ.com User Setup";
+            this.Text = "QRZ.com Configuration";
             this.ResumeLayout(false);
             this.PerformLayout();
 

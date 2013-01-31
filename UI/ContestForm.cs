@@ -798,7 +798,7 @@ namespace UI
 
         private void QrzUserSetupToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (QrzUserSetup QrzSetup = new QrzUserSetup{})
+            using (QrzUserSetup QrzSetup = new QrzUserSetup())
             {
                 DialogResult dr = QrzSetup.ShowDialog();
                 if (dr == DialogResult.OK)

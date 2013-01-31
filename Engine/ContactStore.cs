@@ -123,6 +123,8 @@ namespace Engine
             m_Connection = new MySqlConnection(csb.ConnectionString);
             m_Connection.Open();
 
+            DBMigrations.DbMigrator.UpgradeDatabase(m_Connection, DatabaseType.MySQL);
+
             using (MySqlCommand cmd = m_Connection.CreateCommand())
             {
                 cmd.CommandText = "SELECT id FROM sources WHERE `default`=1;";

@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `log` (
   `qslMethod` varchar(20) DEFAULT NULL,
   `location` int(11) not null default 0,
   PRIMARY KEY (`id`,`sourceId`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9054 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 

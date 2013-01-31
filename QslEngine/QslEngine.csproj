@@ -46,6 +46,7 @@
     <Compile Include="Address.cs" />
     <Compile Include="ClubLogCSVHandler.cs" />
     <Compile Include="IPageLayout.cs" />
+    <Compile Include="LabelEntry.cs" />
     <Compile Include="LayoutAvery7160.cs" />
     <Compile Include="LayoutAvery7162.cs" />
     <Compile Include="PdfEngine.cs" />

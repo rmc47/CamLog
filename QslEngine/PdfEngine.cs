@@ -21,6 +21,7 @@ namespace QslEngine
         private static readonly Font s_TableFont = new Font(Font.FontFamily.TIMES_ROMAN, 9, Font.NORMAL);
         private static readonly Font s_MyCallFont = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
         private static readonly Font s_TitleTextFont = new Font(Font.FontFamily.TIMES_ROMAN, 9, Font.NORMAL);
+        private static readonly Font s_FooterTextFont = new Font(Font.FontFamily.TIMES_ROMAN, (float)7.5, Font.NORMAL);
 
         private static readonly BaseFont s_AddressBaseFont = BaseFont.CreateFont(@"C:\Windows\Fonts\arial.ttf", BaseFont.IDENTITY_H, true);
         private static readonly Font s_AddressFont = new Font(s_AddressBaseFont, 9, Font.NORMAL);
@@ -29,6 +30,16 @@ namespace QslEngine
         private int m_LabelsUsed = 0;
         private readonly string m_OurCallsign;
         private readonly IPageLayout m_Layout;
+
+        public bool PrintFooter { get; set; }
+        public int QsoPerLabel
+        {
+            get
+            {
+                // If we're printing the footer, allow an extra line for that
+                return PrintFooter ? m_Layout.QsoPerLabel - 1 : m_Layout.QsoPerLabel;
+            }
+        }
 
         public PdfEngine(IPageLayout layout, string ourCallsign, int firstPageOffset)
         {
@@ -43,37 +54,31 @@ namespace QslEngine
 
             // Offset the first page by an appropriate number of cells
             for (int i = 0; i < firstPageOffset; i++)
-                m_MainTable.AddCell(PopulateCell(new TableEntry[0]));
+                m_MainTable.AddCell(PopulateCell(new LabelEntry()));
             m_LabelsUsed += firstPageOffset;
         }
 
         public int CalculateLabelCount(List<Contact> entries)
         {
-            return (entries.Count + m_Layout.QsoPerLabel - 1) / m_Layout.QsoPerLabel;
+            return (entries.Count + QsoPerLabel - 1) / QsoPerLabel;
         }
 
-        public int AddQSOs(List<Contact> entries)
+        /// <summary>
+        /// Add a set of QSOs - all for the same callsign - to the list to be printed
+        /// </summary>
+        public int AddQSOs(LabelEntry label, List<Contact> entries)
         {
             // For each group of up to n QSOs, print on to one label
             int startIndex = 0;
             int labelsUsedHere = 0;
             while (startIndex < entries.Count)
             {
-                List<Contact> labelContacts = entries.GetRange(startIndex, Math.Min(m_Layout.QsoPerLabel, entries.Count - startIndex));
-                List<TableEntry> labelEntries = labelContacts.ConvertAll<TableEntry>(c =>
-                {
-                    return new TableEntry
-                    {
-                        Band = BandHelper.ToMHzString(c.Band),
-                        Callsign = c.Callsign,
-                        Mode = ModeHelper.ToString(c.Mode),
-                        MyCall = m_OurCallsign,
-                        Rst = c.ReportSent,
-                        UtcTime = c.StartTime
-                    };
-                });
-                m_MainTable.AddCell(PopulateCell(labelEntries.ToArray()));
-                startIndex += m_Layout.QsoPerLabel;
+                List<Contact> labelContacts = entries.GetRange(startIndex, Math.Min(QsoPerLabel, entries.Count - startIndex));
+                List<TableEntry> labelEntries = labelContacts.ConvertAll<TableEntry>(c => new TableEntry(c));
+
+                label.QSOs = labelEntries.ToArray();
+                m_MainTable.AddCell(PopulateCell(label));
+                startIndex += QsoPerLabel;
                 m_LabelsUsed++;
                 labelsUsedHere++;
             }
@@ -133,7 +138,7 @@ namespace QslEngine
             return cell;
         }
 
-        private PdfPCell PopulateCell(TableEntry[] entries)
+        private PdfPCell PopulateCell(LabelEntry label)
         {
             PdfPCell cell = GetCell();
 
@@ -141,7 +146,7 @@ namespace QslEngine
             qsoTable.SetWidths(m_Layout.ColumnRelativeWidths);
             qsoTable.WidthPercentage = 100f;
 
-            if (entries.Length > 0)
+            if (label.QSOs != null && label.QSOs.Length > 0)
             {
                 AddCell(qsoTable, s_HeaderFont, "Date");
                 AddCell(qsoTable, s_HeaderFont, "UTC");
@@ -151,12 +156,12 @@ namespace QslEngine
 
                 Phrase titlePhrase = new Phrase();
                 titlePhrase.Leading = 14.0f;
-                titlePhrase.Add(new Chunk(entries[0].MyCall, s_MyCallFont));
+                titlePhrase.Add(new Chunk(label.MyCall, s_MyCallFont));
                 titlePhrase.Add(new Chunk(" confirms the following QSO(s) with ", s_TitleTextFont));
-                titlePhrase.Add(new Chunk(entries[0].Callsign, s_MyCallFont));
+                titlePhrase.Add(new Chunk(label.Callsign, s_MyCallFont));
                 titlePhrase.Add(new Chunk(":", s_TitleTextFont));
                 cell.AddElement(titlePhrase);
-                foreach (TableEntry qso in entries)
+                foreach (TableEntry qso in label.QSOs)
                 {
                     AddCell(qsoTable, s_TableFont, qso.UtcTime.ToString("yyyy-MM-dd"));
                     AddCell(qsoTable, s_TableFont, qso.UtcTime.ToString("HHmm"));
@@ -166,6 +171,14 @@ namespace QslEngine
                 }
             }
             cell.AddElement(qsoTable);
+
+            if (PrintFooter)
+            {
+                Phrase footerPhrase = new Phrase();
+                footerPhrase.Add(new Chunk(string.Format("QTH: {0}; IOTA: {1}; WAB: {2}; Locator: {3}", label.Location.IotaName, label.Location.IotaRef, label.Location.Wab, label.Location.Locator), s_FooterTextFont));
+                cell.AddElement(footerPhrase);
+            }
+
             return cell;
         }
 

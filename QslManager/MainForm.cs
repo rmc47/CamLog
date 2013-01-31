@@ -193,7 +193,32 @@ namespace QslManager
                 }
                 foreach (List<Contact> contacts in contactsToPrint)
                 {
-                    engine.AddQSOs(contacts);
+                    if (contacts.Count <= 0)
+                        continue;
+
+                    var contactsByLocation = contacts.GroupBy(c => c.LocationID);
+                    foreach (var oneLocation in contactsByLocation)
+                    {
+                        Location l = m_ContactStore.LoadLocation(oneLocation.Key);
+
+                        LabelEntry labelEntry = new LabelEntry
+                        {
+                            Callsign = contacts[0].Callsign,
+                            MyCall = myCall
+                        };
+
+                        if (l != null)
+                        {
+                            labelEntry.Location = l;
+                            engine.PrintFooter = true;
+                        }
+                        else
+                        {
+                            engine.PrintFooter = false;
+                        }
+
+                        engine.AddQSOs(labelEntry, oneLocation.ToList());
+                    }
                 }
                 engine.PrintDocument(Path.Combine(m_OutputPath.Text, string.Format("QSL-{0}-{1}.pdf", myCall.Replace('/', '_'), DateTime.UtcNow.ToString("yyyy-MM-dd-HHmm"))));
                 m_ContactStore.MarkQslsSent(contactsToPrint);

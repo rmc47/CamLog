@@ -191,6 +191,7 @@ namespace Engine
                         c.QslRxDate = reader.GetDateTimeNullable("qslRxDate");
                         c.QslTxDate = reader.GetDateTimeNullable("qslTxDate");
                         c.QslMethod = reader["qslMethod"] as string;
+                        c.LocationID = (int)reader["location"];
 
                         // Optional stuff below here...
                         string locatorString = reader["locator"] as string;
@@ -250,6 +251,35 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
                     if (c.Id <= 0)
                         c.Id = (int)cmd.LastInsertedId; // This is only valid for an insert, not an update
+                }
+            }
+        }
+
+        public Location LoadLocation(int id)
+        {
+            MySqlConnection conn = OpenConnection;
+            lock (conn)
+            {
+                using (MySqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT * FROM locations WHERE id=?id;";
+                    cmd.Parameters.AddWithValue("?id", id);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.Read())
+                            return null;
+
+                        Location l = new Location
+                        {
+                            ID = id,
+                            Club = reader.GetString("club"),
+                            IotaName = reader.GetString("iotaname"),
+                            IotaRef = reader.GetString("iotaref"),
+                            Locator = reader.GetString("locator"),
+                            Wab = reader.GetString("wab"),
+                        };
+                        return l;
+                    }
                 }
             }
         }

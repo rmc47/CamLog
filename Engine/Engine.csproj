@@ -75,6 +75,7 @@
     <Compile Include="Geographics.cs" />
     <Compile Include="KstEvent.cs" />
     <Compile Include="KstServer.cs" />
+    <Compile Include="Location.cs" />
     <Compile Include="Locator.cs" />
     <Compile Include="Mode.cs" />
     <Compile Include="MySqlDbHelper.cs" />

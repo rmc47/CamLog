@@ -31,6 +31,7 @@ namespace Engine
         private DateTime? m_QslRxDate;
         private DateTime? m_QslTxDate;
         private string m_QslMethod;
+        private int m_LocationID;
 
         public Contact()
         {
@@ -173,6 +174,12 @@ namespace Engine
         {
             get { return m_QslMethod;}
             set { m_QslMethod = value; }
+        }
+
+        public int LocationID
+        {
+            get { return m_LocationID; }
+            set { m_LocationID = value; }
         }
 
         public override string ToString()

@@ -186,5 +186,55 @@ namespace Engine
         {
             return string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10}", Id, StartTime, Callsign, ReportSent, ReportReceived, SerialSent, SerialReceived, LocatorReceivedString, Band, Mode, Operator);
         }
+
+        public static int QsoMatchCompare(Contact c1, Contact c2)
+        {
+            if (c1 == null && c2 == null)
+                return 0;
+            if (c1 == null)
+                return -1;
+            if (c2 == null)
+                return 1;
+
+            int val;
+
+            if (c1.SourceId > 0 && c2.SourceId > 0)
+            {
+                val = c1.SourceId.CompareTo(c2.SourceId);
+                if (val != 0)
+                    return val;
+            }
+
+            val = c1.Callsign.CompareTo(c2.Callsign);
+            if (val != 0)
+                return val;
+
+            val = c1.Band.CompareTo(c2.Band);
+            if (val != 0)
+                return val;
+
+            val = c1.Mode.CompareTo(c2.Mode);
+            if (val != 0)
+                return val;
+
+            if (Math.Abs(c1.StartTime.Subtract(c2.StartTime).TotalMinutes) > 5)
+                return c1.StartTime.CompareTo(c2.StartTime);
+
+            // If callsign, band, mode and time (within 5 mins) match, call it the same
+            return 0;
+        }
+
+        public static bool QsoMatchEquals(Contact c1, Contact c2)
+        {
+            return QsoMatchCompare(c1, c2) == 0;
+        }
+
+        public class QsoMatchComparer : IComparer<Contact>
+        {
+            public int Compare(Contact x, Contact y)
+            {
+                return QsoMatchCompare(x, y);
+            }
+        }
     }
 }

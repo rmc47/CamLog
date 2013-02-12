@@ -787,8 +787,22 @@ namespace UI
                     filename = ofd.FileName;
                 }
                 List<Contact> contacts = AdifHandler.ImportAdif(filename, "IMPORT", m_ContactStore.SourceId, "IMPORT");
-                contacts.ForEach(m_ContactStore.SaveContact);
-                MessageBox.Show(string.Format("Import of {0} contacts successful", contacts.Count), "CamLog | ADIF Import");
+
+                List<Contact> existingContacts = m_ContactStore.GetAllContacts(null);
+                existingContacts.Sort(Contact.QsoMatchCompare);
+
+                // De-dupe QSOs with existing ones in the DB
+                int importedCount = 0;
+                foreach (Contact c in contacts)
+                {
+                    if (existingContacts.BinarySearch(c, new Contact.QsoMatchComparer()) >= 0)
+                        continue;
+
+                    m_ContactStore.SaveContact(c);
+                    importedCount++;
+                }
+
+                MessageBox.Show(string.Format("Import of {0} contacts successful", importedCount), "CamLog | ADIF Import");
             }
             catch (Exception ex)
             {

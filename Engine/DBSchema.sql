@@ -1,7 +1,11 @@
 -- -------------------------------------------------------------------------------
 -- Basic DB schema creation script - creates a V1 schema, which then gets upgraded
 -- By running a set of migrations on top of that. Therefore:
+
 --     **** DO NOT ADD NEW SCHEMA TO THIS FILE ****
+--     **** DO NOT ADD NEW SCHEMA TO THIS FILE ****
+--     **** DO NOT ADD NEW SCHEMA TO THIS FILE ****
+
 -- -------------------------------------------------------------------------------
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";

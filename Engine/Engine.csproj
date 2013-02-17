@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdifHandler.cs" />
+    <Compile Include="AdifFileReader.cs" />
     <Compile Include="Band.cs" />
     <Compile Include="CabrilloExporter.cs" />
     <Compile Include="CallsignLookup.cs" />

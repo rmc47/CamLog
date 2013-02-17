@@ -175,7 +175,7 @@ namespace QslEngine
             if (PrintFooter)
             {
                 Phrase footerPhrase = new Phrase();
-                footerPhrase.Add(new Chunk(string.Format("QTH: {0}; IOTA: {1}; WAB: {2}; Locator: {3}", label.Location.IotaName, label.Location.IotaRef, label.Location.Wab, label.Location.Locator), s_FooterTextFont));
+                footerPhrase.Add(new Chunk(string.Format("IOTA: {0} ({1}); WAB: {2}; Locator: {3}", label.Location.IotaName, label.Location.IotaRef, label.Location.Wab, label.Location.Locator), s_FooterTextFont));
                 cell.AddElement(footerPhrase);
             }
 

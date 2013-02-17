@@ -69,47 +69,54 @@ namespace Engine
             AdifFileReader.Record currentRecord;
             while ((currentRecord = adifReader.ReadRecord()) != null)
             {
-                Contact c = new Contact();
+                Contact c = GetContact(currentRecord);
                 c.SourceId = sourceId;
-                c.Callsign = currentRecord["call"];
-
-                // This parsing is horrid. TODO: Figure out how to use IFormatProvider properly.
-                string dateStr = currentRecord["qso_date"];
-                string timeOnStr = currentRecord["time_on"];
-                DateTime date = AdifFileReader.ParseAdifDate(dateStr, timeOnStr);
-                c.StartTime = c.EndTime = date;
-
-                c.Band = BandHelper.Parse(currentRecord["band"]);
-                if (currentRecord["freq"] != null)
-                    c.Frequency = (long)(decimal.Parse(currentRecord["freq"]) * 1000000);
-                c.ReportReceived = currentRecord["rst_rcvd"];
-                c.ReportSent = currentRecord["rst_sent"];
-                c.Operator = currentRecord["operator"] ?? defaultOperator;
-                c.Mode = ModeHelper.Parse(currentRecord["mode"]);
+                c.Operator = c.Operator ?? defaultOperator;
                 c.Station = station;
-                c.LastModified = DateTime.UtcNow;
-
-                // QSL info...
-                if (currentRecord["qslrdate"] != null)
-                {
-                    c.QslRxDate = AdifFileReader.ParseAdifDate(currentRecord["qslrdate"], null);
-                }
-                if (currentRecord["qsl_rcvd_via"] != null && c.QslRxDate != null)
-                {
-                    if (currentRecord["qsl_rcvd_via"].Trim() == "D")
-                        c.QslMethod = "Direct";
-                    else if (currentRecord["qsl_rcvd_via"].Trim() == "B")
-                        c.QslMethod = "Bureau";
-                }
-                if (currentRecord["qslsdate"] != null)
-                {
-                    c.QslTxDate = AdifFileReader.ParseAdifDate(currentRecord["qslsdate"], null);
-                }
-
                 contacts.Add(c);
             }
 
             return contacts;
+        }
+
+        public static Contact GetContact(AdifFileReader.Record record)
+        {
+            Contact c = new Contact();
+            c.Callsign = record["call"];
+
+            // This parsing is horrid. TODO: Figure out how to use IFormatProvider properly.
+            string dateStr = record["qso_date"];
+            string timeOnStr = record["time_on"];
+            DateTime? date = AdifFileReader.ParseAdifDate(dateStr, timeOnStr);
+            c.StartTime = c.EndTime = date.Value;
+
+            c.Band = BandHelper.Parse(record["band"]);
+            if (record["freq"] != null)
+                c.Frequency = (long)(decimal.Parse(record["freq"]) * 1000000);
+            c.ReportReceived = record["rst_rcvd"];
+            c.ReportSent = record["rst_sent"];
+            c.Operator = record["operator"];
+            c.Mode = ModeHelper.Parse(record["mode"]);
+            c.LastModified = DateTime.UtcNow;
+
+            // QSL info...
+            if (record["qslrdate"] != null)
+            {
+                c.QslRxDate = AdifFileReader.ParseAdifDate(record["qslrdate"], null);
+            }
+            if (record["qsl_rcvd_via"] != null && c.QslRxDate != null)
+            {
+                if (record["qsl_rcvd_via"].Trim() == "D")
+                    c.QslMethod = "Direct";
+                else if (record["qsl_rcvd_via"].Trim() == "B")
+                    c.QslMethod = "Bureau";
+            }
+            if (record["qslsdate"] != null)
+            {
+                c.QslTxDate = AdifFileReader.ParseAdifDate(record["qslsdate"], null);
+            }
+
+            return c;
         }
     }
 }

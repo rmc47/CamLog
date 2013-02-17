@@ -290,19 +290,26 @@ namespace QslManager
         private void ImportClubLog(object sender, EventArgs e)
         {
             PdfEngine addressLabelEngine = new PdfEngine (new LayoutAvery7160(), m_OurCallsign.Text, (int)m_LabelOffset.Value);
-            ClubLogCSVHandler csvHandler = new ClubLogCSVHandler (m_ContactStore, addressLabelEngine);
 
+            ClubLogCSVHandler csvHandler = new ClubLogCSVHandler (m_ContactStore, addressLabelEngine);
+            ClubLogQslAdifHandler adifHandler = new ClubLogQslAdifHandler(m_ContactStore, addressLabelEngine);
+            
             string importPath;
             using (OpenFileDialog ofd = new OpenFileDialog ())
             {
-                ofd.Filter = "CSV Files (*.csv)|*.csv";
+                ofd.Filter = "Club Log OQRS Files (*.csv, *.adi)|*.csv;*.adi";
                 DialogResult dr = ofd.ShowDialog();
                 if (dr != System.Windows.Forms.DialogResult.OK)
                     return;
                 importPath = ofd.FileName;
             }
 
-            int labelsToPrint = csvHandler.ProcessFile(importPath);
+            int labelsToPrint;
+            if (importPath.EndsWith(".csv", StringComparison.InvariantCultureIgnoreCase))
+                labelsToPrint = csvHandler.ProcessFile(importPath);
+            else
+                labelsToPrint = adifHandler.ProcessFile(importPath);
+
             if (labelsToPrint > 0)
                 addressLabelEngine.PrintDocument(Path.Combine(m_OutputPath.Text, string.Format("Address-{0}-{1}.pdf", m_OurCallsign.Text.Replace('/', '_'), DateTime.UtcNow.ToString("yyyy-MM-dd-HHmm"))));
             else

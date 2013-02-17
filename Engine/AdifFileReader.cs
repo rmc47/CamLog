@@ -88,8 +88,11 @@ namespace Engine
             return new Header { HeaderData = headerData };
         }
 
-        public static DateTime ParseAdifDate(string dateField, string timeField)
+        public static DateTime? ParseAdifDate(string dateField, string timeField)
         {
+            if (dateField.StartsWith("-")) // Club Log special
+                return null;
+
             if (timeField != null)
                 return new DateTime(int.Parse(dateField.Substring(0, 4)), int.Parse(dateField.Substring(4, 2)), int.Parse(dateField.Substring(6, 2)), int.Parse(timeField.Substring(0, 2)), int.Parse(timeField.Substring(2, 2)), 0);
             else

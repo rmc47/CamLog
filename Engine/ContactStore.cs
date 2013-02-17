@@ -167,41 +167,46 @@ namespace Engine
                         if (!reader.Read())
                             return null;
 
-                        Contact c = new Contact();
-                        c.Id = id;
-                        c.SourceId = (int)(long)reader["sourceId"];
-                        c.LastModified = (DateTime)reader["lastModified"];
-                        c.StartTime = (DateTime)reader["startTime"];
-                        c.EndTime = (DateTime)reader["endTime"];
-                        c.Callsign = (string)reader["callsign"];
-                        c.Station = reader["station"] as string;
-                        c.Operator = reader["operator"] as string;
-                        c.Band = BandHelper.Parse(reader["band"] as string);
-                        c.Mode = ModeHelper.Parse(reader["mode"] as string);
-                        c.Frequency = (long)reader["frequency"];
-                        c.ReportReceived = (reader["reportRx"] as string) ?? string.Empty;
-                        c.ReportSent = (reader["reportTx"] as string) ?? string.Empty;
-                        c.Notes = (reader["notes"] as string) ?? string.Empty;
-                        int serialReceived;
-                        int serialSent;
-                        int.TryParse(reader["serialReceived"] as string, out serialReceived);
-                        int.TryParse(reader["serialSent"] as string, out serialSent);
-                        c.SerialReceived = serialReceived;
-                        c.SerialSent = serialSent;
-                        c.QslRxDate = reader.GetDateTimeNullable("qslRxDate");
-                        c.QslTxDate = reader.GetDateTimeNullable("qslTxDate");
-                        c.QslMethod = reader["qslMethod"] as string;
-                        c.LocationID = (int)reader["location"];
-
-                        // Optional stuff below here...
-                        string locatorString = reader["locator"] as string;
-                        if (locatorString != null)
-                            c.LocatorReceived = new Locator(locatorString);
-
-                        return c;
+                        return LoadContact(reader);
                     }
                 }
             }
+        }
+
+        private Contact LoadContact(MySqlDataReader reader)
+        {
+            Contact c = new Contact();
+            c.Id = (int)reader["id"];
+            c.SourceId = (int)(long)reader["sourceId"];
+            c.LastModified = (DateTime)reader["lastModified"];
+            c.StartTime = (DateTime)reader["startTime"];
+            c.EndTime = (DateTime)reader["endTime"];
+            c.Callsign = (string)reader["callsign"];
+            c.Station = reader["station"] as string;
+            c.Operator = reader["operator"] as string;
+            c.Band = BandHelper.Parse(reader["band"] as string);
+            c.Mode = ModeHelper.Parse(reader["mode"] as string);
+            c.Frequency = (long)reader["frequency"];
+            c.ReportReceived = (reader["reportRx"] as string) ?? string.Empty;
+            c.ReportSent = (reader["reportTx"] as string) ?? string.Empty;
+            c.Notes = (reader["notes"] as string) ?? string.Empty;
+            int serialReceived;
+            int serialSent;
+            int.TryParse(reader["serialReceived"] as string, out serialReceived);
+            int.TryParse(reader["serialSent"] as string, out serialSent);
+            c.SerialReceived = serialReceived;
+            c.SerialSent = serialSent;
+            c.QslRxDate = reader.GetDateTimeNullable("qslRxDate");
+            c.QslTxDate = reader.GetDateTimeNullable("qslTxDate");
+            c.QslMethod = reader["qslMethod"] as string;
+            c.LocationID = (int)reader["location"];
+
+            // Optional stuff below here...
+            string locatorString = reader["locator"] as string;
+            if (locatorString != null)
+                c.LocatorReceived = new Locator(locatorString);
+
+            return c;
         }
 
         public void SaveContact(Contact c)
@@ -569,25 +574,23 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
             MySqlConnection conn = OpenConnection;
             lock (conn)
             {
-                List<KeyValuePair<int, int>> contactIDs = new List<KeyValuePair<int, int>>();
                 using (MySqlCommand cmd = conn.CreateCommand())
                 {
                     if (station != null)
-                    cmd.CommandText = "SELECT sourceId, id FROM log WHERE station LIKE ?station ORDER BY endTime";
+                    cmd.CommandText = "SELECT * FROM log WHERE station LIKE ?station ORDER BY endTime";
                     else
-                        cmd.CommandText = "SELECT sourceId, id FROM log ORDER BY endTime";
+                        cmd.CommandText = "SELECT * FROM log ORDER BY endTime";
                     cmd.Parameters.AddWithValue("station", station);
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
+                        List<Contact> contacts = new List<Contact>();
                         while (reader.Read())
-                            contactIDs.Add(new KeyValuePair<int, int>(reader.GetInt32(0), reader.GetInt32(1)));
+                        {
+                            contacts.Add(LoadContact(reader));
+                        }
+                        return contacts;
                     }
                 }
-
-                List<Contact> contacts = new List<Contact>(contactIDs.Count);
-                foreach (KeyValuePair<int, int> id in contactIDs)
-                    contacts.Add(LoadContact(id.Key, id.Value));
-                return contacts;
             }
         }
 

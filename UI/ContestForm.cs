@@ -106,29 +106,25 @@ namespace UI
             {
                 Contact c = new Contact();
                 c.SourceId = m_ContactStore.SourceId;
-                c.Band = BandHelper.Parse(m_Band.Text);
-                c.Callsign = m_Callsign.Text.ToUpperInvariant ();
-                if (m_Locator.TextLength > 0)
-                    c.LocatorReceived = new Locator(m_Locator.Text.ToUpperInvariant());
+                c.Band = BandHelper.Parse(m_Band.Text.Trim());
+                c.Callsign = m_Callsign.Text.Trim(). ToUpperInvariant();
+                if (m_Locator.Text.Trim().Length > 0)
+                    c.LocatorReceived = new Locator(m_Locator.Text.Trim().ToUpperInvariant());
                 c.Mode = ModeHelper.Parse(m_OurMode.Text);
                 c.Frequency = FrequencyHelper.Parse(m_Frequency.Text);
                 c.Notes = m_Comments.Text;
-                c.Operator = m_OurOperator.Text.ToUpperInvariant ();
+                c.Operator = m_OurOperator.Text.ToUpperInvariant ().Trim();
                 //c.Points = int.Parse(m_Distance.Text); // TODO: Points calculation
-                c.ReportReceived = m_RstReceived.Text;
-                c.ReportSent = m_RstSent.Text;
-                if (m_SerialReceived.TextLength > 0)
-                    c.SerialReceived = int.Parse(m_SerialReceived.Text);
-                c.SerialSent = int.Parse(m_SerialSent.Text);
+                c.ReportReceived = m_RstReceived.Text.Trim();
+                c.ReportSent = m_RstSent.Text.Trim();
+                if (m_SerialReceived.Text.Trim().Length > 0)
+                    c.SerialReceived = int.Parse(m_SerialReceived.Text.Trim());
+                c.SerialSent = int.Parse(m_SerialSent.Text.Trim());
                 c.StartTime = c.EndTime = DateTime.Now.ToUniversalTime();
-                c.Frequency = FrequencyHelper.Parse(m_Frequency.Text);
-                c.Station = m_Station.Text;
+                c.Frequency = FrequencyHelper.Parse(m_Frequency.Text.Trim());
+                c.Station = m_Station.Text.Trim();
 
                 c.LocatorReceived = new Locator(m_Locator.Text);
-                //// Construct a rather dodgy locator
-                //PrefixRecord pr = m_CallsignLookup.LookupPrefix(m_Callsign.Text);
-                //if (pr != null)
-                //    c.LocatorReceived = new Locator(pr.Latitude, pr.Longitude);
 
                 return c;
             }

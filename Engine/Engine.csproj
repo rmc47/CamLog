@@ -130,7 +130,7 @@
     <None Include="cty.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DBMigrations\MySQL\3.sql" />
+    <EmbeddedResource Include="DBMigrations\MySQL\3.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -341,11 +341,14 @@ namespace UI
             
             int maxToFetch = m_ContactTable.RowCount - 2;
 
+            string band = m_Band.Text;
+            string op = m_OurOperator.Text;
+
             ThreadPool.QueueUserWorkItem((dummy) =>
             {
                 try
                 {
-                    List<Contact> contacts = m_ContactStore.GetLatestContacts(m_ContactTable.RowCount - 2, station);
+                    List<Contact> contacts = m_ContactStore.GetLatestContacts(m_ContactTable.RowCount - 2, station, band, op);
 
                     if (Disposing || IsDisposed)
                         return;
@@ -369,6 +372,9 @@ namespace UI
             
             Locator ourLocation = m_OurLocatorValue;
             //m_QSOGrid.Rows.Clear();
+            string station = m_Station.Text;
+            string band = m_Band.Text;
+            string op = m_OurOperator.Text;
 
             for (int i = 1; i < m_ContactTable.RowCount - 1; i++)
             {
@@ -376,6 +382,7 @@ namespace UI
                 if (contacts.Count > contactsIndex)
                 {
                     Contact c = contacts[contactsIndex];
+                    bool alert = (c.Notes.Contains(station) || c.Notes.Contains(band) || c.Notes.Contains(op));
                     Label[] rowLabels = m_ContactTableLabels[i - 1];
                     rowLabels[(int)ContactTableColumns.Band].Text = BandHelper.ToString(c.Band);
 
@@ -396,7 +403,13 @@ namespace UI
                     rowLabels[(int)ContactTableColumns.Distance].Text = ((int)Math.Ceiling(Geographics.GeodesicDistance(ourLocation, theirLocator) / 1000)).ToString();
 
                     rowLabels[(int)ContactTableColumns.Callsign].Text = c.Callsign;
+                    
                     rowLabels[(int)ContactTableColumns.Comments].Text = c.Notes;
+                    if (alert)
+                        rowLabels[(int)ContactTableColumns.Comments].BackColor = Color.Pink;
+                    else
+                        rowLabels[(int)ContactTableColumns.Comments].BackColor = SystemColors.Control;
+
                     rowLabels[(int)ContactTableColumns.LocatorReceived].Text = c.LocatorReceivedString;
                     rowLabels[(int)ContactTableColumns.RstReceived].Text = c.ReportReceived;
                     rowLabels[(int)ContactTableColumns.RstSent].Text = c.ReportSent;
@@ -405,13 +418,17 @@ namespace UI
                     rowLabels[(int)ContactTableColumns.Time].Text = c.StartTime.ToString("HHmm");
                     m_ContactIds[i - 1] = new KeyValuePair<int, int>(c.SourceId, c.Id);
 
-                    if (string.Equals(c.Station, m_Station.Text, StringComparison.InvariantCultureIgnoreCase))
+                    if (alert)
                     {
-                        Array.ForEach(rowLabels, l => l.ForeColor = Color.Black);
+                        Array.ForEach(rowLabels, l => { l.ForeColor = Color.Black; l.BackColor = Color.Pink; });
+                    }
+                    else if (string.Equals(c.Station, m_Station.Text, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        Array.ForEach(rowLabels, l => { l.ForeColor = Color.Black; l.BackColor = SystemColors.Control; });
                     }
                     else
                     {
-                        Array.ForEach(rowLabels, l => l.ForeColor = Color.DarkGray);
+                        Array.ForEach(rowLabels, l => { l.ForeColor = Color.DarkGray; l.BackColor = SystemColors.Control; });
                     }
 
                     //DataGridViewRow row = new DataGridViewRow();
@@ -558,7 +575,11 @@ namespace UI
 
                 m_Beam.Text = beamText ?? string.Empty;
                 m_Distance.Text = distanceText ?? string.Empty;
-                if (commentsText != null) m_Comments.Text = commentsText;
+                if (commentsText != null)
+                {
+                    m_Comments.Text = commentsText;
+                }
+                
 
                 if (matchesKnownCalls != null || locatorMatchesThisContest != null)
                 {

@@ -289,7 +289,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
             }
         }
 
-        public List<Contact> GetLatestContacts(int maxToFetch, string station)
+        public List<Contact> GetLatestContacts(int maxToFetch, string station, string band = null, string op = null)
         {
             MySqlConnection conn = OpenConnection;
             lock (conn)
@@ -298,12 +298,24 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                 List<KeyValuePair<int, int>> contactIds = new List<KeyValuePair<int, int>>();
                 using (MySqlCommand cmd = conn.CreateCommand())
                 {
-                    if (string.IsNullOrEmpty(station))
-                        cmd.CommandText = "SELECT sourceId, id FROM log ORDER BY endTime DESC LIMIT ?maxToFetch";
-                    else
-                        cmd.CommandText = "SELECT sourceId, id FROM log WHERE station=?station ORDER BY endTime DESC LIMIT ?maxToFetch";
+                    string commandText = "SELECT sourceId, id FROM log WHERE TRUE ";
+                    if (!string.IsNullOrEmpty(station))
+                    {
+                        commandText += "AND station=?station OR notes LIKE ?stationNotes ";
+                        if (!string.IsNullOrEmpty(band))
+                            commandText += "OR notes LIKE ?bandNotes ";
+                        if (!string.IsNullOrEmpty(op))
+                            commandText += "OR notes LIKE ?opNotes ";
+                    }
+                    commandText += " ORDER BY endTime DESC LIMIT ?maxToFetch";
+                    cmd.CommandText = commandText;
 
                     cmd.Parameters.AddWithValue("?station", station);
+                    cmd.Parameters.AddWithValue("?stationNotes", "%" + station + "%");
+                    if (!string.IsNullOrEmpty(band))
+                        cmd.Parameters.AddWithValue("?bandNotes", "%" + band + "%");
+                    if (!string.IsNullOrEmpty(op))
+                        cmd.Parameters.Add("?opNotes", "%" + op + "%");
                     cmd.Parameters.AddWithValue("?maxToFetch", maxToFetch);
 
                     using (MySqlDataReader reader = cmd.ExecuteReader())

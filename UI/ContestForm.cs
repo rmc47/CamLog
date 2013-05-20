@@ -9,6 +9,7 @@ using Engine;
 using Microsoft.Win32;
 using System.Threading;
 using RigCAT.NET;
+using System.IO;
 
 namespace UI
 {
@@ -803,21 +804,9 @@ namespace UI
 
                     filename = ofd.FileName;
                 }
-                List<Contact> contacts = AdifHandler.ImportAdif(filename, "IMPORT", m_ContactStore.SourceId, "IMPORT");
+                List<Contact> contacts = AdifHandler.ImportAdif(File.ReadAllText(filename), "IMPORT", m_ContactStore.SourceId, "IMPORT");
 
-                List<Contact> existingContacts = m_ContactStore.GetAllContacts(null);
-                existingContacts.Sort(Contact.QsoMatchCompare);
-
-                // De-dupe QSOs with existing ones in the DB
-                int importedCount = 0;
-                foreach (Contact c in contacts)
-                {
-                    if (existingContacts.BinarySearch(c, new Contact.QsoMatchComparer()) >= 0)
-                        continue;
-
-                    m_ContactStore.SaveContact(c);
-                    importedCount++;
-                }
+                int importedCount = m_ContactStore.Import(contacts);
 
                 MessageBox.Show(string.Format("Import of {0} contacts successful", importedCount), "CamLog | ADIF Import");
             }

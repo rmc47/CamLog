@@ -5,6 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using Engine;
 using System.Diagnostics;
+using System.IO;
 
 namespace EngineTests
 {
@@ -14,7 +15,7 @@ namespace EngineTests
         [Test]
         public void TryImportAdif()
         {
-            List<Contact> contacts = AdifHandler.ImportAdif(@"c:\users\rob\Documents\win-test\DXPED-HF-ALL_2012@ZD9UW\ZD9-2012-10-04-1230.ADI", "LUNGA", 2, "GS6PYE/P");
+            List<Contact> contacts = AdifHandler.ImportAdif(File.ReadAllText(@"c:\users\rob\Documents\win-test\DXPED-HF-ALL_2012@ZD9UW\ZD9-2012-10-04-1230.ADI"), "LUNGA", 2, "GS6PYE/P");
             ContactStore store = new ContactStore("localhost", "zd92012", "root", "g3pyeflossie");
             contacts.ForEach(store.SaveContact);
         }
@@ -22,7 +23,7 @@ namespace EngineTests
         [Test]
         public void FixAdifDates()
         {
-            List<Contact> adifContacts = AdifHandler.ImportAdif(@"C:\temp\test.adi", string.Empty, 0, "M0VFC");
+            List<Contact> adifContacts = AdifHandler.ImportAdif(File.ReadAllText(@"C:\temp\test.adi"), string.Empty, 0, "M0VFC");
             ContactStore store = new ContactStore("localhost", "fp2011", "root", "aopen");
 
             foreach (Contact adifContact in adifContacts)

@@ -317,5 +317,13 @@ namespace QslManager
 
             UpdateLabelsUsed();
         }
+
+        private void MagicClubLog(object sender, EventArgs e)
+        {
+            using (ClubLogImportForm clif = new ClubLogImportForm(m_ContactStore))
+            {
+                clif.ShowDialog();
+            }
+        }
     }
 }

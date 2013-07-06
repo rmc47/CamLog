@@ -94,6 +94,7 @@ namespace UI
             this.rigControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.QrzUserSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wipeQSOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_OnlineStatus = new System.Windows.Forms.Label();
             groupBox1 = new System.Windows.Forms.GroupBox();
             label7 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
@@ -121,6 +122,7 @@ namespace UI
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(this.m_OnlineStatus);
             groupBox1.Controls.Add(label7);
             groupBox1.Controls.Add(this.m_Frequency);
             groupBox1.Controls.Add(this.m_Station);
@@ -736,6 +738,17 @@ namespace UI
             this.wipeQSOToolStripMenuItem.Text = "&Wipe QSO";
             this.wipeQSOToolStripMenuItem.Click += new System.EventHandler(this.WipeQSOClicked);
             // 
+            // m_OnlineStatus
+            // 
+            this.m_OnlineStatus.BackColor = System.Drawing.Color.PaleGreen;
+            this.m_OnlineStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.m_OnlineStatus.Location = new System.Drawing.Point(210, 91);
+            this.m_OnlineStatus.Name = "m_OnlineStatus";
+            this.m_OnlineStatus.Size = new System.Drawing.Size(165, 25);
+            this.m_OnlineStatus.TabIndex = 14;
+            this.m_OnlineStatus.Text = "Online";
+            this.m_OnlineStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // ContestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -810,6 +823,7 @@ namespace UI
         private System.Windows.Forms.ToolStripMenuItem knownCallsignsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem multipleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem QrzUserSetupToolStripMenuItem;
+        private System.Windows.Forms.Label m_OnlineStatus;
         //private System.Windows.Forms.DataGridView m_QSOGrid;
         //private System.Windows.Forms.DataGridViewTextBoxColumn m_QBand;
         //private System.Windows.Forms.DataGridViewTextBoxColumn m_QTime;

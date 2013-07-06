@@ -136,7 +136,7 @@ namespace HrdImport
                                     c.Band = BandHelper.Parse(reader["COL_BAND"] as string);
                                     c.Frequency = GetFrequency(reader.GetInt32(reader.GetOrdinal("COL_FREQ")).ToString());
                                     c.Mode = ModeHelper.Parse(reader["COL_MODE"] as string);
-                                    c.Operator = (reader["COL_OPERATOR"] as string) ?? "GS3PYE/P";
+                                    c.Operator = (reader["COL_OPERATOR"] as string) ?? m_DefaultOperator.Text;
                                     c.Station = m_Station;
                                     c.LocatorReceived = new Locator(0, 0);
                                     c.ReportReceived = c.ReportSent = "599";

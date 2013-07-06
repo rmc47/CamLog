@@ -74,6 +74,7 @@
     <Compile Include="DBMigrations\DbMigrator.cs" />
     <Compile Include="FrequencyHelper.cs" />
     <Compile Include="Geographics.cs" />
+    <Compile Include="IContest.cs" />
     <Compile Include="KstEvent.cs" />
     <Compile Include="KstServer.cs" />
     <Compile Include="Location.cs" />
@@ -131,6 +132,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="DBMigrations\MySQL\3.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Contests\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

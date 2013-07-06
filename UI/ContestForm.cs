@@ -26,7 +26,7 @@ namespace UI
         private KeyValuePair<int, int>[] m_ContactIds;
         private QrzServer m_QrzServer = new QrzServer(Settings.Get("QRZUsername", "M0VFC"), Settings.Get("QRZPassword", ""));
         private bool m_LocatorSetManually;
-
+        private bool m_Online = true;
         private string m_lastComment;
         
         public ContestForm()
@@ -98,6 +98,27 @@ namespace UI
 
             return !failed;
 
+        }
+
+        private bool OnlineStatus
+        {
+            get { return m_Online; }
+            set
+            {
+                if (value == m_Online)
+                    return;
+                if (value)
+                {
+                    m_OnlineStatus.Text = "Online";
+                    m_OnlineStatus.BackColor = Color.PaleGreen;
+                }
+                else
+                {
+                    m_OnlineStatus.Text = "Offline";
+                    m_OnlineStatus.BackColor = Color.Pink;
+                }
+                m_Online = value;
+            }
         }
 
         private Contact Contact
@@ -259,8 +280,19 @@ namespace UI
         private void m_OurBand_SelectedIndexChanged(object sender, EventArgs e)
         {
             m_Band.Text = m_OurBand.Text;
-            if (m_ContactStore != null)
-                m_SerialSent.Text = m_ContactStore.GetSerial(BandHelper.Parse(m_Band.Text)).ToString().PadLeft(3, '0');
+            if (m_ContactStore != null && OnlineStatus)
+            {
+                try
+                {
+                    m_SerialSent.Text = m_ContactStore.GetSerial(BandHelper.Parse(m_Band.Text)).ToString().PadLeft(3, '0');
+                }
+                catch
+                {
+                    OnlineStatus = false;
+                }
+            }
+            else
+                m_SerialSent.Text = string.Empty;
         }
 
         private void ContestForm_Shown(object sender, EventArgs e)
@@ -272,12 +304,19 @@ namespace UI
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if (ValidateContact())
+                if (OnlineStatus && ValidateContact())
                 {
-                    e.SuppressKeyPress = true;
-                    m_ContactStore.SaveContact(Contact);
-                    ClearContactRow(true);
-                    PopulatePreviousContactsGrid();
+                    try
+                    {
+                        e.SuppressKeyPress = true;
+                        m_ContactStore.SaveContact(Contact);
+                        ClearContactRow(true);
+                        PopulatePreviousContactsGrid();
+                    }
+                    catch
+                    {
+                        OnlineStatus = false;
+                    }
                 }
             }
         }
@@ -355,13 +394,14 @@ namespace UI
                     Invoke(new MethodInvoker(() =>
                     {
                         PopulatePreviousContactsGridCallback(contacts);
+                        OnlineStatus = true;
                     }));
                 }
-                catch (Exception ex)
+                catch
                 {
                     Invoke(new MethodInvoker(() =>
                     {
-                        MessageBox.Show("Exception populating previous contacts grid: " + ex.Message, "CamLog", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        OnlineStatus = false;
                     }));
                 }
             });
@@ -477,129 +517,135 @@ namespace UI
 
         private void CallsignChangedWorker(string callsign, string ourBandText, Locator ourLocatorValue)
         {
-            string notesText = null;
-            Color notesBackColor = Color.Transparent;
-            string locatorText = null;
-            string beamText = null, distanceText = null, commentsText = null;
-            object[] matchesKnownCalls = null, matchesThisContest = null, locatorMatchesThisContest = null;
-
-            Locator existingLocator;
-            if (callsign.Length > 2)
+            try
             {
-                List<Band> bands = m_ContactStore.GetPreviousBands(callsign, out existingLocator);
-                Band ourBand = BandHelper.Parse(ourBandText);
-                if (bands.Contains(ourBand))
+                string notesText = null;
+                Color notesBackColor = Color.Transparent;
+                string locatorText = null;
+                string beamText = null, distanceText = null, commentsText = null;
+                object[] matchesKnownCalls = null, matchesThisContest = null, locatorMatchesThisContest = null;
+
+                Locator existingLocator;
+                if (callsign.Length > 2)
                 {
-                    notesBackColor = c_DupeColor;
-                    List<Contact> previousQsos = m_ContactStore.GetPreviousContacts(callsign);
-                    if (previousQsos.Count > 0)
+                    List<Band> bands = m_ContactStore.GetPreviousBands(callsign, out existingLocator);
+                    Band ourBand = BandHelper.Parse(ourBandText);
+                    if (bands.Contains(ourBand))
                     {
-                        Contact previousQso = previousQsos[previousQsos.Count - 1];
-                        notesText = string.Format("Already worked {0} on {1} (Last: TX: {2} {3:000} / RX: {4} {5:000} on {6})", callsign, BandHelper.ToString(ourBand), previousQso.ReportSent, previousQso.SerialSent, previousQso.ReportReceived, previousQso.SerialReceived, previousQso.StartTime.ToString("d MMM hh:mm"));
+                        notesBackColor = c_DupeColor;
+                        List<Contact> previousQsos = m_ContactStore.GetPreviousContacts(callsign);
+                        if (previousQsos.Count > 0)
+                        {
+                            Contact previousQso = previousQsos[previousQsos.Count - 1];
+                            notesText = string.Format("Already worked {0} on {1} (Last: TX: {2} {3:000} / RX: {4} {5:000} on {6})", callsign, BandHelper.ToString(ourBand), previousQso.ReportSent, previousQso.SerialSent, previousQso.ReportReceived, previousQso.SerialReceived, previousQso.StartTime.ToString("d MMM hh:mm"));
+                        }
+                        else
+                        {
+                            notesText = string.Format("Already worked {0} on {1} (Missing QSO details?)", callsign, BandHelper.ToString(ourBand));
+                        }
+                    }
+                    else if (bands.Count > 0)
+                    {
+                        notesBackColor = c_WorkedOtherBandsColor;
+                        string bandString = string.Empty;
+                        foreach (Band b in bands)
+                        {
+                            bandString += BandHelper.ToString(b) + ", ";
+                        }
+                        notesText = string.Format("Worked {0} on {1} - {2}", callsign, bandString, existingLocator);
+                        if (existingLocator != null)
+                            locatorText = existingLocator.ToString();
                     }
                     else
                     {
-                        notesText = string.Format("Already worked {0} on {1} (Missing QSO details?)", callsign, BandHelper.ToString(ourBand));
+                        notesText = string.Empty;
+                        notesBackColor = Color.Transparent;
                     }
-                }
-                else if (bands.Count > 0)
-                {
-                    notesBackColor = c_WorkedOtherBandsColor;
-                    string bandString = string.Empty;
-                    foreach (Band b in bands)
+
+                    // Do a first guess beam heading etc
+                    PrefixRecord pfx = m_CallsignLookup.LookupPrefix(callsign);
+                    if (pfx != null)
                     {
-                        bandString += BandHelper.ToString(b) + ", ";
+                        Locator theirLocator = new Locator(pfx.Latitude, pfx.Longitude);
+
+                        // Only use the DXCC if it's a substantial distance (500km) away from us
+                        if (Geographics.GeodesicDistance(ourLocatorValue, theirLocator) > 500 * 1000)
+                        {
+                            beamText = Geographics.BeamHeading(ourLocatorValue, theirLocator).ToString();
+                            distanceText = Math.Ceiling(Geographics.GeodesicDistance(ourLocatorValue, theirLocator) / 1000).ToString();
+                        }
+
+                        // Only change comments field if it has not been manually changed
+                        if ((m_Comments.Text == m_lastComment) || (m_Comments.Text == ""))
+                        {
+                            m_lastComment = commentsText = pfx.Entity;
+                        }
                     }
-                    notesText = string.Format("Worked {0} on {1} - {2}", callsign, bandString, existingLocator);
-                    if (existingLocator != null)
-                        locatorText = existingLocator.ToString();
                 }
-                else
+
+                // Populate the lists of partial callsign matches
+                if (callsign.Length > 0)
                 {
-                    notesText = string.Empty;
-                    notesBackColor = Color.Transparent;
+                    matchesKnownCalls = m_ContactStore.GetPartialMatchesKnownCalls(callsign).ToArray();
+                    matchesThisContest = m_ContactStore.GetPartialMatchesThisContest(callsign).ToArray();
                 }
 
-                // Do a first guess beam heading etc
-                PrefixRecord pfx = m_CallsignLookup.LookupPrefix(callsign);
-                if (pfx != null)
+                // Also search locators if we've got enough digits for it to be sensibly 
+                // distinguished from a callsign
+                if (callsign.Length > 2)
                 {
-                    Locator theirLocator = new Locator(pfx.Latitude, pfx.Longitude);
-
-                    // Only use the DXCC if it's a substantial distance (500km) away from us
-                    if (Geographics.GeodesicDistance(ourLocatorValue, theirLocator) > 500 * 1000)
-                    {
-                        beamText = Geographics.BeamHeading(ourLocatorValue, theirLocator).ToString();
-                        distanceText = Math.Ceiling(Geographics.GeodesicDistance(ourLocatorValue, theirLocator) / 1000).ToString();
-                    }
-                    
-                    // Only change comments field if it has not been manually changed
-                    if ((m_Comments.Text == m_lastComment) || (m_Comments.Text == ""))
-                    {
-                        m_lastComment = commentsText = pfx.Entity;
-                    }
+                    locatorMatchesThisContest = m_ContactStore.GetLocatorMatchesThisContest(callsign).ToArray();
                 }
-            }
 
-            // Populate the lists of partial callsign matches
-            if (callsign.Length > 0)
-            {
-                matchesKnownCalls = m_ContactStore.GetPartialMatchesKnownCalls(callsign).ToArray();
-                matchesThisContest = m_ContactStore.GetPartialMatchesThisContest(callsign).ToArray();
-            }
-
-            // Also search locators if we've got enough digits for it to be sensibly 
-            // distinguished from a callsign
-            if (callsign.Length > 2)
-            {
-                locatorMatchesThisContest = m_ContactStore.GetLocatorMatchesThisContest(callsign).ToArray();
-            }
-
-            // Actually populate everything back on the UI thread!
-            if (Disposing || IsDisposed || !IsHandleCreated)
-                return;
-            Invoke(new MethodInvoker(() =>
-            {
-                // If the callsign has been changed while we've been doing this work, don't do the update - another request
-                // will have been kicked off since, and we don't want to trample on the later update
-                if (m_Callsign.Text != callsign)
+                // Actually populate everything back on the UI thread!
+                if (Disposing || IsDisposed || !IsHandleCreated)
                     return;
-
-                if (notesText != null)
+                Invoke(new MethodInvoker(() =>
                 {
-                    m_Notes.Text = notesText;
-                    m_Notes.BackColor = notesBackColor;
-                }
+                    // If the callsign has been changed while we've been doing this work, don't do the update - another request
+                    // will have been kicked off since, and we don't want to trample on the later update
+                    if (m_Callsign.Text != callsign)
+                        return;
 
-                if (locatorText != null) m_Locator.Text = locatorText;
+                    if (notesText != null)
+                    {
+                        m_Notes.Text = notesText;
+                        m_Notes.BackColor = notesBackColor;
+                    }
 
-                m_Beam.Text = beamText ?? string.Empty;
-                m_Distance.Text = distanceText ?? string.Empty;
-                if (commentsText != null)
-                {
-                    m_Comments.Text = commentsText;
-                }
-                
+                    if (locatorText != null) m_Locator.Text = locatorText;
 
-                if (matchesKnownCalls != null || locatorMatchesThisContest != null)
-                {
-                    m_MatchesKnownCalls.BeginUpdate();
-                    m_MatchesKnownCalls.Items.Clear();
+                    m_Beam.Text = beamText ?? string.Empty;
+                    m_Distance.Text = distanceText ?? string.Empty;
+                    if (commentsText != null)
+                    {
+                        m_Comments.Text = commentsText;
+                    }
 
-                    if (matchesKnownCalls != null)
-                        m_MatchesKnownCalls.Items.AddRange(matchesKnownCalls);
-                    if (locatorMatchesThisContest != null)
-                        m_MatchesKnownCalls.Items.AddRange(locatorMatchesThisContest);
-                    m_MatchesKnownCalls.EndUpdate();
-                }
-                if (matchesThisContest != null)
-                {
-                    m_MatchesThisContest.BeginUpdate();
-                    m_MatchesThisContest.Items.Clear();
-                    m_MatchesThisContest.Items.AddRange(matchesThisContest);
-                    m_MatchesThisContest.EndUpdate();
-                }
-            }));
+
+                    if (matchesKnownCalls != null || locatorMatchesThisContest != null)
+                    {
+                        m_MatchesKnownCalls.BeginUpdate();
+                        m_MatchesKnownCalls.Items.Clear();
+
+                        if (matchesKnownCalls != null)
+                            m_MatchesKnownCalls.Items.AddRange(matchesKnownCalls);
+                        if (locatorMatchesThisContest != null)
+                            m_MatchesKnownCalls.Items.AddRange(locatorMatchesThisContest);
+                        m_MatchesKnownCalls.EndUpdate();
+                    }
+                    if (matchesThisContest != null)
+                    {
+                        m_MatchesThisContest.BeginUpdate();
+                        m_MatchesThisContest.Items.Clear();
+                        m_MatchesThisContest.Items.AddRange(matchesThisContest);
+                        m_MatchesThisContest.EndUpdate();
+                    }
+                }));
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         private void m_OurMode_SelectedIndexChanged(object sender, EventArgs e)
@@ -766,13 +812,34 @@ namespace UI
             if (e.KeyCode >= Keys.F1 && e.KeyCode <= Keys.F12 && e.Modifiers == Keys.None)
             {
                 e.SuppressKeyPress = true;
+                if (m_OurMode.Text == "CW")
+                {
+                    try
+                    {
+                        Controller.CWMacro.SendMacro(e.KeyCode - Keys.F1, new Dictionary<string, string> { 
+                        { "HISCALL", m_Callsign.Text },
+                        { "MYCALL", "GS3PYE/P" },
+                        { "EXCHTX", m_RstSent.Text.Replace("9", "N").Replace("0", "T") }
+                    });
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error sending CW macro: " + ex.Message);
+                    }
+                }
+                else
+                {
+                }
+            }
+            else if (e.KeyCode == Keys.Escape && e.Modifiers == Keys.None)
+            {
                 try
                 {
-                    Controller.CWMacro.SendMacro(e.KeyCode - Keys.F1, new Dictionary<string, string>());
+                    Controller.CWMacro.WinKey.StopSending();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error sending CW macro: " + ex.Message);
+                    MessageBox.Show("Error stopping CW macro: " + ex.Message);
                 }
             }
         }

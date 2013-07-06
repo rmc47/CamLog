@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RigCAT.NET;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace Engine
             set { m_ContactStore = value; LoadMacros(); }
         }
 
-        public WinKey WinKey { get; set; }
+        public IWinKey WinKey { get; set; }
 
         private List<string> m_Macros = new List<string>(12);
 
@@ -45,6 +46,10 @@ namespace Engine
                 return;
             
             // Untokenize the macro
+            foreach (var kvp in values)
+            {
+                s = s.Replace("{{" + kvp.Key + "}}", kvp.Value);
+            }
 
             WinKey.SendString(s);
         }
@@ -54,8 +59,11 @@ namespace Engine
             m_Macros = new List<string>
             {
                 "CQ GS3PYE/P GS3PYE/P K",
-                "M0VFC 5NN",
-                "TU GS3PYE/P"
+                "{{HISCALL}} {{EXCHTX}}",
+                "TU {{MYCALL}}",
+                "{{MYCALL}}",
+                "{{HISCALL}}",
+                "?"
             };
         }
     }

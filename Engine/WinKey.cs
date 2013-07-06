@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.IO.Ports;
 using System.Threading;
+using RigCAT.NET;
 
 namespace Engine
 {
-    public class WinKey : IDisposable
+    public class WinKey : IWinKey
     {
         private readonly string m_PortName;
         private readonly object m_Lock = new object ();

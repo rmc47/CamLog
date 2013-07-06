@@ -11,6 +11,7 @@ namespace Engine
         CW,
         SSB,
         FM,
+        AM,
         JT6m,
         JT65b,
         JT4Other,
@@ -34,6 +35,7 @@ namespace Engine
                 case Mode.CW: return "CW";
                 case Mode.SSB: return "SSB";
                 case Mode.FM: return "FM";
+                case Mode.AM: return "AM";
                 case Mode.JT6m: return "JT6m";
                 case Mode.JT65b: return "JT65b";
                 case Mode.JT4Other: return "JT4*";
@@ -70,7 +72,8 @@ namespace Engine
             switch (m)
             {
                 case Mode.CW: return "A1A";
-                case Mode.SSB: return "J3E";
+                case Mode.SSB: 
+                case Mode.AM: return "J3E";
                 case Mode.FM: return "F3E";
                 default: return "???";
             }
@@ -83,6 +86,7 @@ namespace Engine
                 case Mode.CW: return "CW";
                 case Mode.SSB: return "PH";
                 case Mode.FM: return "PH";
+                case Mode.AM: return "PH";
                 default: return "??";
             }
         }
@@ -95,6 +99,7 @@ namespace Engine
             {
                 case "CW": return Mode.CW;
                 case "SSB": return Mode.SSB;
+                case "AM": return Mode.AM;
                 case "FM": return Mode.FM;
                 case "JTMS": return Mode.JTMS;
                 case "JT6M": return Mode.JT6m;

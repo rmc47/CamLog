@@ -7,6 +7,7 @@ namespace Engine
     public enum Band
     {
         Unknown = 0,
+        B630m,
         B160m,
         B80m,
         B60m,
@@ -22,7 +23,8 @@ namespace Engine
         B2m,
         B70cm,
         B23cm,
-        B3cm
+        B3cm,
+        B625nm,
     }
 
     public static class BandHelper
@@ -56,6 +58,8 @@ namespace Engine
                 case "3":
                 case "3cm":
                 case "3c": return Band.B3cm;
+                case "625n":
+                case "625nm": return Band.B625nm;
                 default: return Band.Unknown;
             }
         }
@@ -80,6 +84,7 @@ namespace Engine
                 case Band.B70cm: return "70cm";
                 case Band.B23cm: return "23cm";
                 case Band.B3cm: return "3cm";
+                case Band.B625nm: return "625nm";
                 default: return "Unknown";
             }
         }
@@ -103,11 +108,12 @@ namespace Engine
                 case Band.B2m: return "144";
                 case Band.B70cm: return "430";
                 case Band.B23cm: return "1296";
+                case Band.B625nm: return "480000000";
                 default: return "?";
             }
         }
 
-        public static int ToKHz(Band band)
+        public static long ToKHz(Band band)
         {
             switch (band)
             {
@@ -117,6 +123,7 @@ namespace Engine
                 case Band.B20m: return 14000;
                 case Band.B15m: return 21000;
                 case Band.B10m: return 28000;
+                case Band.B625nm: return 480000000000;
                 default: throw new ArgumentOutOfRangeException ("Unknown band -> KHz conversion");
             }
         }

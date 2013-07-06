@@ -57,9 +57,9 @@ namespace Engine
             writer.Write(string.Format("<{0}:{1}>{2}", fieldName.ToUpper(), val.Length, val.ToUpper() + " "));
         }
 
-        public static List<Contact> ImportAdif(string sourceFile, string station, int sourceId, string defaultOperator)
+        public static List<Contact> ImportAdif(string source, string station, int sourceId, string defaultOperator)
         {
-            AdifFileReader adifReader = AdifFileReader.LoadFromContent(File.ReadAllText(sourceFile));
+            AdifFileReader adifReader = AdifFileReader.LoadFromContent(source);
 
             //int offset = 0;
             AdifFileReader.Header header = adifReader.ReadHeader();

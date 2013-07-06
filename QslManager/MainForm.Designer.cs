@@ -57,6 +57,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.m_LabelOffset = new System.Windows.Forms.NumericUpDown();
             this.m_ImportClubLog = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.m_ContactsGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_LabelOffset)).BeginInit();
             this.SuspendLayout();
@@ -343,12 +344,23 @@
             this.m_ImportClubLog.UseVisualStyleBackColor = true;
             this.m_ImportClubLog.Click += new System.EventHandler(this.ImportClubLog);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(464, 90);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(199, 23);
+            this.button1.TabIndex = 21;
+            this.button1.Text = "Magic Club Log...";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.MagicClubLog);
+            // 
             // MainForm
             // 
             this.AcceptButton = this.m_MarkSelectedAsReceived;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(694, 454);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.m_ImportClubLog);
             this.Controls.Add(this.m_LabelOffset);
             this.Controls.Add(this.label6);
@@ -410,6 +422,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown m_LabelOffset;
         private System.Windows.Forms.Button m_ImportClubLog;
+        private System.Windows.Forms.Button button1;
 
     }
 }

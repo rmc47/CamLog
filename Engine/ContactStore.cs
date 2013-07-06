@@ -918,6 +918,25 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
             }
         }
 
+        public int Import(List<Contact> contacts)
+        {
+            List<Contact> existingContacts = GetAllContacts(null);
+            existingContacts.Sort(Contact.QsoMatchCompare);
+
+            // De-dupe QSOs with existing ones in the DB
+            int importedCount = 0;
+            foreach (Contact c in contacts)
+            {
+                if (existingContacts.BinarySearch(c, new Contact.QsoMatchComparer()) >= 0)
+                    continue;
+
+                SaveContact(c);
+                importedCount++;
+            }
+
+            return importedCount;
+        }
+
         public void Dispose()
         {
             if (m_Connection != null)

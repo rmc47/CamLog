@@ -50,6 +50,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClubLogImportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ClubLogImportForm.Designer.cs">
+      <DependentUpon>ClubLogImportForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="LogonForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,6 +70,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ClubLogImportForm.resx">
+      <DependentUpon>ClubLogImportForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LogonForm.resx">
       <DependentUpon>LogonForm.cs</DependentUpon>
       <SubType>Designer</SubType>

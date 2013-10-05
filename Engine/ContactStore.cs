@@ -843,7 +843,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
             }
         }
 
-        public List<List<Contact>> GetContactsToQsl(int sourceId)
+        public List<List<Contact>> GetContactsToQsl(int sourceId, string qslMethod)
         {
             List<int> idsToPrint = new List<int>();
             MySqlConnection conn = OpenConnection;
@@ -851,8 +851,9 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
             {
                 using (MySqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT id FROM log WHERE qslRxDate IS NOT NULL and qslTxDate IS NULL AND sourceId=?sourceId ORDER BY callsign, startTime;";
+                    cmd.CommandText = "SELECT id FROM log WHERE qslRxDate IS NOT NULL and qslTxDate IS NULL AND sourceId=?sourceId AND qslMethod=?qslMethod ORDER BY callsign, startTime;";
                     cmd.Parameters.AddWithValue("?sourceId", sourceId);
+                    cmd.Parameters.AddWithValue("?qslMethod", qslMethod);
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())

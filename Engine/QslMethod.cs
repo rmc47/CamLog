@@ -9,6 +9,7 @@ namespace Engine
     [Obfuscation(Exclude=true)]
     public enum QslMethod
     {
+        Unknown = 0,
         Bureau,
         Direct,
     }

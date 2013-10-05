@@ -158,7 +158,7 @@ namespace QslManager
         private void UpdateLabelsUsed()
         {
             PdfEngine engine = new PdfEngine(m_PageLayout, m_SelectedSource.Callsign, 0);
-            List<List<Contact>> contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource.SourceID);
+            List<List<Contact>> contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource.SourceID, m_QslMethod.Text);
             int labelsUsed = 0;
             foreach (List<Contact> contacts in contactsToPrint)
             {
@@ -172,7 +172,7 @@ namespace QslManager
         {
             string myCall = m_SelectedSource.Callsign;
             PdfEngine engine = new PdfEngine(m_PageLayout, myCall, (int)m_LabelOffset.Value);
-            List<List<Contact>> contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource.SourceID);
+            List<List<Contact>> contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource.SourceID, m_QslMethod.Text);
             if (contactsToPrint.Count == 0)
             {
                 MessageBox.Show("No QSOs to print");
@@ -313,7 +313,7 @@ namespace QslManager
             if (labelsToPrint > 0)
                 addressLabelEngine.PrintDocument(Path.Combine(m_OutputPath.Text, string.Format("Address-{0}-{1}.pdf", m_OurCallsign.Text.Replace('/', '_'), DateTime.UtcNow.ToString("yyyy-MM-dd-HHmm"))));
             else
-                MessageBox.Show("No new QSOs to print");
+                MessageBox.Show("Nop address labels to print");
 
             UpdateLabelsUsed();
         }

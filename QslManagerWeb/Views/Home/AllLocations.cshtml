@@ -1,0 +1,13 @@
+﻿@model QslManagerWeb.Models.AllLocationsModel;
+
+@{
+    ViewBag.Title = "AllLocations";
+    Layout = "~/Views/Master.cshtml";
+}
+<h2>All Locations</h2>
+<ul>
+    @foreach (var location in Model.Locations)
+    {
+        <li>@location.ID</li>
+    }
+</ul>

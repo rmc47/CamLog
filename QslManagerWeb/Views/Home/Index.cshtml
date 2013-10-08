@@ -1,0 +1,12 @@
+﻿@model QslManagerWeb.Models.HomeModel
+@{
+    Layout = "~/Views/Master.cshtml";
+}
+
+<h1>Dates with missing locations</h1>
+<ul>
+    @foreach (var day in this.Model.DatesWithMissingLocations)
+    {
+        <li>@day.Key.ToShortDateString() (@day.Value)</li>
+    }
+</ul>

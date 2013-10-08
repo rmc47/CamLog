@@ -4,6 +4,7 @@ using System.Text;
 using MySql.Data.MySqlClient;
 using System.IO;
 using System.Threading;
+using System.Reflection;
 
 namespace Engine
 {
@@ -12,7 +13,7 @@ namespace Engine
         private string m_ConnectionString;
         private MySqlConnection m_Connection;
         private int m_SourceId;
-        private CallsignLookup m_CallsignLookup = new CallsignLookup("cty.xml.gz");
+        private CallsignLookup m_CallsignLookup = new CallsignLookup(Path.Combine(Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath), "cty.xml.gz"));
 
         private MySqlConnection OpenConnection
         {
@@ -917,6 +918,47 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                     tran.Commit();
                 }
             }
+        }
+
+        public List<Location> GetLocations()
+        {
+            List<Location> locations = new List<Location>();
+            var conn = OpenConnection;
+            lock (conn)
+            {
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT id FROM locations ORDER BY id;";
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            locations.Add(LoadLocation(reader.GetInt32("id")));
+                        }
+                    }
+                }
+            }
+            return locations;
+        }
+
+        public List<Contact> GetContactsByLocation(Location location)
+        {
+            List<Contact> contacts = new List<Contact>();
+            var conn = OpenConnection;
+            lock (conn)
+            {
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT * FROM log WHERE location=?location";
+                    cmd.Parameters.AddWithValue("?location", (location == null) ? 0 : location.ID);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                            contacts.Add(LoadContact(reader));
+                    }
+                }
+            }
+            return contacts;
         }
 
         public int Import(List<Contact> contacts)

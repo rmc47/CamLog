@@ -1,0 +1,27 @@
+﻿@model QslManagerWeb.Models.QsosModel
+
+@{
+    ViewBag.Title = "Qsos";
+    Layout = "~/Views/Master.cshtml";
+}
+
+<h2>QSOs: @Model.Title</h2>
+@using(Html.BeginForm("AssignQsos", "Home")) {
+    <p><input type="radio" name="locationType" value="existing" id="existingLocation" /><label for="existingLocation">Existing location:</label>
+        <select name="existingLocationId">
+            @foreach (var location in Model.Locations)
+            {
+                <option value="@location.ID">@location.Club - @location.Locator - @location.Wab</option>
+            }
+        </select>
+    </p>
+    <p><input type="radio" name="locationType" value="new" id="newLocation" /><label for="newLocation">New location:</label> Club:<input type="text" size="20" name="club"/> Locator: <input type="text" size="10" maxlength="6" name="locator" /> WAB: <input type="text" size="10" maxlength="4" name="wab" /></p>
+    <p><input type="submit" name="submit" value="Assign QSOs" /></p>
+    <input type="hidden" name="qsoIDs" value="@Model.Contacts.Aggregate("", (s,c)=> s + c.Id + ",")" />
+}
+<ul>
+    @foreach (var qso in Model.Contacts)
+    {
+        <li>@qso.StartTime.ToShortDateString() - @qso.Callsign</li>
+    }
+</ul>

@@ -114,7 +114,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AllLocationsModel.cs" />
+    <Compile Include="Models\AssignQsosModel.cs" />
     <Compile Include="Models\HomeModel.cs" />
+    <Compile Include="Models\QsosModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +150,7 @@
     <Content Include="Views\Master.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Home\AllLocations.cshtml" />
+    <Content Include="Views\Home\Qsos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

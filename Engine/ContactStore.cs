@@ -5,6 +5,7 @@ using MySql.Data.MySqlClient;
 using System.IO;
 using System.Threading;
 using System.Reflection;
+using System.Linq;
 
 namespace Engine
 {
@@ -221,12 +222,12 @@ namespace Engine
                         cmd.CommandText = @"UPDATE log SET lastModified=?lastModified, startTime=?startTime, endTime=?endTime,
 callsign=?callsign, station=?station, operator=?operator, band=?band, mode=?mode, frequency=?frequency,
 reportTx=?reportTx, reportRx=?reportRx, locator=?locatorReceived, notes=?notes, serialSent=?serialSent, serialReceived=?serialReceived, qslRxDate=?qslRxDate,
-qslTxDate=?qslTxDate, qslMethod=?qslMethod WHERE id=?id AND sourceId=?sourceId;";
+qslTxDate=?qslTxDate, qslMethod=?qslMethod, location=?location WHERE id=?id AND sourceId=?sourceId;";
                     else
                         cmd.CommandText = @"INSERT INTO log (sourceId, lastModified, startTime, endTime, callsign, station,
-operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent, serialReceived, qslRxDate, qslTxDate, qslMethod) VALUES
+operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent, serialReceived, qslRxDate, qslTxDate, qslMethod, location) VALUES
 (?sourceId, ?lastModified, ?startTime, ?endTime, ?callsign, ?station, ?operator, ?band, ?mode, ?frequency,
-?reportTx, ?reportRx, ?locatorReceived, ?notes, ?serialSent, ?serialReceived, ?qslRxDate, ?qslTxDate, ?qslMethod);";
+?reportTx, ?reportRx, ?locatorReceived, ?notes, ?serialSent, ?serialReceived, ?qslRxDate, ?qslTxDate, ?qslMethod, ?location);";
 
                     cmd.Parameters.AddWithValue("?sourceId", c.SourceId);
                     cmd.Parameters.AddWithValue("?lastModified", DateTime.UtcNow); c.LastModified = DateTime.UtcNow;
@@ -247,6 +248,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                     cmd.Parameters.AddWithValue("?qslRxDate", c.QslRxDate);
                     cmd.Parameters.AddWithValue("?qslTxDate", c.QslTxDate);
                     cmd.Parameters.AddWithValue("?qslMethod", c.QslMethod);
+                    cmd.Parameters.AddWithValue("?location", c.LocationID);
                     //cmd.Parameters.AddWithValue("?points", c.Points);
                     //cmd.Parameters.AddWithValue("?serialReceived", c.SerialReceived);
                     //cmd.Parameters.AddWithValue("?serialSent", c.SerialSent);
@@ -922,7 +924,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
         public List<Location> GetLocations()
         {
-            List<Location> locations = new List<Location>();
+            List<int> locationIDs = new List<int>();
             var conn = OpenConnection;
             lock (conn)
             {
@@ -933,12 +935,36 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                     {
                         while (reader.Read())
                         {
-                            locations.Add(LoadLocation(reader.GetInt32("id")));
+                            locationIDs.Add(reader.GetInt32("id"));
                         }
                     }
                 }
             }
+
+            List<Location> locations = locationIDs.ConvertAll(id => LoadLocation(id));
             return locations;
+        }
+
+        public Location CreateLocation(string club, string locator, string wab, string iotaReference, string iotaName)
+        {
+            var locations = GetLocations();
+            int id = locations.Aggregate(0, (max, l) => Math.Max(max, l.ID)) + 1;
+            var conn = OpenConnection;
+            lock (conn)
+            {
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "INSERT INTO locations (id, locator, wab, club, iotaref, iotaname) VALUES (?id, ?locator, ?wab, ?club, ?iotaRef, ?iotaName);";
+                    cmd.Parameters.AddWithValue("?id", id);
+                    cmd.Parameters.AddWithValue("?locator", locator);
+                    cmd.Parameters.AddWithValue("?wab", wab);
+                    cmd.Parameters.AddWithValue("?club", club);
+                    cmd.Parameters.AddWithValue("?iotaRef", iotaReference);
+                    cmd.Parameters.AddWithValue("?iotaName", iotaName);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            return LoadLocation(id);
         }
 
         public List<Contact> GetContactsByLocation(Location location)

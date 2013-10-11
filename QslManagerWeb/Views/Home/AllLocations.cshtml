@@ -1,4 +1,4 @@
-﻿@model QslManagerWeb.Models.AllLocationsModel;
+﻿@model QslManagerWeb.Models.AllLocationsModel
 
 @{
     ViewBag.Title = "AllLocations";
@@ -8,6 +8,6 @@
 <ul>
     @foreach (var location in Model.Locations)
     {
-        <li>@location.ID</li>
+        <li>@location.ID - @location.Club / @location.Locator / @location.Wab</li>
     }
 </ul>

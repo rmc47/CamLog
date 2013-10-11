@@ -7,6 +7,6 @@
 <ul>
     @foreach (var day in this.Model.DatesWithMissingLocations)
     {
-        <li>@day.Key.ToShortDateString() (@day.Value)</li>
+        <li>@Html.ActionLink("View", "QsosWithoutLocation", new { date = day.Key }) @day.Key.ToShortDateString() (@day.Value)</li>
     }
 </ul>

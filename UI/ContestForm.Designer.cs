@@ -53,6 +53,9 @@ namespace UI
             System.Windows.Forms.Label label30;
             System.Windows.Forms.Label label31;
             System.Windows.Forms.Label label32;
+            System.Windows.Forms.Label label6;
+            System.Windows.Forms.Label label8;
+            this.m_OnlineStatus = new System.Windows.Forms.Label();
             this.m_Frequency = new System.Windows.Forms.TextBox();
             this.m_Station = new System.Windows.Forms.TextBox();
             this.m_OurMode = new System.Windows.Forms.ComboBox();
@@ -94,7 +97,8 @@ namespace UI
             this.rigControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.QrzUserSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wipeQSOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_OnlineStatus = new System.Windows.Forms.Label();
+            this.m_SatelliteName = new System.Windows.Forms.ComboBox();
+            this.m_SatelliteMode = new System.Windows.Forms.ComboBox();
             groupBox1 = new System.Windows.Forms.GroupBox();
             label7 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
@@ -114,6 +118,8 @@ namespace UI
             label30 = new System.Windows.Forms.Label();
             label31 = new System.Windows.Forms.Label();
             label32 = new System.Windows.Forms.Label();
+            label6 = new System.Windows.Forms.Label();
+            label8 = new System.Windows.Forms.Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             this.m_ContactTable.SuspendLayout();
@@ -122,7 +128,10 @@ namespace UI
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(this.m_OnlineStatus);
+            groupBox1.Controls.Add(this.m_SatelliteMode);
+            groupBox1.Controls.Add(this.m_SatelliteName);
+            groupBox1.Controls.Add(label8);
+            groupBox1.Controls.Add(label6);
             groupBox1.Controls.Add(label7);
             groupBox1.Controls.Add(this.m_Frequency);
             groupBox1.Controls.Add(this.m_Station);
@@ -141,6 +150,17 @@ namespace UI
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Operator / Station details";
+            // 
+            // m_OnlineStatus
+            // 
+            this.m_OnlineStatus.BackColor = System.Drawing.Color.PaleGreen;
+            this.m_OnlineStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.m_OnlineStatus.Location = new System.Drawing.Point(631, 0);
+            this.m_OnlineStatus.Name = "m_OnlineStatus";
+            this.m_OnlineStatus.Size = new System.Drawing.Size(165, 24);
+            this.m_OnlineStatus.TabIndex = 14;
+            this.m_OnlineStatus.Text = "Online";
+            this.m_OnlineStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label7
             // 
@@ -738,22 +758,59 @@ namespace UI
             this.wipeQSOToolStripMenuItem.Text = "&Wipe QSO";
             this.wipeQSOToolStripMenuItem.Click += new System.EventHandler(this.WipeQSOClicked);
             // 
-            // m_OnlineStatus
+            // label6
             // 
-            this.m_OnlineStatus.BackColor = System.Drawing.Color.PaleGreen;
-            this.m_OnlineStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.m_OnlineStatus.Location = new System.Drawing.Point(210, 91);
-            this.m_OnlineStatus.Name = "m_OnlineStatus";
-            this.m_OnlineStatus.Size = new System.Drawing.Size(165, 25);
-            this.m_OnlineStatus.TabIndex = 14;
-            this.m_OnlineStatus.Text = "Online";
-            this.m_OnlineStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            label6.AutoSize = true;
+            label6.Location = new System.Drawing.Point(207, 83);
+            label6.Name = "label6";
+            label6.Size = new System.Drawing.Size(76, 13);
+            label6.TabIndex = 15;
+            label6.Text = "Satellite name:";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new System.Drawing.Point(207, 109);
+            label8.Name = "label8";
+            label8.Size = new System.Drawing.Size(76, 13);
+            label8.TabIndex = 17;
+            label8.Text = "Satellite mode:";
+            // 
+            // m_SatelliteName
+            // 
+            this.m_SatelliteName.FormattingEnabled = true;
+            this.m_SatelliteName.Items.AddRange(new object[] {
+            "",
+            "AO-7",
+            "AO-72",
+            "FO-29",
+            "SO-50",
+            "VO-52"});
+            this.m_SatelliteName.Location = new System.Drawing.Point(294, 80);
+            this.m_SatelliteName.Name = "m_SatelliteName";
+            this.m_SatelliteName.Size = new System.Drawing.Size(81, 21);
+            this.m_SatelliteName.TabIndex = 18;
+            this.m_SatelliteName.TabStop = false;
+            // 
+            // m_SatelliteMode
+            // 
+            this.m_SatelliteMode.FormattingEnabled = true;
+            this.m_SatelliteMode.Items.AddRange(new object[] {
+            "",
+            "U/V",
+            "V/U"});
+            this.m_SatelliteMode.Location = new System.Drawing.Point(294, 106);
+            this.m_SatelliteMode.Name = "m_SatelliteMode";
+            this.m_SatelliteMode.Size = new System.Drawing.Size(81, 21);
+            this.m_SatelliteMode.TabIndex = 19;
+            this.m_SatelliteMode.TabStop = false;
             // 
             // ContestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(796, 423);
+            this.Controls.Add(this.m_OnlineStatus);
             this.Controls.Add(this.m_ContactTable);
             this.Controls.Add(groupBox2);
             this.Controls.Add(this.m_Notes);
@@ -824,6 +881,8 @@ namespace UI
         private System.Windows.Forms.ToolStripMenuItem multipleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem QrzUserSetupToolStripMenuItem;
         private System.Windows.Forms.Label m_OnlineStatus;
+        private System.Windows.Forms.ComboBox m_SatelliteMode;
+        private System.Windows.Forms.ComboBox m_SatelliteName;
         //private System.Windows.Forms.DataGridView m_QSOGrid;
         //private System.Windows.Forms.DataGridViewTextBoxColumn m_QBand;
         //private System.Windows.Forms.DataGridViewTextBoxColumn m_QTime;

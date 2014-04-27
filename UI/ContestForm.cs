@@ -147,7 +147,10 @@ namespace UI
                 c.Station = m_Station.Text.Trim();
 
                 c.LocatorReceived = new Locator(m_Locator.Text);
-
+                if (!string.IsNullOrWhiteSpace(m_SatelliteMode.Text))
+                    c.SatelliteMode = m_SatelliteMode.Text;
+                if (!string.IsNullOrWhiteSpace(m_SatelliteName.Text))
+                    c.SatelliteName = m_SatelliteName.Text;
                 return c;
             }
         }
@@ -408,6 +411,14 @@ namespace UI
             });
         }
 
+        private string BandTextFromContact(Contact c)
+        {
+            if (!string.IsNullOrWhiteSpace(c.SatelliteName))
+                return c.SatelliteName;
+            else
+                return BandHelper.ToString(c.Band);
+        }
+
         private void PopulatePreviousContactsGridCallback(List<Contact> contacts)
         {
             
@@ -425,7 +436,7 @@ namespace UI
                     Contact c = contacts[contactsIndex];
                     bool alert = (c.Notes.Contains(station) || c.Notes.Contains(band) || c.Notes.Contains(op));
                     Label[] rowLabels = m_ContactTableLabels[i - 1];
-                    rowLabels[(int)ContactTableColumns.Band].Text = BandHelper.ToString(c.Band);
+                    rowLabels[(int)ContactTableColumns.Band].Text = BandTextFromContact(c);
 
                     Locator theirLocator;
                     if (c.LocatorReceived != null && !(c.LocatorReceived.Latitude == 0 && c.LocatorReceived.Longitude == 0))

@@ -95,7 +95,6 @@
     <Compile Include="Registry.cs" />
     <Compile Include="SerialProvider.cs" />
     <Compile Include="SourceCallsign.cs" />
-    <Compile Include="SpotService.cs" />
     <Compile Include="ThreadDataStore.cs" />
     <Compile Include="WinKey.cs" />
   </ItemGroup>

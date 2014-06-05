@@ -17,7 +17,7 @@ namespace Engine
             m_ApiKey = RegistryHelper.GetString(RegistryValue.ClublogApiKey, string.Empty);
         }
 
-        public Dictionary<string, int> Lookup(List<string> callsigns)
+        public Dictionary<string, int> Lookup(IEnumerable<string> callsigns)
         {
             Dictionary<string, int> results = new Dictionary<string, int>();
 
@@ -29,7 +29,7 @@ namespace Engine
             using (StreamWriter writer = new StreamWriter(requestStream))
             {
                 writer.Write("json=");
-                var serializedCallsigns = JsonConvert.SerializeObject(callsigns.ConvertAll(c => new LookupCallsignRequest { Callsign = c, Date = DateTime.UtcNow }), Formatting.None);
+                var serializedCallsigns = JsonConvert.SerializeObject(callsigns.Select(c => new LookupCallsignRequest { Callsign = c, Date = DateTime.UtcNow }), Formatting.None);
                 writer.Write(Uri.EscapeDataString(serializedCallsigns));
             }
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();

@@ -86,6 +86,9 @@ namespace QslEngine
         }
 
         private List<int> s_AdifSortOrder = new List<int> {
+            
+            // This list converted in Excel from http://www.arrl.org/files/file/DXCC/2013_Current_Deleted.txt
+
             223, //G,GX,M* 
             114, //GD,GT* 
             265, //GI,GN* 

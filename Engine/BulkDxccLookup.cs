@@ -34,11 +34,16 @@ namespace Engine
             }
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             var responseStream = response.GetResponseStream();
+            string responseString;
             using (StreamReader reader = new StreamReader(responseStream))
             {
-                string responseString = reader.ReadToEnd();
+                responseString = reader.ReadToEnd();
             }
-
+            var responseList = JsonConvert.DeserializeObject<List<LookupCallsignResult>>(responseString);
+            foreach (var item in responseList)
+            {
+                results[item.Callsign] = item.AdifNumber;
+            }
             return results;
         }
 
@@ -46,7 +51,8 @@ namespace Engine
         {
             [JsonProperty("C")]
             public string Callsign { get; set; }
-            [JsonProperty("T", ItemConverterType=typeof(Newtonsoft.Json.Converters.IsoDateTimeConverter))]
+            [JsonProperty("T")]
+            [JsonConverter(typeof(ClubLogDateTimeConverter))]
             public DateTime Date { get; set; }
         }
 
@@ -56,6 +62,15 @@ namespace Engine
             public string Callsign { get; set; }
             [JsonProperty("A")]
             public int AdifNumber { get; set; }
+        }
+
+        private class ClubLogDateTimeConverter : Newtonsoft.Json.Converters.IsoDateTimeConverter
+        {
+            public ClubLogDateTimeConverter()
+                : base()
+            {
+                DateTimeFormat = "yyyy-dd-MM HH:mm:ss";
+            }
         }
     }
 }

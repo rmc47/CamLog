@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="AdifTests.cs" />
     <Compile Include="BandTests.cs" />
+    <Compile Include="BulkDxccLookupTests.cs" />
     <Compile Include="CallsignLookupTests.cs" />
     <Compile Include="FrequencyTests.cs" />
     <Compile Include="GeographicsTests.cs" />

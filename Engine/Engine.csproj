@@ -57,6 +57,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Referenced Dlls\MySql.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net35\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -65,6 +68,7 @@
     <Compile Include="AdifHandler.cs" />
     <Compile Include="AdifFileReader.cs" />
     <Compile Include="Band.cs" />
+    <Compile Include="BulkDxccLookup.cs" />
     <Compile Include="CabrilloExporter.cs" />
     <Compile Include="CallsignLookup.cs" />
     <Compile Include="Contact.cs" />
@@ -126,6 +130,7 @@
     <None Include="cty.xml.gz">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cty.xml" />

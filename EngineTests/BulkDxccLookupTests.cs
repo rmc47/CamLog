@@ -17,5 +17,13 @@ namespace EngineTests
             var results = lookup.Lookup(new List<string> { "M0VFC" });
             Assert.That(results["M0VFC"] == 223, "Expected M0VFC to map to England");
         }
+
+        [Test]
+        public void GermanSWLLookup()
+        {
+            var lookup = new BulkDxccLookup();
+            var results = lookup.Lookup(new List<string> { "DE1ABC" });
+            Assert.That(results["DE1ABC"] == 1000, "Expected DE1ABC to map to INVALID (SWL)");
+        }
     }
 }

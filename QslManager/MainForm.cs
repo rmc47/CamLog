@@ -322,6 +322,7 @@ namespace QslManager
         {
             using (ClubLogImportForm clif = new ClubLogImportForm(m_ContactStore))
             {
+                clif.Callsign = m_OurCallsign.Text;
                 clif.ShowDialog();
             }
         }

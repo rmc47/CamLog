@@ -83,6 +83,9 @@ namespace Engine
         Locator,
         Operator,
         QrzUsername,
-        QrzPassword
+        QrzPassword,
+        ClublogUsername,
+        ClublogPassword,
+        ClublogApiKey,
     }
 }

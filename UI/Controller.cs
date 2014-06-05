@@ -15,7 +15,7 @@ namespace UI
 
         public ContactStore ContactStore {get;private set;}
         public IRadio Radio { get;private set;}
-        public IWinKey WinKey { get; private set; }
+        public WinKey WinKey { get; private set; }
         public CWMacro CWMacro { get; private set; }
 
         public Controller()

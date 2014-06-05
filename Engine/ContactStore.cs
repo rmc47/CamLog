@@ -202,6 +202,8 @@ namespace Engine
             c.QslTxDate = reader.GetDateTimeNullable("qslTxDate");
             c.QslMethod = reader["qslMethod"] as string;
             c.LocationID = (int)reader["location"];
+            c.SatelliteName = reader.GetStringNullable("satellitename");
+            c.SatelliteMode = reader.GetStringNullable("satellitemode");
 
             // Optional stuff below here...
             string locatorString = reader["locator"] as string;
@@ -222,12 +224,12 @@ namespace Engine
                         cmd.CommandText = @"UPDATE log SET lastModified=?lastModified, startTime=?startTime, endTime=?endTime,
 callsign=?callsign, station=?station, operator=?operator, band=?band, mode=?mode, frequency=?frequency,
 reportTx=?reportTx, reportRx=?reportRx, locator=?locatorReceived, notes=?notes, serialSent=?serialSent, serialReceived=?serialReceived, qslRxDate=?qslRxDate,
-qslTxDate=?qslTxDate, qslMethod=?qslMethod, location=?location WHERE id=?id AND sourceId=?sourceId;";
+qslTxDate=?qslTxDate, qslMethod=?qslMethod, location=?location, satellitename=?satellitename, satellitemode=?satellitemode WHERE id=?id AND sourceId=?sourceId;";
                     else
                         cmd.CommandText = @"INSERT INTO log (sourceId, lastModified, startTime, endTime, callsign, station,
-operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent, serialReceived, qslRxDate, qslTxDate, qslMethod, location) VALUES
+operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent, serialReceived, qslRxDate, qslTxDate, qslMethod, location, satellitename, satellitemode) VALUES
 (?sourceId, ?lastModified, ?startTime, ?endTime, ?callsign, ?station, ?operator, ?band, ?mode, ?frequency,
-?reportTx, ?reportRx, ?locatorReceived, ?notes, ?serialSent, ?serialReceived, ?qslRxDate, ?qslTxDate, ?qslMethod, ?location);";
+?reportTx, ?reportRx, ?locatorReceived, ?notes, ?serialSent, ?serialReceived, ?qslRxDate, ?qslTxDate, ?qslMethod, ?location, ?satellitename, ?satellitemode);";
 
                     cmd.Parameters.AddWithValue("?sourceId", c.SourceId);
                     cmd.Parameters.AddWithValue("?lastModified", DateTime.UtcNow); c.LastModified = DateTime.UtcNow;
@@ -249,6 +251,8 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                     cmd.Parameters.AddWithValue("?qslTxDate", c.QslTxDate);
                     cmd.Parameters.AddWithValue("?qslMethod", c.QslMethod);
                     cmd.Parameters.AddWithValue("?location", c.LocationID);
+                    cmd.Parameters.AddWithValue("?satellitename", c.SatelliteName);
+                    cmd.Parameters.AddWithValue("?satellitemode", c.SatelliteMode);
                     //cmd.Parameters.AddWithValue("?points", c.Points);
                     //cmd.Parameters.AddWithValue("?serialReceived", c.SerialReceived);
                     //cmd.Parameters.AddWithValue("?serialSent", c.SerialSent);

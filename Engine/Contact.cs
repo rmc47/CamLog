@@ -33,6 +33,9 @@ namespace Engine
         private string m_QslMethod;
         private int m_LocationID;
 
+        private string m_SatelliteName;
+        private string m_SatelliteMode;
+
         public Contact()
         {
             m_Id = -1;
@@ -180,6 +183,18 @@ namespace Engine
         {
             get { return m_LocationID; }
             set { m_LocationID = value; }
+        }
+
+        public string SatelliteName
+        {
+            get { return m_SatelliteName; }
+            set { m_SatelliteName = value; }
+        }
+
+        public string SatelliteMode
+        {
+            get { return m_SatelliteMode; }
+            set { m_SatelliteMode = value; }
         }
 
         public override string ToString()

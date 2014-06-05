@@ -16,7 +16,7 @@ namespace Engine
             set { m_ContactStore = value; LoadMacros(); }
         }
 
-        public IWinKey WinKey { get; set; }
+        public WinKey WinKey { get; set; }
 
         private List<string> m_Macros = new List<string>(12);
 

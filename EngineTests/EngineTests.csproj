@@ -70,6 +70,7 @@
     <Compile Include="KstTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QrzTests.cs" />
+    <Compile Include="QslBureauSorterTests.cs" />
     <Compile Include="QslLabelTests.cs" />
   </ItemGroup>
   <ItemGroup>

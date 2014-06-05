@@ -184,7 +184,7 @@ namespace QslManager
                 switch (m_QslMethod.Text)
                 {
                     case "Bureau":
-                        contactsByCallsign.Sort(BureauSorter);
+                        contactsByCallsign.Sort(new BureauSorter(contactsToPrint.Select(c => c.Callsign).Distinct()).Sort);
                         break;
                     case "Direct":
                         contactsByCallsign.Sort(DirectSorter);
@@ -224,18 +224,6 @@ namespace QslManager
                 m_LabelsUsed = 0;
             }
             m_TxtCallsign.Focus();
-        }
-
-        private static int BureauSorter(List<Contact> contacts1, List<Contact> contacts2)
-        {
-            if ((contacts1 == null || contacts1.Count == 0) && (contacts2 == null || contacts2.Count == 0))
-                return 0;
-            if (contacts1 == null || contacts1.Count == 0)
-                return 1;
-            if (contacts2 == null || contacts2.Count == 0)
-                return -1;
-
-            return contacts1[0].Callsign.CompareTo(contacts2[0].Callsign);
         }
 
         private static int DirectSorter(List<Contact> contacts1, List<Contact> contacts2)

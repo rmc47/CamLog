@@ -158,9 +158,9 @@ namespace QslManager
         private void UpdateLabelsUsed()
         {
             PdfEngine engine = new PdfEngine(m_PageLayout, m_SelectedSource.Callsign, 0);
-            List<List<Contact>> contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource.SourceID, m_QslMethod.Text);
+            var contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource.SourceID, m_QslMethod.Text);
             int labelsUsed = 0;
-            foreach (List<Contact> contacts in contactsToPrint)
+            foreach (List<Contact> contacts in contactsToPrint.GroupBy(c => c.Callsign))
             {
                 labelsUsed += engine.CalculateLabelCount(contacts);
             }
@@ -172,30 +172,29 @@ namespace QslManager
         {
             string myCall = m_SelectedSource.Callsign;
             PdfEngine engine = new PdfEngine(m_PageLayout, myCall, (int)m_LabelOffset.Value);
-            List<List<Contact>> contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource.SourceID, m_QslMethod.Text);
+            var contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource.SourceID, m_QslMethod.Text);
             if (contactsToPrint.Count == 0)
             {
                 MessageBox.Show("No QSOs to print");
             }
             else
             {
+                var contactsByCallsign = contactsToPrint.GroupBy(c => c.Callsign).Select(g => g.ToList()).ToList();
                 // Sort according to the QSL method we're using
                 switch (m_QslMethod.Text)
                 {
                     case "Bureau":
-                        contactsToPrint.Sort(BureauSorter);
+                        contactsByCallsign.Sort(BureauSorter);
                         break;
                     case "Direct":
-                        contactsToPrint.Sort(DirectSorter);
+                        contactsByCallsign.Sort(DirectSorter);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException("Unknown QSL method: " + m_QslMethod.Text);
                 }
-                foreach (List<Contact> contacts in contactsToPrint)
-                {
-                    if (contacts.Count <= 0)
-                        continue;
 
+                foreach (List<Contact> contacts in contactsByCallsign)
+                {
                     var contactsByLocation = contacts.GroupBy(c => c.LocationID);
                     foreach (var oneLocation in contactsByLocation)
                     {

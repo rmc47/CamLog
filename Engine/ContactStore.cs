@@ -850,7 +850,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
             }
         }
 
-        public List<List<Contact>> GetContactsToQsl(int sourceId, string qslMethod)
+        public List<Contact> GetContactsToQsl(int sourceId, string qslMethod)
         {
             List<int> idsToPrint = new List<int>();
             MySqlConnection conn = OpenConnection;
@@ -872,23 +872,11 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                 }
             }
 
-            List<List<Contact>> contacts = new List<List<Contact>>();
-            string currentCallsign = null;
-            List<Contact> currentCallsignContacts = null;
+            List<Contact> contacts = null;
             foreach (int id in idsToPrint)
             {
-                Contact c = LoadContact(sourceId, id);
-                if (!string.Equals(c.Callsign, currentCallsign, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    if (currentCallsignContacts != null)
-                        contacts.Add(currentCallsignContacts);
-                    currentCallsign = c.Callsign;
-                    currentCallsignContacts = new List<Contact>();
-                }
-                currentCallsignContacts.Add(c);
+                contacts.Add(LoadContact(sourceId, id));
             }
-            if (currentCallsignContacts != null)
-                contacts.Add(currentCallsignContacts);
 
             return contacts;
         }

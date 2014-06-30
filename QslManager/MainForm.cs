@@ -160,9 +160,9 @@ namespace QslManager
             PdfEngine engine = new PdfEngine(m_PageLayout, m_SelectedSource.Callsign, 0);
             var contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource.SourceID, m_QslMethod.Text);
             int labelsUsed = 0;
-            foreach (List<Contact> contacts in contactsToPrint.GroupBy(c => c.Callsign))
+            foreach (var contacts in contactsToPrint.GroupBy(c => c.Callsign))
             {
-                labelsUsed += engine.CalculateLabelCount(contacts);
+                labelsUsed += engine.CalculateLabelCount(contacts.ToList());
             }
             m_LabelsUsed = labelsUsed;
             m_UpdateLabelsUsed.Text = string.Format("&Labels used: {0}", labelsUsed);

@@ -872,7 +872,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                 }
             }
 
-            List<Contact> contacts = null;
+            List<Contact> contacts = new List<Contact>();
             foreach (int id in idsToPrint)
             {
                 contacts.Add(LoadContact(sourceId, id));

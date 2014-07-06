@@ -29,15 +29,13 @@ namespace UI
         private void InitializeComponent()
         {
             System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-            System.Windows.Forms.Label label4;
-            System.Windows.Forms.Label label2;
             System.Windows.Forms.Label label1;
-            System.Windows.Forms.Label label3;
             System.Windows.Forms.Label label5;
             System.Windows.Forms.Label label6;
             System.Windows.Forms.Label label7;
-            this.m_Password = new System.Windows.Forms.TextBox();
-            this.m_Username = new System.Windows.Forms.TextBox();
+            System.Windows.Forms.Label label4;
+            System.Windows.Forms.Label label3;
+            System.Windows.Forms.Label label2;
             this.m_Server = new System.Windows.Forms.TextBox();
             this.m_Connect = new System.Windows.Forms.Button();
             this.m_SerialPort = new System.Windows.Forms.ComboBox();
@@ -46,24 +44,26 @@ namespace UI
             this.m_RTS = new System.Windows.Forms.CheckBox();
             this.m_RadioModel = new System.Windows.Forms.ComboBox();
             this.m_Speed = new System.Windows.Forms.TextBox();
+            this.m_Username = new System.Windows.Forms.TextBox();
+            this.m_Password = new System.Windows.Forms.TextBox();
             this.m_Database = new System.Windows.Forms.ComboBox();
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            label4 = new System.Windows.Forms.Label();
-            label2 = new System.Windows.Forms.Label();
             label1 = new System.Windows.Forms.Label();
-            label3 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
             label6 = new System.Windows.Forms.Label();
             label7 = new System.Windows.Forms.Label();
+            label4 = new System.Windows.Forms.Label();
+            label3 = new System.Windows.Forms.Label();
+            label2 = new System.Windows.Forms.Label();
             tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
             // 
-            tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -98,43 +98,6 @@ namespace UI
             tableLayoutPanel1.Size = new System.Drawing.Size(328, 282);
             tableLayoutPanel1.TabIndex = 0;
             // 
-            // m_Password
-            // 
-            this.m_Password.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_Password.Location = new System.Drawing.Point(167, 67);
-            this.m_Password.Name = "m_Password";
-            this.m_Password.PasswordChar = '*';
-            this.m_Password.Size = new System.Drawing.Size(158, 20);
-            this.m_Password.TabIndex = 7;
-            // 
-            // m_Username
-            // 
-            this.m_Username.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_Username.Location = new System.Drawing.Point(167, 36);
-            this.m_Username.Name = "m_Username";
-            this.m_Username.Size = new System.Drawing.Size(158, 20);
-            this.m_Username.TabIndex = 5;
-            // 
-            // label4
-            // 
-            label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            label4.AutoSize = true;
-            label4.Location = new System.Drawing.Point(3, 40);
-            label4.Name = "label4";
-            label4.Size = new System.Drawing.Size(58, 13);
-            label4.TabIndex = 4;
-            label4.Text = "Username:";
-            // 
-            // label2
-            // 
-            label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(3, 102);
-            label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(56, 13);
-            label2.TabIndex = 2;
-            label2.Text = "Database:";
-            // 
             // m_Server
             // 
             this.m_Server.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
@@ -153,23 +116,13 @@ namespace UI
             label1.TabIndex = 0;
             label1.Text = "Server:";
             // 
-            // label3
-            // 
-            label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            label3.AutoSize = true;
-            label3.Location = new System.Drawing.Point(3, 71);
-            label3.Name = "label3";
-            label3.Size = new System.Drawing.Size(56, 13);
-            label3.TabIndex = 6;
-            label3.Text = "Password:";
-            // 
             // m_Connect
             // 
             this.m_Connect.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.m_Connect.Location = new System.Drawing.Point(250, 255);
             this.m_Connect.Name = "m_Connect";
             this.m_Connect.Size = new System.Drawing.Size(75, 19);
-            this.m_Connect.TabIndex = 8;
+            this.m_Connect.TabIndex = 14;
             this.m_Connect.Text = "Connect";
             this.m_Connect.UseVisualStyleBackColor = true;
             this.m_Connect.Click += new System.EventHandler(this.m_Connect_Click);
@@ -181,7 +134,7 @@ namespace UI
             label5.Location = new System.Drawing.Point(3, 133);
             label5.Name = "label5";
             label5.Size = new System.Drawing.Size(81, 13);
-            label5.TabIndex = 9;
+            label5.TabIndex = 8;
             label5.Text = "C-IV Serial Port:";
             // 
             // m_SerialPort
@@ -191,7 +144,7 @@ namespace UI
             this.m_SerialPort.Location = new System.Drawing.Point(167, 129);
             this.m_SerialPort.Name = "m_SerialPort";
             this.m_SerialPort.Size = new System.Drawing.Size(158, 21);
-            this.m_SerialPort.TabIndex = 10;
+            this.m_SerialPort.TabIndex = 9;
             // 
             // flowLayoutPanel1
             // 
@@ -234,7 +187,7 @@ namespace UI
             this.m_RadioModel.Location = new System.Drawing.Point(167, 191);
             this.m_RadioModel.Name = "m_RadioModel";
             this.m_RadioModel.Size = new System.Drawing.Size(158, 21);
-            this.m_RadioModel.TabIndex = 12;
+            this.m_RadioModel.TabIndex = 11;
             // 
             // label6
             // 
@@ -243,7 +196,7 @@ namespace UI
             label6.Location = new System.Drawing.Point(3, 195);
             label6.Name = "label6";
             label6.Size = new System.Drawing.Size(61, 13);
-            label6.TabIndex = 13;
+            label6.TabIndex = 10;
             label6.Text = "Radio type:";
             // 
             // label7
@@ -253,7 +206,7 @@ namespace UI
             label7.Location = new System.Drawing.Point(3, 226);
             label7.Name = "label7";
             label7.Size = new System.Drawing.Size(68, 13);
-            label7.TabIndex = 14;
+            label7.TabIndex = 12;
             label7.Text = "Serial speed:";
             // 
             // m_Speed
@@ -262,7 +215,54 @@ namespace UI
             this.m_Speed.Location = new System.Drawing.Point(167, 222);
             this.m_Speed.Name = "m_Speed";
             this.m_Speed.Size = new System.Drawing.Size(158, 20);
-            this.m_Speed.TabIndex = 15;
+            this.m_Speed.TabIndex = 13;
+            // 
+            // label4
+            // 
+            label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            label4.AutoSize = true;
+            label4.Location = new System.Drawing.Point(3, 40);
+            label4.Name = "label4";
+            label4.Size = new System.Drawing.Size(58, 13);
+            label4.TabIndex = 2;
+            label4.Text = "Username:";
+            // 
+            // m_Username
+            // 
+            this.m_Username.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_Username.Location = new System.Drawing.Point(167, 36);
+            this.m_Username.Name = "m_Username";
+            this.m_Username.Size = new System.Drawing.Size(158, 20);
+            this.m_Username.TabIndex = 3;
+            // 
+            // label3
+            // 
+            label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            label3.AutoSize = true;
+            label3.Location = new System.Drawing.Point(3, 71);
+            label3.Name = "label3";
+            label3.Size = new System.Drawing.Size(56, 13);
+            label3.TabIndex = 4;
+            label3.Text = "Password:";
+            // 
+            // m_Password
+            // 
+            this.m_Password.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_Password.Location = new System.Drawing.Point(167, 67);
+            this.m_Password.Name = "m_Password";
+            this.m_Password.PasswordChar = '*';
+            this.m_Password.Size = new System.Drawing.Size(158, 20);
+            this.m_Password.TabIndex = 5;
+            // 
+            // label2
+            // 
+            label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            label2.AutoSize = true;
+            label2.Location = new System.Drawing.Point(3, 102);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(56, 13);
+            label2.TabIndex = 6;
+            label2.Text = "Database:";
             // 
             // m_Database
             // 
@@ -271,7 +271,7 @@ namespace UI
             this.m_Database.Location = new System.Drawing.Point(167, 98);
             this.m_Database.Name = "m_Database";
             this.m_Database.Size = new System.Drawing.Size(158, 21);
-            this.m_Database.TabIndex = 16;
+            this.m_Database.TabIndex = 7;
             this.m_Database.DropDown += new System.EventHandler(this.DatabaseDroppedDown);
             // 
             // LogonForm

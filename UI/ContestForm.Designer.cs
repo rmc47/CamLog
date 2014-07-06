@@ -99,6 +99,7 @@ namespace UI
             this.wipeQSOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.m_SatelliteName = new System.Windows.Forms.ComboBox();
             this.m_SatelliteMode = new System.Windows.Forms.ComboBox();
+            this.transverterOffisetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             groupBox1 = new System.Windows.Forms.GroupBox();
             label7 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
@@ -727,7 +728,8 @@ namespace UI
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.winKeyToolStripMenuItem,
             this.rigControlToolStripMenuItem,
-            this.QrzUserSetupToolStripMenuItem});
+            this.QrzUserSetupToolStripMenuItem,
+            this.transverterOffisetToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "&Options";
@@ -777,6 +779,7 @@ namespace UI
             label8.Text = "Satellite mode:";
             // 
             // m_SatelliteName
+            // transverterOffisetToolStripMenuItem
             // 
             this.m_SatelliteName.FormattingEnabled = true;
             this.m_SatelliteName.Items.AddRange(new object[] {
@@ -804,6 +807,10 @@ namespace UI
             this.m_SatelliteMode.Size = new System.Drawing.Size(81, 21);
             this.m_SatelliteMode.TabIndex = 19;
             this.m_SatelliteMode.TabStop = false;
+            this.transverterOffisetToolStripMenuItem.Name = "transverterOffisetToolStripMenuItem";
+            this.transverterOffisetToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.transverterOffisetToolStripMenuItem.Text = "Transverter offiset...";
+            this.transverterOffisetToolStripMenuItem.Click += new System.EventHandler(this.SetTransverterOffset);
             // 
             // ContestForm
             // 
@@ -883,6 +890,7 @@ namespace UI
         private System.Windows.Forms.Label m_OnlineStatus;
         private System.Windows.Forms.ComboBox m_SatelliteMode;
         private System.Windows.Forms.ComboBox m_SatelliteName;
+        private System.Windows.Forms.ToolStripMenuItem transverterOffisetToolStripMenuItem;
         //private System.Windows.Forms.DataGridView m_QSOGrid;
         //private System.Windows.Forms.DataGridViewTextBoxColumn m_QBand;
         //private System.Windows.Forms.DataGridViewTextBoxColumn m_QTime;

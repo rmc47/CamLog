@@ -21,6 +21,7 @@ namespace UI
         private Controller Controller { get; set; }
         private ContactStore m_ContactStore;
         private IRadio m_RadioCAT;
+        private double m_TransverterOffsetMHz;
         private CallsignLookup m_CallsignLookup = new CallsignLookup("cty.xml.gz");
         private Locator m_OurLocatorValue = new Locator(Settings.Get("Locator", "JO02ce"));
         private Label[][] m_ContactTableLabels;
@@ -275,8 +276,9 @@ namespace UI
         {
             Invoke(new MethodInvoker(delegate
             {
-                m_Frequency.Text = FrequencyHelper.ToString(m_RadioCAT.PrimaryFrequency);
-                m_OurBand.SelectedItem = BandHelper.ToString(BandHelper.FromFrequency(m_RadioCAT.PrimaryFrequency));
+                long frequencyWithOffset = m_RadioCAT.PrimaryFrequency + (long)(m_TransverterOffsetMHz * 1000000);
+                m_Frequency.Text = FrequencyHelper.ToString(frequencyWithOffset);
+                m_OurBand.SelectedItem = BandHelper.ToString(BandHelper.FromFrequency(frequencyWithOffset));
                 m_OurMode.SelectedItem = ModeHelper.ToString(m_RadioCAT.PrimaryMode);
             }));
         }
@@ -905,6 +907,18 @@ namespace UI
                     Settings.Set("QRZPassword", QrzSetup.QrzPassword);
                     m_QrzServer = new QrzServer(Settings.Get("QRZUsername", ""), Settings.Get("QRZPassword", ""));
                 }
+            }
+        }
+
+        private void SetTransverterOffset(object sender, EventArgs e)
+        {
+            using (TransverterOffsetForm tvo = new TransverterOffsetForm())
+            {
+                tvo.Offset = m_TransverterOffsetMHz;
+                DialogResult dr = tvo.ShowDialog();
+                if (dr != System.Windows.Forms.DialogResult.OK)
+                    return;
+                m_TransverterOffsetMHz = tvo.Offset;
             }
         }
     }

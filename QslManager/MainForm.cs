@@ -239,7 +239,13 @@ namespace QslManager
                 return 1;
 
             if (contacts1[0].QslRxDate.Equals(contacts2[0].QslRxDate))
-                return contacts1[0].Id.CompareTo(contacts2[0].Id);
+            {
+                // Find minimum contact IDs, not just first ones
+                int minID1 = int.MaxValue, minID2 = int.MaxValue;
+                contacts1.ForEach(c => minID1 = Math.Min(minID1, c.Id));
+                contacts2.ForEach(c => minID2 = Math.Min(minID2, c.Id));
+                return minID1.CompareTo(minID2);
+            }
             else
                 return contacts1[0].QslRxDate.Value.CompareTo(contacts2[0].QslRxDate);
         }
@@ -300,7 +306,7 @@ namespace QslManager
             if (labelsToPrint > 0)
                 addressLabelEngine.PrintDocument(Path.Combine(m_OutputPath.Text, string.Format("Address-{0}-{1}.pdf", m_OurCallsign.Text.Replace('/', '_'), DateTime.UtcNow.ToString("yyyy-MM-dd-HHmm"))));
             else
-                MessageBox.Show("Nop address labels to print");
+                MessageBox.Show("No address labels to print");
 
             UpdateLabelsUsed();
         }

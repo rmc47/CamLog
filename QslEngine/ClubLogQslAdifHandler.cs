@@ -39,7 +39,10 @@ namespace QslEngine
                 int matchedContactIndex = allContacts.BinarySearch(importedContact, matchComparer);
                 if (matchedContactIndex < 0)
                 {
-                    continue;
+                    //continue;
+                    matchedContactIndex = allContacts.FindIndex(c => matchComparer.Compare(importedContact, c) == 0);
+                    if (matchedContactIndex < 0)
+                        continue;
                     //throw new InvalidDataException("QSO not found in log: " + importedContact);
                 }
 

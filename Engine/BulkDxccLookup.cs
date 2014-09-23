@@ -42,6 +42,8 @@ namespace Engine
             var responseList = JsonConvert.DeserializeObject<List<LookupCallsignResult>>(responseString);
             foreach (var item in responseList)
             {
+                if (item.AdifNumber == 0)
+                    throw new InvalidDataException("Error performing DXCC lookup for callsign: " + item.Callsign);
                 results[item.Callsign] = item.AdifNumber;
             }
             return results;
@@ -69,7 +71,7 @@ namespace Engine
             public ClubLogDateTimeConverter()
                 : base()
             {
-                DateTimeFormat = "yyyy-dd-MM HH:mm:ss";
+                DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
             }
         }
     }

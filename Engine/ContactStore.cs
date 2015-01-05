@@ -685,19 +685,16 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
                 StringBuilder sb = new StringBuilder();
                 List<string> locator4SquaresSeen = new List<string> ();
-                int ukLocatorsSeen = 0;
+                List<string> ukLocator4SquaresSeen = new List<string>();
                 int totalPoints = 0;
                 int oDxPoints = 0;
                 Contact oDxContact = null;
                 foreach (KeyValuePair<int, int> id in contactIDs)
                 {
                     int pts;
-                    bool isNewUkLocator;
                     Contact c = LoadContact(id.Key, id.Value);
-                    sb.AppendLine(GetContactLog(c, sourceLocator, locator4SquaresSeen, out pts, out isNewUkLocator));
+                    sb.AppendLine(GetContactLog(c, sourceLocator, locator4SquaresSeen, ukLocator4SquaresSeen, out pts));
                     totalPoints += pts;
-                    if (isNewUkLocator)
-                        ukLocatorsSeen++;
                     if (pts > oDxPoints)
                     {
                         oDxContact = c;
@@ -726,7 +723,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                     HeightAboveGround = 20,
                     HeightAboveSea = 68,
                     Locator = new Locator("JO02CE"),
-                    Multipliers = locator4SquaresSeen.Count + ukLocatorsSeen,
+                    Multipliers = locator4SquaresSeen.Count + ukLocator4SquaresSeen.Count,
                     OdxCall = oDxContact.Callsign,
                     OdxLocator = oDxContact.LocatorReceived,
                     OdxDistance = oDxPoints,
@@ -737,7 +734,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                     Receiver = "RECEIVER",
                     Section = "UKAC Restricted",
                     StartDate = new DateTime(2010, 07, 03),
-                    TotalScore = totalPoints * (locator4SquaresSeen.Count + ukLocatorsSeen),
+                    TotalScore = totalPoints * (locator4SquaresSeen.Count + ukLocator4SquaresSeen.Count),
                     Transmitter = "TRANSMITTER"
                 };
 
@@ -774,12 +771,11 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
 
 
-        private string GetContactLog(Contact c, Locator sourceLocator, List<string> locator4SquaresSeen, out int points, out bool isNewUkLocator)
+        private string GetContactLog(Contact c, Locator sourceLocator, List<string> locator4SquaresSeen, List<string> ukLocator4SquaresSeen, out int points)
         {
             // Figure out if this QSO is valid as a mult
             bool qualifiesForMult;
             bool qualifiesForUkMult;
-            isNewUkLocator = false;
             PrefixRecord prefix = m_CallsignLookup.LookupPrefix(c.Callsign.Trim());
             if (prefix == null || prefix.Entity == null)
             {
@@ -815,7 +811,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
             bool newUkSquare = qualifiesForUkMult && !locator4SquaresSeen.Contains(square4.ToLowerInvariant());
             if (newUkSquare)
-                isNewUkLocator = true;
+                ukLocator4SquaresSeen.Add(square4.ToLowerInvariant());
 
             bool newSquare = qualifiesForMult && !locator4SquaresSeen.Contains(square4.ToLowerInvariant());
             if (newSquare)

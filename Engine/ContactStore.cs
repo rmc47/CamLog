@@ -809,7 +809,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
             else
                 square4 = string.Empty;
 
-            bool newUkSquare = qualifiesForUkMult && !locator4SquaresSeen.Contains(square4.ToLowerInvariant());
+            bool newUkSquare = qualifiesForUkMult && !ukLocator4SquaresSeen.Contains(square4.ToLowerInvariant());
             if (newUkSquare)
                 ukLocator4SquaresSeen.Add(square4.ToLowerInvariant());
 

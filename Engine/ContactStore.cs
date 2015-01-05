@@ -685,15 +685,19 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
                 StringBuilder sb = new StringBuilder();
                 List<string> locator4SquaresSeen = new List<string> ();
+                int ukLocatorsSeen = 0;
                 int totalPoints = 0;
                 int oDxPoints = 0;
                 Contact oDxContact = null;
                 foreach (KeyValuePair<int, int> id in contactIDs)
                 {
                     int pts;
+                    bool isNewUkLocator;
                     Contact c = LoadContact(id.Key, id.Value);
-                    sb.AppendLine(GetContactLog(c, sourceLocator, locator4SquaresSeen, out pts));
+                    sb.AppendLine(GetContactLog(c, sourceLocator, locator4SquaresSeen, out pts, out isNewUkLocator));
                     totalPoints += pts;
+                    if (isNewUkLocator)
+                        ukLocatorsSeen++;
                     if (pts > oDxPoints)
                     {
                         oDxContact = c;
@@ -722,7 +726,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                     HeightAboveGround = 20,
                     HeightAboveSea = 68,
                     Locator = new Locator("JO02CE"),
-                    Multipliers = locator4SquaresSeen.Count,
+                    Multipliers = locator4SquaresSeen.Count + ukLocatorsSeen,
                     OdxCall = oDxContact.Callsign,
                     OdxLocator = oDxContact.LocatorReceived,
                     OdxDistance = oDxPoints,
@@ -733,7 +737,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                     Receiver = "RECEIVER",
                     Section = "UKAC Restricted",
                     StartDate = new DateTime(2010, 07, 03),
-                    TotalScore = totalPoints * locator4SquaresSeen.Count,
+                    TotalScore = totalPoints * (locator4SquaresSeen.Count + ukLocatorsSeen),
                     Transmitter = "TRANSMITTER"
                 };
 
@@ -770,14 +774,17 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
 
 
-        private string GetContactLog(Contact c, Locator sourceLocator, List<string> locator4SquaresSeen, out int points)
+        private string GetContactLog(Contact c, Locator sourceLocator, List<string> locator4SquaresSeen, out int points, out bool isNewUkLocator)
         {
             // Figure out if this QSO is valid as a mult
             bool qualifiesForMult;
+            bool qualifiesForUkMult;
+            isNewUkLocator = false;
             PrefixRecord prefix = m_CallsignLookup.LookupPrefix(c.Callsign.Trim());
             if (prefix == null || prefix.Entity == null)
             {
                 qualifiesForMult = false;
+                qualifiesForUkMult = false;
             }
             else
             {
@@ -791,9 +798,11 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                     case "JERSEY":
                     case "GUERNSEY":
                         qualifiesForMult = true;
+                        qualifiesForUkMult = true;
                         break;
                     default:
-                        qualifiesForMult = false;
+                        qualifiesForMult = true;
+                        qualifiesForUkMult = false;
                         break;
                 }
             }
@@ -804,10 +813,14 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
             else
                 square4 = string.Empty;
 
+            bool newUkSquare = qualifiesForUkMult && !locator4SquaresSeen.Contains(square4.ToLowerInvariant());
+            if (newUkSquare)
+                isNewUkLocator = true;
+
             bool newSquare = qualifiesForMult && !locator4SquaresSeen.Contains(square4.ToLowerInvariant());
             if (newSquare)
                 locator4SquaresSeen.Add(square4.ToLowerInvariant());
-
+            
             string thisEntry = string.Format("{0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11};{12};{13};{14}",
                 c.EndTime.ToString("yyMMdd"),
                 c.EndTime.ToString("HHmm"),

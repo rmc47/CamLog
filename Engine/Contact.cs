@@ -232,6 +232,10 @@ namespace Engine
             if (val != 0)
                 return val;
 
+            val = c1.Station.CompareTo(c2.Station);
+            if (val != 0)
+                return val;
+
             if (Math.Abs(c1.StartTime.Subtract(c2.StartTime).TotalMinutes) > 5)
                 return c1.StartTime.CompareTo(c2.StartTime);
 

@@ -345,6 +345,21 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
             lock (conn)
             {
                 int nextSerial;
+                using (MySqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT MAX(CAST(serialSent as SIGNED)) FROM log WHERE band=?band;";
+                    cmd.Parameters.AddWithValue("?band", BandHelper.ToString(band));
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        reader.Read();
+                        if (reader.IsDBNull(0))
+                            nextSerial = 1;
+                        else
+                            nextSerial = reader.GetInt32(0) + 1;
+                    }
+                }
+                return nextSerial;
+
                 bool needToCreate;
                 using (MySqlCommand cmd = conn.CreateCommand())
                 {

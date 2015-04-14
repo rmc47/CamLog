@@ -158,11 +158,11 @@ namespace QslManager
         private void UpdateLabelsUsed()
         {
             PdfEngine engine = new PdfEngine(m_PageLayout, m_SelectedSource.Callsign, 0);
-            List<List<Contact>> contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource.SourceID, m_QslMethod.Text);
+            var contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource.SourceID, m_QslMethod.Text);
             int labelsUsed = 0;
-            foreach (List<Contact> contacts in contactsToPrint)
+            foreach (var contacts in contactsToPrint.GroupBy(c => c.Callsign))
             {
-                labelsUsed += engine.CalculateLabelCount(contacts);
+                labelsUsed += engine.CalculateLabelCount(contacts.ToList());
             }
             m_LabelsUsed = labelsUsed;
             m_UpdateLabelsUsed.Text = string.Format("&Labels used: {0}", labelsUsed);
@@ -172,30 +172,29 @@ namespace QslManager
         {
             string myCall = m_SelectedSource.Callsign;
             PdfEngine engine = new PdfEngine(m_PageLayout, myCall, (int)m_LabelOffset.Value);
-            List<List<Contact>> contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource.SourceID, m_QslMethod.Text);
+            var contactsToPrint = m_ContactStore.GetContactsToQsl(m_SelectedSource.SourceID, m_QslMethod.Text);
             if (contactsToPrint.Count == 0)
             {
                 MessageBox.Show("No QSOs to print");
             }
             else
             {
+                var contactsByCallsign = contactsToPrint.GroupBy(c => c.Callsign).Select(g => g.ToList()).ToList();
                 // Sort according to the QSL method we're using
                 switch (m_QslMethod.Text)
                 {
                     case "Bureau":
-                        contactsToPrint.Sort(BureauSorter);
+                        contactsByCallsign.Sort(new BureauSorter(contactsToPrint.Select(c => c.Callsign).Distinct()).Sort);
                         break;
                     case "Direct":
-                        contactsToPrint.Sort(DirectSorter);
+                        contactsByCallsign.Sort(DirectSorter);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException("Unknown QSL method: " + m_QslMethod.Text);
                 }
-                foreach (List<Contact> contacts in contactsToPrint)
-                {
-                    if (contacts.Count <= 0)
-                        continue;
 
+                foreach (List<Contact> contacts in contactsByCallsign)
+                {
                     var contactsByLocation = contacts.GroupBy(c => c.LocationID);
                     foreach (var oneLocation in contactsByLocation)
                     {
@@ -227,18 +226,6 @@ namespace QslManager
             m_TxtCallsign.Focus();
         }
 
-        private static int BureauSorter(List<Contact> contacts1, List<Contact> contacts2)
-        {
-            if ((contacts1 == null || contacts1.Count == 0) && (contacts2 == null || contacts2.Count == 0))
-                return 0;
-            if (contacts1 == null || contacts1.Count == 0)
-                return 1;
-            if (contacts2 == null || contacts2.Count == 0)
-                return -1;
-
-            return contacts1[0].Callsign.CompareTo(contacts2[0].Callsign);
-        }
-
         private static int DirectSorter(List<Contact> contacts1, List<Contact> contacts2)
         {
             if ((contacts1 == null || contacts1.Count == 0) && (contacts2 == null || contacts2.Count == 0))
@@ -252,7 +239,13 @@ namespace QslManager
                 return 1;
 
             if (contacts1[0].QslRxDate.Equals(contacts2[0].QslRxDate))
-                return contacts1[0].Id.CompareTo(contacts2[0].Id);
+            {
+                // Find minimum contact IDs, not just first ones
+                int minID1 = int.MaxValue, minID2 = int.MaxValue;
+                contacts1.ForEach(c => minID1 = Math.Min(minID1, c.Id));
+                contacts2.ForEach(c => minID2 = Math.Min(minID2, c.Id));
+                return minID1.CompareTo(minID2);
+            }
             else
                 return contacts1[0].QslRxDate.Value.CompareTo(contacts2[0].QslRxDate);
         }
@@ -313,7 +306,7 @@ namespace QslManager
             if (labelsToPrint > 0)
                 addressLabelEngine.PrintDocument(Path.Combine(m_OutputPath.Text, string.Format("Address-{0}-{1}.pdf", m_OurCallsign.Text.Replace('/', '_'), DateTime.UtcNow.ToString("yyyy-MM-dd-HHmm"))));
             else
-                MessageBox.Show("Nop address labels to print");
+                MessageBox.Show("No address labels to print");
 
             UpdateLabelsUsed();
         }
@@ -322,6 +315,7 @@ namespace QslManager
         {
             using (ClubLogImportForm clif = new ClubLogImportForm(m_ContactStore))
             {
+                clif.Callsign = m_OurCallsign.Text;
                 clif.ShowDialog();
             }
         }

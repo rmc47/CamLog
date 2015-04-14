@@ -14,6 +14,7 @@ namespace Engine
         AM,
         JT6m,
         JT65b,
+        JT65c,
         JT4Other,
         JTMS,
         FSK441,
@@ -38,6 +39,7 @@ namespace Engine
                 case Mode.AM: return "AM";
                 case Mode.JT6m: return "JT6m";
                 case Mode.JT65b: return "JT65b";
+                case Mode.JT65c: return "JT65c";
                 case Mode.JT4Other: return "JT4*";
                 case Mode.PSK31: return "PSK31";
                 case Mode.PSK63: return "PSK63";
@@ -104,6 +106,7 @@ namespace Engine
                 case "JTMS": return Mode.JTMS;
                 case "JT6M": return Mode.JT6m;
                 case "JT65B": return Mode.JT65b;
+                case "JT65C": return Mode.JT65c;
                 case "JT4*": return Mode.JT4Other;
                 case "PSK31": return Mode.PSK31;
                 case "PSK63": return Mode.PSK63;
@@ -129,6 +132,7 @@ namespace Engine
                     return "26";
                 case Mode.JT4Other:
                 case Mode.JT65b:
+                case Mode.JT65c:
                     return "00";
                 case Mode.ISCAT:
                     return "-15";

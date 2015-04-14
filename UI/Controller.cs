@@ -15,15 +15,15 @@ namespace UI
 
         public ContactStore ContactStore {get;private set;}
         public IRadio Radio { get;private set;}
-        public IWinKey WinKey { get; private set; }
+        public WinKey WinKey { get; private set; }
         public CWMacro CWMacro { get; private set; }
 
         public Controller()
         {
             //WinKey = new WinKey("COM17");
             CWMacro = new CWMacro(null);
-            if (Radio is IWinKey)
-                CWMacro.WinKey = (IWinKey)Radio;
+            if (Radio is WinKey)
+                CWMacro.WinKey = (WinKey)Radio;
             else
                 CWMacro.WinKey = WinKey;
         }
@@ -44,8 +44,8 @@ namespace UI
                 if (!string.IsNullOrEmpty(lf.CivSerialPort) && lf.RadioModel.HasValue)
                 {
                     Radio = new RadioFactory().GetRadio(lf.RadioModel.Value, new RadioConnectionSettings { BaudRate = lf.CivSpeed, FlowControl = FlowControl.None, Port = lf.CivSerialPort, UseDTR = lf.CivDtr, UseRTS = lf.CivRts});
-                    if (Radio is IWinKey)
-                        CWMacro.WinKey = (IWinKey)Radio;
+                    if (Radio is WinKey)
+                        CWMacro.WinKey = (WinKey)Radio;
                     if (CivServerChanged != null)
                         CivServerChanged(this, new EventArgs());
                 }

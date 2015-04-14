@@ -35,6 +35,8 @@ namespace UI
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.GroupBox groupBox1;
+            System.Windows.Forms.Label label8;
+            System.Windows.Forms.Label label6;
             System.Windows.Forms.Label label7;
             System.Windows.Forms.Label label5;
             System.Windows.Forms.Label label4;
@@ -53,9 +55,8 @@ namespace UI
             System.Windows.Forms.Label label30;
             System.Windows.Forms.Label label31;
             System.Windows.Forms.Label label32;
-            System.Windows.Forms.Label label6;
-            System.Windows.Forms.Label label8;
-            this.m_OnlineStatus = new System.Windows.Forms.Label();
+            this.m_SatelliteMode = new System.Windows.Forms.ComboBox();
+            this.m_SatelliteName = new System.Windows.Forms.ComboBox();
             this.m_Frequency = new System.Windows.Forms.TextBox();
             this.m_Station = new System.Windows.Forms.TextBox();
             this.m_OurMode = new System.Windows.Forms.ComboBox();
@@ -64,6 +65,7 @@ namespace UI
             this.m_OurOperator = new System.Windows.Forms.TextBox();
             this.m_MatchesKnownCalls = new System.Windows.Forms.ListBox();
             this.m_MatchesThisContest = new System.Windows.Forms.ListBox();
+            this.m_OnlineStatus = new System.Windows.Forms.Label();
             this.m_Time = new System.Windows.Forms.TextBox();
             this.m_Band = new System.Windows.Forms.TextBox();
             this.m_Callsign = new System.Windows.Forms.TextBox();
@@ -97,10 +99,10 @@ namespace UI
             this.rigControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.QrzUserSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wipeQSOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_SatelliteName = new System.Windows.Forms.ComboBox();
-            this.m_SatelliteMode = new System.Windows.Forms.ComboBox();
             this.transverterOffisetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             groupBox1 = new System.Windows.Forms.GroupBox();
+            label8 = new System.Windows.Forms.Label();
+            label6 = new System.Windows.Forms.Label();
             label7 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
@@ -119,8 +121,6 @@ namespace UI
             label30 = new System.Windows.Forms.Label();
             label31 = new System.Windows.Forms.Label();
             label32 = new System.Windows.Forms.Label();
-            label6 = new System.Windows.Forms.Label();
-            label8 = new System.Windows.Forms.Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             this.m_ContactTable.SuspendLayout();
@@ -152,16 +152,52 @@ namespace UI
             groupBox1.TabStop = false;
             groupBox1.Text = "Operator / Station details";
             // 
-            // m_OnlineStatus
+            // m_SatelliteMode
             // 
-            this.m_OnlineStatus.BackColor = System.Drawing.Color.PaleGreen;
-            this.m_OnlineStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.m_OnlineStatus.Location = new System.Drawing.Point(631, 0);
-            this.m_OnlineStatus.Name = "m_OnlineStatus";
-            this.m_OnlineStatus.Size = new System.Drawing.Size(165, 24);
-            this.m_OnlineStatus.TabIndex = 14;
-            this.m_OnlineStatus.Text = "Online";
-            this.m_OnlineStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.m_SatelliteMode.FormattingEnabled = true;
+            this.m_SatelliteMode.Items.AddRange(new object[] {
+            "",
+            "U/V",
+            "V/U"});
+            this.m_SatelliteMode.Location = new System.Drawing.Point(294, 106);
+            this.m_SatelliteMode.Name = "m_SatelliteMode";
+            this.m_SatelliteMode.Size = new System.Drawing.Size(81, 21);
+            this.m_SatelliteMode.TabIndex = 19;
+            this.m_SatelliteMode.TabStop = false;
+            // 
+            // m_SatelliteName
+            // 
+            this.m_SatelliteName.FormattingEnabled = true;
+            this.m_SatelliteName.Items.AddRange(new object[] {
+            "",
+            "AO-7",
+            "AO-72",
+            "FO-29",
+            "SO-50",
+            "VO-52"});
+            this.m_SatelliteName.Location = new System.Drawing.Point(294, 80);
+            this.m_SatelliteName.Name = "m_SatelliteName";
+            this.m_SatelliteName.Size = new System.Drawing.Size(81, 21);
+            this.m_SatelliteName.TabIndex = 18;
+            this.m_SatelliteName.TabStop = false;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new System.Drawing.Point(207, 109);
+            label8.Name = "label8";
+            label8.Size = new System.Drawing.Size(76, 13);
+            label8.TabIndex = 17;
+            label8.Text = "Satellite mode:";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new System.Drawing.Point(207, 83);
+            label6.Name = "label6";
+            label6.Size = new System.Drawing.Size(76, 13);
+            label6.TabIndex = 15;
+            label6.Text = "Satellite name:";
             // 
             // label7
             // 
@@ -425,6 +461,17 @@ namespace UI
             label32.Size = new System.Drawing.Size(64, 13);
             label32.TabIndex = 24;
             label32.Text = "Comments";
+            // 
+            // m_OnlineStatus
+            // 
+            this.m_OnlineStatus.BackColor = System.Drawing.Color.PaleGreen;
+            this.m_OnlineStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.m_OnlineStatus.Location = new System.Drawing.Point(631, 0);
+            this.m_OnlineStatus.Name = "m_OnlineStatus";
+            this.m_OnlineStatus.Size = new System.Drawing.Size(165, 24);
+            this.m_OnlineStatus.TabIndex = 14;
+            this.m_OnlineStatus.Text = "Online";
+            this.m_OnlineStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // m_Time
             // 
@@ -760,53 +807,8 @@ namespace UI
             this.wipeQSOToolStripMenuItem.Text = "&Wipe QSO";
             this.wipeQSOToolStripMenuItem.Click += new System.EventHandler(this.WipeQSOClicked);
             // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new System.Drawing.Point(207, 83);
-            label6.Name = "label6";
-            label6.Size = new System.Drawing.Size(76, 13);
-            label6.TabIndex = 15;
-            label6.Text = "Satellite name:";
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Location = new System.Drawing.Point(207, 109);
-            label8.Name = "label8";
-            label8.Size = new System.Drawing.Size(76, 13);
-            label8.TabIndex = 17;
-            label8.Text = "Satellite mode:";
-            // 
-            // m_SatelliteName
             // transverterOffisetToolStripMenuItem
             // 
-            this.m_SatelliteName.FormattingEnabled = true;
-            this.m_SatelliteName.Items.AddRange(new object[] {
-            "",
-            "AO-7",
-            "AO-72",
-            "FO-29",
-            "SO-50",
-            "VO-52"});
-            this.m_SatelliteName.Location = new System.Drawing.Point(294, 80);
-            this.m_SatelliteName.Name = "m_SatelliteName";
-            this.m_SatelliteName.Size = new System.Drawing.Size(81, 21);
-            this.m_SatelliteName.TabIndex = 18;
-            this.m_SatelliteName.TabStop = false;
-            // 
-            // m_SatelliteMode
-            // 
-            this.m_SatelliteMode.FormattingEnabled = true;
-            this.m_SatelliteMode.Items.AddRange(new object[] {
-            "",
-            "U/V",
-            "V/U"});
-            this.m_SatelliteMode.Location = new System.Drawing.Point(294, 106);
-            this.m_SatelliteMode.Name = "m_SatelliteMode";
-            this.m_SatelliteMode.Size = new System.Drawing.Size(81, 21);
-            this.m_SatelliteMode.TabIndex = 19;
-            this.m_SatelliteMode.TabStop = false;
             this.transverterOffisetToolStripMenuItem.Name = "transverterOffisetToolStripMenuItem";
             this.transverterOffisetToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.transverterOffisetToolStripMenuItem.Text = "Transverter offiset...";

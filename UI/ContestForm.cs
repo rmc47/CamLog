@@ -310,7 +310,21 @@ namespace UI
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if (OnlineStatus && ValidateContact())
+                // Check if the callsign field looks like a number...
+                long number;
+                if (long.TryParse(m_Callsign.Text, out number))
+                {
+                    if (number > 1000) // it's probably a frequency
+                    {
+                        if (m_RadioCAT != null)
+                        {
+                            m_RadioCAT.EqualiseVFOs();
+                            m_RadioCAT.SecondaryFrequency = number * 1000;
+                        }
+                    }
+                    ClearContactRow(false);
+                }
+                else if (OnlineStatus && ValidateContact())
                 {
                     try
                     {

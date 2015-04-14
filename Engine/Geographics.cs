@@ -138,7 +138,7 @@ namespace Engine
 
         public static void LatLongFromMaidenhead(string maidenhead, out double latitude, out double longitude)
         {
-            if (maidenhead == null || maidenhead.Length != 6)
+            if (maidenhead == null || (maidenhead.Length != 4 && maidenhead.Length != 6))
                 throw new ArgumentException("Locator must be 6 characters long", "maidenhead");
 
             // Get everything into nice workable ints :-)
@@ -151,10 +151,14 @@ namespace Engine
             int squareLat = maidenhead[3] - '0';
             if (squareLong > 9 || squareLong < 0 || squareLat > 9 || squareLat < 0)
                 throw new ArgumentException("Square must be 0-9", "maidenhead");
-            int subLong = maidenhead[4] - 'A';
-            int subLat = maidenhead[5] - 'A';
-            if (subLong > 24 || subLong < 0 || subLat > 24 || subLat < 0)
-                throw new ArgumentException("Subsquare must be a-x", "maidenhead");
+            int subLong = 0, subLat = 0;
+            if (maidenhead.Length > 4)
+            {
+                subLong = maidenhead[4] - 'A';
+                subLat = maidenhead[5] - 'A';
+                if (subLong > 24 || subLong < 0 || subLat > 24 || subLat < 0)
+                    throw new ArgumentException("Subsquare must be a-x", "maidenhead");
+            }
 
             latitude = ((double)fieldLat * 10) + (double)squareLat + ((double)subLat / 24) - 90;
             longitude = ((double)fieldLong * 20) + (double)squareLong * 2 + ((double)subLong / 12) - 180;

@@ -565,7 +565,7 @@ namespace UI
                         if (previousQsos.Count > 0)
                         {
                             Contact previousQso = previousQsos[previousQsos.Count - 1];
-                            notesText = string.Format("Already worked {0} on {1} (Last: TX: {2} {3:000} / RX: {4} {5:000} on {6})", callsign, BandHelper.ToString(ourBand), previousQso.ReportSent, previousQso.SerialSent, previousQso.ReportReceived, previousQso.SerialReceived, previousQso.StartTime.ToString("d MMM hh:mm"));
+                            notesText = string.Format("Already worked {0} on {1} (TX: {2} {3:000} / RX: {4} {5:000} on {6} / {7})", callsign, BandHelper.ToString(ourBand), previousQso.ReportSent, previousQso.SerialSent, previousQso.ReportReceived, previousQso.SerialReceived, previousQso.StartTime.ToString("d MMM HH:mm"), previousQso.LocatorReceivedString);
                         }
                         else
                         {
@@ -635,7 +635,7 @@ namespace UI
                     if (m_Callsign.Text != callsign)
                         return;
 
-                    if (notesText != null)
+                    if (!string.IsNullOrWhiteSpace(notesText))
                     {
                         m_Notes.Text = notesText;
                         m_Notes.BackColor = notesBackColor;

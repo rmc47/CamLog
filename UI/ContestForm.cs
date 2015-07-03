@@ -318,8 +318,8 @@ namespace UI
                     {
                         if (m_RadioCAT != null)
                         {
-                            m_RadioCAT.EqualiseVFOs();
-                            m_RadioCAT.SecondaryFrequency = number * 1000;
+                            //m_RadioCAT.EqualiseVFOs();
+                            //m_RadioCAT.SecondaryFrequency = number * 1000;
                         }
                     }
                     ClearContactRow(false);
@@ -796,7 +796,7 @@ namespace UI
                         {
                             if (m_LocatorSetManually)
                             {
-                                m_Notes.Text = "QRZ.com: Locator found (" + qrz.Locator + ") but not overriding manual value";
+                                m_Notes.Text = "QRZ.com: Locator " + qrz.Locator + " not overriding manual value - " + qrz.Name;
                             }
                             else
                             {
@@ -812,7 +812,7 @@ namespace UI
                             if (qrz == null)
                                 m_Notes.Text = "QRZ.com: No callsign found";
                             else
-                                m_Notes.Text = "QRZ.com: Callsign found, but no locator present";
+                                m_Notes.Text = "QRZ.com: Callsign found, but no locator present. Name: " + qrz.Name;
                         }));
                 }
             }

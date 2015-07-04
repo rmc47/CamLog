@@ -8,7 +8,7 @@ using RigCAT.NET;
 
 namespace Engine
 {
-    public class WinKey
+    public class WinKey : IWinKey
     {
         private readonly string m_PortName;
         private readonly object m_Lock = new object ();

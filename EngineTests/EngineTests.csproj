@@ -72,8 +72,13 @@
     <Compile Include="QrzTests.cs" />
     <Compile Include="QslBureauSorterTests.cs" />
     <Compile Include="QslLabelTests.cs" />
+    <Compile Include="RigCatTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\CloudlogCAT\RigCAT.NET\RigCAT.NET.csproj">
+      <Project>{71135ac1-ab0b-4e4e-9f7a-6090cd9f246f}</Project>
+      <Name>RigCAT.NET</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Engine\Engine.csproj">
       <Project>{06985513-7F57-4221-A495-3D63DCD927F4}</Project>
       <Name>Engine</Name>

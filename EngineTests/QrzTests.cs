@@ -55,13 +55,5 @@ namespace EngineTests
             Assert.IsNotNull(entry.Name);
             Assert.IsNull(entry.Locator);
         }
-
-        [Test]
-        public void LookupFromPi()
-        {
-            SpotService service = new SpotService();
-            var res = service.Query("vfc");
-            Assert.That(res.Count > 0);
-        }
     }
 }

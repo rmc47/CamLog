@@ -10,7 +10,7 @@ namespace Engine
 {
     public sealed class QrzServer
     {
-        private const string c_ServerUrl = "http://www.qrz.com/xml";
+        private const string c_ServerUrl = "http://xmldata.qrz.com/xml/";
         private const string c_Agent = "CamLog1.0";
 
         private string m_Session;
@@ -110,7 +110,7 @@ namespace Engine
             {
                 m_Doc = ReadDocument(url, webClient);
                 m_Nsm = new XmlNamespaceManager(m_Doc.NameTable);
-                m_Nsm.AddNamespace("qrz", "http://www.qrz.com");
+                m_Nsm.AddNamespace("qrz", "http://xmldata.qrz.com");
             }
 
             public XmlElement GetElement(string xpath)

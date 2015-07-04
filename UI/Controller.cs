@@ -22,7 +22,7 @@ namespace UI
         {
             //WinKey = new WinKey("COM17");
             CWMacro = new CWMacro(null);
-            if (Radio is WinKey)
+            if (Radio is IWinKey)
                 CWMacro.WinKey = (WinKey)Radio;
             else
                 CWMacro.WinKey = WinKey;

@@ -98,12 +98,31 @@ namespace QslManager
                 return;
             }
 
-            // Get the previous contacts, filtering according to the selected source
+            System.Threading.ThreadPool.QueueUserWorkItem(_ => UpdateVisibleContacts(m_TxtCallsign.Text, deepSearch, m_SelectedSource.SourceID));
+        }
+
+        private void UpdateVisibleContacts(string callsign, bool deepSearch, int sourceID)
+        {
+            List<Contact> newVisibleContacts;
             if (!deepSearch)
-                m_VisibleContacts = m_ContactStore.GetPreviousContacts(m_TxtCallsign.Text).FindAll(c => c.SourceId == m_SelectedSource.SourceID);
+                newVisibleContacts = m_ContactStore.GetPreviousContacts(callsign).FindAll(c => c.SourceId == sourceID);
             else
-                m_VisibleContacts = m_ContactStore.GetApproximateMatches(m_TxtCallsign.Text).FindAll(c => c.SourceId == m_SelectedSource.SourceID);
-            
+                newVisibleContacts = m_ContactStore.GetApproximateMatches(callsign).FindAll(c => c.SourceId == sourceID);
+
+            BeginInvoke(new MethodInvoker(() => RedrawVisibleContacts(callsign, newVisibleContacts, deepSearch)));
+        }
+
+        private void RedrawVisibleContacts(string callsign, List<Contact> newVisibleContacts, bool deepSearch)
+        {
+            if (Disposing || IsDisposed || !IsHandleCreated)
+                return;
+
+            // We pass in callsign here to check the callsign textbox hasn't been changed since we were called, in case lookups complete out of order
+            if (m_TxtCallsign.Text != callsign)
+                return;
+
+            m_VisibleContacts = newVisibleContacts;
+
             foreach (Contact c in m_VisibleContacts)
             {
                 m_ContactsGrid.Rows.Add(new object[] { 

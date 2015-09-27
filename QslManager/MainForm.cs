@@ -134,10 +134,13 @@ namespace QslManager
 
             m_VisibleContacts = newVisibleContacts;
 
+            // If they've got loads of QSOs, default to not checked, as most incoming cards only have one QSO on them
+            bool checkedByDefault = !deepSearch && m_VisibleContacts.Count < 2;
+
             foreach (Contact c in m_VisibleContacts)
             {
                 m_ContactsGrid.Rows.Add(new object[] { 
-                    c.QslRxDate == null && !deepSearch, 
+                    c.QslRxDate == null && checkedByDefault, 
                     c.Callsign, 
                     c.StartTime, 
                     BandHelper.ToString(c.Band), 

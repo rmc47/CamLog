@@ -18,6 +18,7 @@ namespace QslManager
         private List<Contact> m_VisibleContacts;
         private List<SourceCallsign> m_SourceIdCallsigns;
         private SourceCallsign m_SelectedSource;
+        private List<string> m_CallsignsInLog;
         private int m_LabelsUsed;
 
         private IPageLayout m_PageLayout = new LayoutAvery7160();
@@ -62,6 +63,7 @@ namespace QslManager
 
                 m_ContactStore = lf.ContactStore;
                 m_SourceIdCallsigns = m_ContactStore.GetSources();
+                m_CallsignsInLog = m_ContactStore.GetAllCallsigns();
 
                 m_OurCallsign.BeginUpdate();
                 m_OurCallsign.Items.Clear();
@@ -104,10 +106,19 @@ namespace QslManager
         private void UpdateVisibleContacts(string callsign, bool deepSearch, int sourceID)
         {
             List<Contact> newVisibleContacts;
+
             if (!deepSearch)
-                newVisibleContacts = m_ContactStore.GetPreviousContacts(callsign).FindAll(c => c.SourceId == sourceID);
+            {
+                // See if we can shortcut the database by checking if the callsign appears in the log at all
+                if (!m_CallsignsInLog.Contains(callsign.ToUpperInvariant()))
+                    newVisibleContacts = new List<Contact> ();
+                else
+                    newVisibleContacts = m_ContactStore.GetPreviousContacts(callsign).FindAll(c => c.SourceId == sourceID);
+            }
             else
+            {
                 newVisibleContacts = m_ContactStore.GetApproximateMatches(callsign).FindAll(c => c.SourceId == sourceID);
+            }
 
             BeginInvoke(new MethodInvoker(() => RedrawVisibleContacts(callsign, newVisibleContacts, deepSearch)));
         }

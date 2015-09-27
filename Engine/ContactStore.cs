@@ -603,6 +603,27 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
             }
         }
 
+        public List<string> GetAllCallsigns()
+        {
+            MySqlConnection conn = OpenConnection;
+            lock (conn)
+            {
+                using (MySqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT DISTINCT callsign FROM log;";
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        List<string> callsigns = new List<string>();
+                        while (reader.Read())
+                        {
+                            callsigns.Add(reader.GetString("callsign").ToUpperInvariant());
+                        }
+                        return callsigns;
+                    }
+                }
+            }
+        }
+
         public List<Contact> GetAllContacts(string station)
         {
             MySqlConnection conn = OpenConnection;

@@ -146,6 +146,12 @@
   <ItemGroup>
     <EmbeddedResource Include="DBMigrations\MySQL\4.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DBMigrations\MySQL\5.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DBMigrations\MySQL\6.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

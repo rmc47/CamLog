@@ -9,3 +9,5 @@ CREATE TABLE IF NOT EXISTS `squaresstats` (
   `squarecount` int(11) NOT NULL,
   PRIMARY KEY (`band`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+UPDATE `setup` SET `val`=5 WHERE `key`='schemaVersion';

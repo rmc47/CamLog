@@ -57,6 +57,7 @@ namespace Engine.DBMigrations
                     migrationNames.Add(int.Parse(resourceNameBits[resourceNameBits.Length - 2])); // Lose the file extension
                 }
             }
+            migrationNames.Sort();
             return migrationNames;
         }
 

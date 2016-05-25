@@ -45,3 +45,5 @@ INSERT INTO `modeorder` (`order`, `mode`) VALUES
 (450, 'JT65b'),
 (310, 'PSK31'),
 (410, 'JT/FSK');
+
+UPDATE `setup` SET `val`=6 WHERE `key`='schemaVersion';

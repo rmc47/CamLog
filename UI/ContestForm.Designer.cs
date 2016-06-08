@@ -171,10 +171,20 @@ namespace UI
             this.m_SatelliteName.Items.AddRange(new object[] {
             "",
             "AO-7",
-            "AO-72",
+            "AO-73",
+            "AO-85",
+            "CAS-2H",
             "FO-29",
+            "ISS",
+            "NO-84",
             "SO-50",
-            "VO-52"});
+            "XW-2A",
+            "XW-2B",
+            "XW-2C",
+            "XW-2D",
+            "XW-2E",
+            "XW-2F",
+            });
             this.m_SatelliteName.Location = new System.Drawing.Point(294, 80);
             this.m_SatelliteName.Name = "m_SatelliteName";
             this.m_SatelliteName.Size = new System.Drawing.Size(81, 21);

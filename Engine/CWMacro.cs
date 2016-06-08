@@ -61,12 +61,13 @@ namespace Engine
         {
             m_Macros = new List<string>
             {
-                "CQ GS3PYE/P GS3PYE/P K",
-                "{{HISCALL}} {{EXCHTX}}",
-                "TU {{MYCALL}}",
-                "{{MYCALL}}",
-                "{{HISCALL}}",
-                "?"
+                "CQ GS3PYE/P GS3PYE/P K", // F1
+                "{{HISCALL}} {{EXCHTX}}", // F2
+                "TU {{MYCALL}}", // F3
+                "{{MYCALL}}", // F4
+                "{{HISCALL}}", // F5
+                "?", // F6
+                "EU123" // F7
             };
         }
     }

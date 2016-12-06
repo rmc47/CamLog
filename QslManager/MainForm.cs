@@ -152,6 +152,23 @@ namespace QslManager
                 });
             }
         }
+        
+        private void m_SelectAllUnsent_Click(object sender, EventArgs e)
+        {
+            if (m_VisibleContacts == null || m_VisibleContacts.Count == 0)
+                return;
+
+            List<Contact> contactsToPrint = new List<Contact>();
+            for (int row = 0; row < m_VisibleContacts.Count; row++)
+            {
+                Contact c = m_VisibleContacts[row];
+                if (c.QslRxDate == null)
+                {
+                    DataGridViewRow gridRow = m_ContactsGrid.Rows[row];
+                    gridRow.Cells[0].Value = true;
+                }
+            }
+        }
 
         private void m_MarkSelectedAsReceived_Click(object sender, EventArgs e)
         {

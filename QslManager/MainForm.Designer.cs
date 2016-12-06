@@ -58,6 +58,7 @@
             this.m_LabelOffset = new System.Windows.Forms.NumericUpDown();
             this.m_ImportClubLog = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.m_SelectAllUnsent = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.m_ContactsGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_LabelOffset)).BeginInit();
             this.SuspendLayout();
@@ -185,9 +186,9 @@
             // 
             // m_PrintQueuedCards
             // 
-            this.m_PrintQueuedCards.Location = new System.Drawing.Point(446, 9);
+            this.m_PrintQueuedCards.Location = new System.Drawing.Point(321, 90);
             this.m_PrintQueuedCards.Name = "m_PrintQueuedCards";
-            this.m_PrintQueuedCards.Size = new System.Drawing.Size(115, 23);
+            this.m_PrintQueuedCards.Size = new System.Drawing.Size(119, 23);
             this.m_PrintQueuedCards.TabIndex = 3;
             this.m_PrintQueuedCards.Text = "&Print queued cards";
             this.m_PrintQueuedCards.UseVisualStyleBackColor = true;
@@ -336,9 +337,9 @@
             // 
             // m_ImportClubLog
             // 
-            this.m_ImportClubLog.Location = new System.Drawing.Point(241, 90);
+            this.m_ImportClubLog.Location = new System.Drawing.Point(446, 90);
             this.m_ImportClubLog.Name = "m_ImportClubLog";
-            this.m_ImportClubLog.Size = new System.Drawing.Size(199, 23);
+            this.m_ImportClubLog.Size = new System.Drawing.Size(115, 23);
             this.m_ImportClubLog.TabIndex = 20;
             this.m_ImportClubLog.Text = "Import Club Log...";
             this.m_ImportClubLog.UseVisualStyleBackColor = true;
@@ -346,13 +347,23 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(464, 90);
+            this.button1.Location = new System.Drawing.Point(567, 90);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(199, 23);
+            this.button1.Size = new System.Drawing.Size(115, 23);
             this.button1.TabIndex = 21;
             this.button1.Text = "Magic Club Log...";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.MagicClubLog);
+            // 
+            // m_SelectAllUnsent
+            // 
+            this.m_SelectAllUnsent.Location = new System.Drawing.Point(446, 10);
+            this.m_SelectAllUnsent.Name = "m_SelectAllUnsent";
+            this.m_SelectAllUnsent.Size = new System.Drawing.Size(115, 23);
+            this.m_SelectAllUnsent.TabIndex = 22;
+            this.m_SelectAllUnsent.Text = "&Select all unsent";
+            this.m_SelectAllUnsent.UseVisualStyleBackColor = true;
+            this.m_SelectAllUnsent.Click += new System.EventHandler(this.m_SelectAllUnsent_Click);
             // 
             // MainForm
             // 
@@ -360,6 +371,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(694, 454);
+            this.Controls.Add(this.m_SelectAllUnsent);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.m_ImportClubLog);
             this.Controls.Add(this.m_LabelOffset);
@@ -423,7 +435,7 @@
         private System.Windows.Forms.NumericUpDown m_LabelOffset;
         private System.Windows.Forms.Button m_ImportClubLog;
         private System.Windows.Forms.Button button1;
-
+        private System.Windows.Forms.Button m_SelectAllUnsent;
     }
 }
 

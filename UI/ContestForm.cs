@@ -857,6 +857,18 @@ namespace UI
                 }
                 else
                 {
+                    try
+                    {
+                        RigCAT.NET.Elecraft.K3 k3 = Controller.Radio as RigCAT.NET.Elecraft.K3;
+                        if (k3 != null)
+                        {
+                            k3.SendDvk(1 + e.KeyCode - Keys.F1); // Assumes KeyCodes for F1-4 are contiguous. Because I am a bad person.
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error sending DVK macro: " + ex.Message);
+                    }
                 }
             }
             else if (e.KeyCode == Keys.Escape && e.Modifiers == Keys.None)

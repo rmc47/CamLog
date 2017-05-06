@@ -26,6 +26,8 @@ namespace Engine
         SSTV,
         DStar,
         ISCAT,
+        MSK144,
+        FSK315,
     }
 
     public static class ModeHelper
@@ -51,6 +53,8 @@ namespace Engine
                 case Mode.DStar: return "D-STAR";
                 case Mode.SSTV: return "SSTV";
                 case Mode.ISCAT: return "ISCAT";
+                case Mode.MSK144: return "MSK144";
+                case Mode.FSK315: return "FSK315";
                 default: return "Unknown";
             }
         }
@@ -119,6 +123,8 @@ namespace Engine
                 case "DSTAR": return Mode.DStar;
                 case "SSTV": return Mode.SSTV;
                 case "ISCAT": return Mode.ISCAT;
+                case "MSK144": return Mode.MSK144;
+                case "FSK315": return Mode.FSK315;
                 default: return Mode.Unknown;
             }
         }
@@ -137,6 +143,9 @@ namespace Engine
                 case Mode.JT65b:
                 case Mode.JT65c:
                     return "00";
+                case Mode.FSK315:
+                case Mode.MSK144:
+                    return "+00";
                 case Mode.ISCAT:
                     return "-15";
                 default:

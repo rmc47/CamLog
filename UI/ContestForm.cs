@@ -69,6 +69,8 @@ namespace UI
             m_SerialReceived.Text = string.Empty;
             m_Locator.Text = string.Empty;
             m_Comments.Text = string.Empty;
+            m_Notes.Text = string.Empty;
+            m_Notes.BackColor = Color.Transparent;
 
             if (newSerial && m_ContactStore != null) // Can't do this before we connect to the DB
                 m_SerialSent.Text = m_ContactStore.GetSerial(BandHelper.Parse(m_Band.Text)).ToString().PadLeft(3, '0'); // For IOTA just use unknown band

@@ -506,8 +506,11 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
         public List<string> GetPartialMatchesKnownCalls(string callsign)
         {
-            return GetPartialMatches(callsign, "knowncalls");
+            return new List<string>();
+            //return GetPartialMatches(callsign, "knowncalls");
         }
+
+        class PreviousQso { public string Callsign; public string Locator; public string Band; }
 
         private List<string> GetPartialMatches(string callsign, string table)
         {
@@ -517,20 +520,31 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                 List<string> matches = new List<string>();
                 using (MySqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT callsign, MAX(locator) AS loc FROM " + table + " WHERE callsign LIKE ?callsign GROUP BY callsign ORDER BY callsign";
+                    cmd.CommandText = "SELECT callsign, locator, band FROM " + table + " WHERE callsign LIKE ?callsign ORDER BY callsign, band";
                     cmd.Parameters.AddWithValue("?callsign", string.Format("%{0}%", callsign.ToUpperInvariant()));
+
+                    List<PreviousQso> previousQsos = new List<PreviousQso>();
+
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            string call = reader.GetString(0);
-                            string loc;
-                            if (reader.IsDBNull(1))
-                                loc = string.Empty;
-                            else
-                                loc = reader.GetString(1);
-                            matches.Add(call + " - " + loc);
+                            previousQsos.Add(new PreviousQso {
+                                Callsign = reader.GetString(0),
+                                Locator = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
+                                Band = reader.GetString(2)
+                            });
                         }
+                    }
+
+                    var previousByCallsign = previousQsos.GroupBy(q => q.Callsign);
+                    foreach (var previousCallsign in previousByCallsign)
+                    {
+                        string call = previousCallsign.Key;
+                        string[] locators = previousCallsign.Select(q => q.Locator).Distinct().ToArray();
+                        string[] bands = previousCallsign.Select(q => q.Band).Distinct().ToArray();
+
+                        matches.Add(string.Format("{0} - {1} - {2}", call, string.Join(", ", locators), string.Join(", ", bands)));
                     }
                 }
                 return matches;

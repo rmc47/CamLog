@@ -4,3 +4,6 @@
 *.user
 */obj
 /debug.log
+
+Referenced Dlls/RigCAT.NET.dll
+Referenced Dlls/RigCAT.NET.pdb

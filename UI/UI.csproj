@@ -57,6 +57,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Referenced Dlls\MySql.Data.dll</HintPath>
     </Reference>
+    <Reference Include="RigCAT.NET, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Referenced Dlls\RigCAT.NET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -179,10 +183,6 @@
     <Compile Include="ValidationHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\CloudlogCAT\RigCAT.NET\RigCAT.NET.csproj">
-      <Project>{71135AC1-AB0B-4E4E-9F7A-6090CD9F246F}</Project>
-      <Name>RigCAT.NET</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Engine\Engine.csproj">
       <Project>{06985513-7F57-4221-A495-3D63DCD927F4}</Project>
       <Name>Engine</Name>

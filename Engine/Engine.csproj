@@ -62,6 +62,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="RigCAT.NET, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Referenced Dlls\RigCAT.NET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -121,12 +125,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\CloudlogCAT\RigCAT.NET\RigCAT.NET.csproj">
-      <Project>{71135AC1-AB0B-4E4E-9F7A-6090CD9F246F}</Project>
-      <Name>RigCAT.NET</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="cty.xml.gz">

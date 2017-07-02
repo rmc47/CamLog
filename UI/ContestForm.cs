@@ -452,7 +452,11 @@ namespace UI
                 if (contacts.Count > contactsIndex)
                 {
                     Contact c = contacts[contactsIndex];
-                    bool alert = (c.Notes.Contains(station) || c.Notes.Contains(band) || c.Notes.Contains(op));
+                    string notesLowerInvariant = c.Notes.ToLowerInvariant();
+                    bool alert = (notesLowerInvariant.Contains(station.ToLowerInvariant()) 
+                        || notesLowerInvariant.Contains(band.ToLowerInvariant()) 
+                        || notesLowerInvariant.Contains(op.ToLowerInvariant()));
+
                     Label[] rowLabels = m_ContactTableLabels[i - 1];
                     rowLabels[(int)ContactTableColumns.Band].Text = BandTextFromContact(c);
 

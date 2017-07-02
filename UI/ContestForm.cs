@@ -582,7 +582,11 @@ namespace UI
                         }
                         notesText = string.Format("Worked {0} on {1} - {2}", callsign, bandString, existingLocator);
                         if (existingLocator != null)
+                        {
                             locatorText = existingLocator.ToString();
+                            beamText = Geographics.BeamHeading(ourLocatorValue, existingLocator).ToString();
+                            distanceText = Geographics.GeodesicDistance(ourLocatorValue, existingLocator).ToString();
+                        }
                     }
                     else
                     {

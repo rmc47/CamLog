@@ -885,7 +885,8 @@ namespace UI
             {
                 try
                 {
-                    Controller.CWMacro.WinKey.StopSending();
+                    if (Controller.CWMacro.WinKey != null)
+                        Controller.CWMacro.WinKey.StopSending();
                 }
                 catch (Exception ex)
                 {

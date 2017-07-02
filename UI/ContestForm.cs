@@ -587,7 +587,7 @@ namespace UI
                         {
                             locatorText = existingLocator.ToString();
                             beamText = Geographics.BeamHeading(ourLocatorValue, existingLocator).ToString();
-                            distanceText = Geographics.GeodesicDistance(ourLocatorValue, existingLocator).ToString();
+                            distanceText = Math.Ceiling(Geographics.GeodesicDistance(ourLocatorValue, existingLocator) / 1000).ToString();
                         }
                     }
                     else

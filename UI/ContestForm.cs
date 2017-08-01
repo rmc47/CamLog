@@ -728,6 +728,10 @@ namespace UI
         private void m_OurOperator_TextChanged(object sender, EventArgs e)
         {
             Settings.Set("Operator", m_OurOperator.Text);
+            if (m_OurOperator.Text.Length > 7)
+            {
+                MessageBox.Show("Operator callsign longer than expected - are you typing in the right box?");
+            }
         }
 
         private void ExportAdif(object sender, EventArgs e)

@@ -28,6 +28,7 @@ namespace Engine
         ISCAT,
         MSK144,
         FSK315,
+        FT8,
     }
 
     public static class ModeHelper
@@ -55,6 +56,7 @@ namespace Engine
                 case Mode.ISCAT: return "ISCAT";
                 case Mode.MSK144: return "MSK144";
                 case Mode.FSK315: return "FSK315";
+                case Mode.FT8: return "FT8";
                 default: return "Unknown";
             }
         }
@@ -125,6 +127,7 @@ namespace Engine
                 case "ISCAT": return Mode.ISCAT;
                 case "MSK144": return Mode.MSK144;
                 case "FSK315": return Mode.FSK315;
+                case "FT8": return Mode.FT8;
                 default: return Mode.Unknown;
             }
         }

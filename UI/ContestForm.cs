@@ -860,7 +860,7 @@ namespace UI
                     {
                         Controller.CWMacro.SendMacro(e.KeyCode - Keys.F1, new Dictionary<string, string> { 
                         { "HISCALL", m_Callsign.Text },
-                        { "MYCALL", "GS3PYE/P" },
+                        { "MYCALL", "GB17YOTA" },
                         { "EXCHTX", m_RstSent.Text.Replace("9", "N").Replace("0", "T") }
                     });
                     }

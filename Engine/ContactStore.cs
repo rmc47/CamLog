@@ -344,26 +344,40 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
             MySqlConnection conn = OpenConnection;
             lock (conn)
             {
+                bool useSerialReservation = true;
+                bool serialPerBand = false;
+
+                string bandString;
+                if (serialPerBand)
+                    bandString = " AND band=?band";
+                else
+                    bandString = string.Empty;
+
+
                 int nextSerial;
-                using (MySqlCommand cmd = conn.CreateCommand())
+
+                if (!useSerialReservation)
                 {
-                    cmd.CommandText = "SELECT MAX(CAST(serialSent as SIGNED)) FROM log WHERE band=?band;";
-                    cmd.Parameters.AddWithValue("?band", BandHelper.ToString(band));
-                    using (var reader = cmd.ExecuteReader())
+                    using (MySqlCommand cmd = conn.CreateCommand())
                     {
-                        reader.Read();
-                        if (reader.IsDBNull(0))
-                            nextSerial = 1;
-                        else
-                            nextSerial = reader.GetInt32(0) + 1;
+                        cmd.CommandText = "SELECT MAX(CAST(serialSent as SIGNED)) FROM log WHERE TRUE" + bandString + ";";
+                        cmd.Parameters.AddWithValue("?band", BandHelper.ToString(band));
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            reader.Read();
+                            if (reader.IsDBNull(0))
+                                nextSerial = 1;
+                            else
+                                nextSerial = reader.GetInt32(0) + 1;
+                        }
                     }
+                    return nextSerial;
                 }
-                return nextSerial;
 
                 bool needToCreate;
                 using (MySqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT nextSerial FROM serials WHERE band=?band;";
+                    cmd.CommandText = "SELECT MAX(nextSerial) FROM serials WHERE TRUE" + bandString + ";";
                     cmd.Parameters.AddWithValue("?band", BandHelper.ToString(band));
                     object nextSerialObj = cmd.ExecuteScalar();
                     if (nextSerialObj is int)
@@ -380,10 +394,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
 
                 using (MySqlCommand cmd = conn.CreateCommand())
                 {
-                    if (needToCreate)
-                        cmd.CommandText = "INSERT INTO serials (band, nextSerial) VALUES (?band, ?nextSerial);";
-                    else
-                        cmd.CommandText = "UPDATE serials SET nextSerial=?nextSerial WHERE band=?band;";
+                    cmd.CommandText = "INSERT INTO serials (band, nextSerial) VALUES (?band, ?nextSerial) ON DUPLICATE KEY UPDATE nextSerial=?nextSerial;";
 
                     cmd.Parameters.AddWithValue("?band", BandHelper.ToString(band));
                     cmd.Parameters.AddWithValue("?nextSerial", nextSerial + 1);

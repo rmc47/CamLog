@@ -29,7 +29,7 @@ namespace Engine
             using (StreamWriter writer = new StreamWriter(requestStream))
             {
                 writer.Write("json=");
-                var serializedCallsigns = JsonConvert.SerializeObject(callsigns.Select(c => new LookupCallsignRequest { Callsign = c, Date = DateTime.UtcNow }), Formatting.None);
+                var serializedCallsigns = JsonConvert.SerializeObject(callsigns.Select(c => new LookupCallsignRequest { Callsign = c.ToUpperInvariant(), Date = DateTime.UtcNow }), Formatting.None);
                 writer.Write(Uri.EscapeDataString(serializedCallsigns));
             }
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -40,10 +40,15 @@ namespace Engine
                 responseString = reader.ReadToEnd();
             }
             var responseList = JsonConvert.DeserializeObject<List<LookupCallsignResult>>(responseString);
+
+            var errors = responseList.Where(r => r.AdifNumber == 0);
+            if (errors.Count() > 0)
+            {
+                throw new InvalidDataException("Error performing DXCC lookup for callsigns: " + string.Join(",", errors.Select(e => e.Callsign).ToArray()));
+            }
+
             foreach (var item in responseList)
             {
-                if (item.AdifNumber == 0)
-                    throw new InvalidDataException("Error performing DXCC lookup for callsign: " + item.Callsign);
                 results[item.Callsign] = item.AdifNumber;
             }
             return results;

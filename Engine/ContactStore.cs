@@ -374,7 +374,6 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                     return nextSerial;
                 }
 
-                bool needToCreate;
                 using (MySqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = "SELECT MAX(nextSerial) FROM serials WHERE TRUE" + bandString + ";";
@@ -383,12 +382,10 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                     if (nextSerialObj is int)
                     {
                         nextSerial = (int)nextSerialObj;
-                        needToCreate = false;
                     }
                     else
                     {
                         nextSerial = 1;
-                        needToCreate = true;
                     }
                 }
 

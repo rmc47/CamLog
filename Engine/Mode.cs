@@ -29,6 +29,10 @@ namespace Engine
         MSK144,
         FSK315,
         FT8,
+        Hell,
+        Thrbx,
+        Domino,
+        Thor,
     }
 
     public static class ModeHelper
@@ -57,6 +61,10 @@ namespace Engine
                 case Mode.MSK144: return "MSK144";
                 case Mode.FSK315: return "FSK315";
                 case Mode.FT8: return "FT8";
+                case Mode.Hell: return "HELL";
+                case Mode.Thrbx: return "THRBX";
+                case Mode.Domino: return "DOMINO";
+                case Mode.Thor: return "THOR";
                 default: return "Unknown";
             }
         }
@@ -128,6 +136,10 @@ namespace Engine
                 case "MSK144": return Mode.MSK144;
                 case "FSK315": return Mode.FSK315;
                 case "FT8": return Mode.FT8;
+                case "HELL": return Mode.Hell;
+                case "THRBX": return Mode.Thrbx;
+                case "DOMINO": return Mode.Domino;
+                case "THOR": return Mode.Thor;
                 default: return Mode.Unknown;
             }
         }

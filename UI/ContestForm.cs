@@ -165,11 +165,19 @@ namespace UI
                 try
                 {
                     Locator theirLocator = new Locator(m_Locator.Text);
-                    m_Beam.Text = Geographics.BeamHeading(m_OurLocatorValue, theirLocator).ToString();
-                    int distance = (int)Math.Ceiling(Geographics.GeodesicDistance(m_OurLocatorValue, theirLocator) / 1000);
-                    if (distance == 0)
-                        distance = 1; // By definition - QSOs in same square = 1 point
-                    m_Distance.Text = distance.ToString();
+                    if (theirLocator.IsValid)
+                    {
+                        m_Beam.Text = Geographics.BeamHeading(m_OurLocatorValue, theirLocator).ToString();
+                        int distance = (int)Math.Ceiling(Geographics.GeodesicDistance(m_OurLocatorValue, theirLocator) / 1000);
+                        if (distance == 0)
+                            distance = 1; // By definition - QSOs in same square = 1 point
+                        m_Distance.Text = distance.ToString();
+                    }
+                    else
+                    {
+                        m_Beam.Text = string.Empty;
+                        m_Distance.Text = string.Empty;
+                    }
                 }
                 catch (ArgumentException)
                 {

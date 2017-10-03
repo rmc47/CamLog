@@ -56,6 +56,13 @@ namespace Engine
             }
         }
 
+        public bool IsValid
+        {
+            get
+            {
+                return Latitude != 0.0 && Longitude != 0.0;
+            }
+        }
         private void PopulateLatLong()
         {
             double lat, lon;

@@ -41,12 +41,35 @@ namespace Engine
                     foreach (Contact c in contacts)
                         Export_80mAFS(c, writer, locatorSent, callUsed);
                 }
+                else if (contest == "RSGB AFS - 6m")
+                {
+                    foreach (Contact c in contacts)
+                        Export_6mAFS(c, writer, locatorSent, callUsed, "CB");
+                }
                 else
                 {
                     foreach (Contact c in contacts)
                         Export_UKAC(c, writer, locatorSent, callUsed);
                 }
             }
+        }
+
+        private static void Export_6mAFS(Contact c, StreamWriter writer, string c_LocatorSent, string c_CallUsed, string c_PostcodeSent)
+        {
+            writer.WriteLine("QSO: {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12}",
+                 BandHelper.ToMHzString(c.Band).PadRight(4),
+                 ModeHelper.ToCabrilloString(c.Mode),
+                 c.StartTime.ToString("yyyy-MM-dd HHmm"),
+                 c_CallUsed.PadRight(15).ToUpper(),
+                 c.ReportSent.PadRight(3),
+                 c.SerialSent.ToString().PadLeft(3),
+                 c_LocatorSent.ToUpper(),
+                 c_PostcodeSent.ToUpper(),
+                 c.Callsign.PadRight(15).ToUpper(),
+                 c.ReportReceived.PadRight(3),
+                 c.SerialReceived.ToString().PadLeft(3),
+                 c.LocatorReceivedString,
+                 c.Notes.ToUpper());
         }
 
         private static void Export_ClubCalls(Contact c, StreamWriter writer, string c_LocatorSent, string c_CallUsed)

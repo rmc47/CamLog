@@ -881,10 +881,10 @@ namespace UI
                 {
                     try
                     {
-                        RigCAT.NET.Elecraft.K3 k3 = Controller.Radio as RigCAT.NET.Elecraft.K3;
-                        if (k3 != null)
+                        RigCAT.NET.IVoiceKeyer voiceKeyer = Controller.Radio as RigCAT.NET.IVoiceKeyer;
+                        if (voiceKeyer != null)
                         {
-                            k3.SendDvk(1 + e.KeyCode - Keys.F1); // Assumes KeyCodes for F1-4 are contiguous. Because I am a bad person.
+                            voiceKeyer.SendDvk(1 + e.KeyCode - Keys.F1); // Assumes KeyCodes for F1-4 are contiguous. Because I am a bad person.
                         }
                     }
                     catch (Exception ex)

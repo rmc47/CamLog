@@ -67,7 +67,7 @@ namespace Engine
                 "{{MYCALL}}", // F4
                 "{{HISCALL}}", // F5
                 "?", // F6
-                "EU123" // F7
+                "EU008" // F7
             };
         }
     }

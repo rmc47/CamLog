@@ -881,7 +881,7 @@ namespace UI
                 {
                     try
                     {
-                        RigCAT.NET.IVoiceKeyer voiceKeyer = Controller.Radio as RigCAT.NET.IVoiceKeyer;
+                        IVoiceKeyer voiceKeyer = Controller.Radio as IVoiceKeyer;
                         if (voiceKeyer != null)
                         {
                             voiceKeyer.SendDvk(1 + e.KeyCode - Keys.F1); // Assumes KeyCodes for F1-4 are contiguous. Because I am a bad person.
@@ -895,14 +895,32 @@ namespace UI
             }
             else if (e.KeyCode == Keys.Escape && e.Modifiers == Keys.None)
             {
-                try
+                if (m_OurMode.Text == "CW")
                 {
-                    if (Controller.CWMacro.WinKey != null)
-                        Controller.CWMacro.WinKey.StopSending();
+                    try
+                    {
+                        if (Controller.CWMacro.WinKey != null)
+                            Controller.CWMacro.WinKey.StopSending();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error stopping CW macro: " + ex.Message);
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show("Error stopping CW macro: " + ex.Message);
+                    try
+                    {
+                        IVoiceKeyer voiceKeyer = Controller.Radio as IVoiceKeyer;
+                        if (voiceKeyer != null)
+                        {
+                            voiceKeyer.CancelDvk();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error stopping DVK: " + ex.Message);
+                    }
                 }
             }
         }

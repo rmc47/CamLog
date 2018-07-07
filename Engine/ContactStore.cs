@@ -344,8 +344,8 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
             MySqlConnection conn = OpenConnection;
             lock (conn)
             {
-                bool useSerialReservation = true;
-                bool serialPerBand = false;
+                bool useSerialReservation = false;
+                bool serialPerBand = true;
 
                 string bandString;
                 if (serialPerBand)

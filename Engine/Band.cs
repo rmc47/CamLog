@@ -23,6 +23,7 @@ namespace Engine
         B2m,
         B70cm,
         B23cm,
+        B13cm,
         B3cm,
         B625nm,
     }
@@ -55,6 +56,8 @@ namespace Engine
                 case "70c": return Band.B70cm;
                 case "23":
                 case "23c": return Band.B23cm;
+                case "13":
+                case "13c": return Band.B13cm;
                 case "3":
                 case "3cm":
                 case "3c": return Band.B3cm;
@@ -83,6 +86,7 @@ namespace Engine
                 case Band.B2m: return "2m";
                 case Band.B70cm: return "70cm";
                 case Band.B23cm: return "23cm";
+                case Band.B13cm: return "13cm";
                 case Band.B3cm: return "3cm";
                 case Band.B625nm: return "625nm";
                 default: return "Unknown";
@@ -108,6 +112,7 @@ namespace Engine
                 case Band.B2m: return "144";
                 case Band.B70cm: return "430";
                 case Band.B23cm: return "1296";
+                case Band.B13cm: return "2400";
                 case Band.B625nm: return "480000000";
                 default: return "?";
             }
@@ -163,6 +168,8 @@ namespace Engine
                 return Band.B70cm;
             else if (frequencyInMhz < 1350)
                 return Band.B23cm;
+            else if (frequencyInMhz < 2500)
+                return Band.B13cm;
             else
                 return Band.Unknown;
         }

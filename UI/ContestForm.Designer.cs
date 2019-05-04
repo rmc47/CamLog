@@ -98,8 +98,8 @@ namespace UI
             this.winKeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rigControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.QrzUserSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.wipeQSOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.transverterOffisetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.wipeQSOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             groupBox1 = new System.Windows.Forms.GroupBox();
             label8 = new System.Windows.Forms.Label();
             label6 = new System.Windows.Forms.Label();
@@ -172,18 +172,19 @@ namespace UI
             "",
             "AO-7",
             "AO-73",
+            "AO-85",
             "AO-91",
             "AO-92",
-            "AO-85",
-            "CAS-2H",
             "CAS-4A",
             "CAS-4B",
+            "Diwara-2",
             "EO-79",
             "EO-88",
             "FO-29",
+            "FS3",
             "ISS",
+            "IO-86",
             "LILACSAT-2",
-            "LO-87",
             "NO-84",
             "SO-50",
             "UKube-1",
@@ -192,8 +193,7 @@ namespace UI
             "XW-2C",
             "XW-2D",
             "XW-2E",
-            "XW-2F",
-            });
+            "XW-2F"});
             this.m_SatelliteName.Location = new System.Drawing.Point(294, 80);
             this.m_SatelliteName.Name = "m_SatelliteName";
             this.m_SatelliteName.Size = new System.Drawing.Size(81, 21);
@@ -819,19 +819,19 @@ namespace UI
             this.QrzUserSetupToolStripMenuItem.Text = "QRZ.com User Setup...";
             this.QrzUserSetupToolStripMenuItem.Click += new System.EventHandler(this.QrzUserSetupToolStripMenuItem_Click);
             // 
-            // wipeQSOToolStripMenuItem
-            // 
-            this.wipeQSOToolStripMenuItem.Name = "wipeQSOToolStripMenuItem";
-            this.wipeQSOToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
-            this.wipeQSOToolStripMenuItem.Text = "&Wipe QSO";
-            this.wipeQSOToolStripMenuItem.Click += new System.EventHandler(this.WipeQSOClicked);
-            // 
             // transverterOffisetToolStripMenuItem
             // 
             this.transverterOffisetToolStripMenuItem.Name = "transverterOffisetToolStripMenuItem";
             this.transverterOffisetToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.transverterOffisetToolStripMenuItem.Text = "Transverter offiset...";
             this.transverterOffisetToolStripMenuItem.Click += new System.EventHandler(this.SetTransverterOffset);
+            // 
+            // wipeQSOToolStripMenuItem
+            // 
+            this.wipeQSOToolStripMenuItem.Name = "wipeQSOToolStripMenuItem";
+            this.wipeQSOToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
+            this.wipeQSOToolStripMenuItem.Text = "&Wipe QSO";
+            this.wipeQSOToolStripMenuItem.Click += new System.EventHandler(this.WipeQSOClicked);
             // 
             // ContestForm
             // 

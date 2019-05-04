@@ -33,6 +33,8 @@ namespace Engine
         Thrbx,
         Domino,
         Thor,
+        FT4,
+        DATV,
     }
 
     public static class ModeHelper
@@ -65,6 +67,8 @@ namespace Engine
                 case Mode.Thrbx: return "THRBX";
                 case Mode.Domino: return "DOMINO";
                 case Mode.Thor: return "THOR";
+                case Mode.FT4: return "FT4";
+                case Mode.DATV: return "DATV";
                 default: return "Unknown";
             }
         }
@@ -140,6 +144,8 @@ namespace Engine
                 case "THRBX": return Mode.Thrbx;
                 case "DOMINO": return Mode.Domino;
                 case "THOR": return Mode.Thor;
+                case "FT4": return Mode.FT4;
+                case "DATV": return Mode.DATV;
                 default: return Mode.Unknown;
             }
         }

@@ -114,6 +114,7 @@ namespace WsjtxImport
                         m_StatusLabel.Text = "Added QSO: " + contact.Callsign;
                         addedAnyQSOs = true;
                     }
+                    CacheExistingContact(record);
                 }
 
                 if (!addedAnyQSOs)
@@ -130,15 +131,13 @@ namespace WsjtxImport
         private bool CheckExistingContact(AdifFileReader.Record record)
         {
             string checkKey = string.Format("{0}-{1}-{2}", record["call"], record["qso_date"], record["time_on"]);
-            if (ExistingContactCache.ContainsKey(checkKey))
-            {
-                return true;
-            }
-            else
-            {
-                ExistingContactCache[checkKey] = new object();
-                return false;
-            }
+            return (ExistingContactCache.ContainsKey(checkKey));
+        }
+
+        private void CacheExistingContact(AdifFileReader.Record record)
+        {
+            string checkKey = string.Format("{0}-{1}-{2}", record["call"], record["qso_date"], record["time_on"]);
+            ExistingContactCache[checkKey] = new object();
         }
 
         private void m_BrowseFileLocation_Click(object sender, EventArgs e)

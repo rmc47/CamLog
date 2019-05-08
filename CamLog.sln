@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2041
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{06985513-7F57-4221-A495-3D63DCD927F4}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KstWatcher", "KstWatcher\KstWatcher.csproj", "{9220348E-9426-4803-9AE7-0F496B75119F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BellDriver", "BellDriver\BellDriver.csproj", "{AC27F61A-26DB-4C63-AE95-6FE670BC7DE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WsjtxImport", "WsjtxImport\WsjtxImport.csproj", "{03ACDA7C-2427-4240-ABEC-8483F0447AF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -125,8 +127,23 @@ Global
 		{AC27F61A-26DB-4C63-AE95-6FE670BC7DE3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AC27F61A-26DB-4C63-AE95-6FE670BC7DE3}.Release|x86.ActiveCfg = Release|Any CPU
 		{AC27F61A-26DB-4C63-AE95-6FE670BC7DE3}.Release|x86.Build.0 = Release|Any CPU
+		{03ACDA7C-2427-4240-ABEC-8483F0447AF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03ACDA7C-2427-4240-ABEC-8483F0447AF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03ACDA7C-2427-4240-ABEC-8483F0447AF2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{03ACDA7C-2427-4240-ABEC-8483F0447AF2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{03ACDA7C-2427-4240-ABEC-8483F0447AF2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{03ACDA7C-2427-4240-ABEC-8483F0447AF2}.Debug|x86.Build.0 = Debug|Any CPU
+		{03ACDA7C-2427-4240-ABEC-8483F0447AF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03ACDA7C-2427-4240-ABEC-8483F0447AF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03ACDA7C-2427-4240-ABEC-8483F0447AF2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{03ACDA7C-2427-4240-ABEC-8483F0447AF2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{03ACDA7C-2427-4240-ABEC-8483F0447AF2}.Release|x86.ActiveCfg = Release|Any CPU
+		{03ACDA7C-2427-4240-ABEC-8483F0447AF2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D1BE248F-7816-45B8-87A9-43747B17486E}
 	EndGlobalSection
 EndGlobal

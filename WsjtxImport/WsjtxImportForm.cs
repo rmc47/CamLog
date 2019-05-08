@@ -56,67 +56,74 @@ namespace WsjtxImport
             if (Disposing || IsDisposed || !IsHandleCreated)
                 return;
 
-            string logFileLocation = m_LogFileLocation.Text;
-            if (string.IsNullOrWhiteSpace(logFileLocation))
+            try
             {
-                m_StatusLabel.Text = "No log file path set";
-                return;
-            }
-            if (!File.Exists(logFileLocation))
-            {
-                m_StatusLabel.Text = "Log file not found";
-                return;
-            }
-
-            bool addedAnyQSOs = false;
-
-            AdifFileReader adifReader = AdifFileReader.LoadFromContent(File.ReadAllText(logFileLocation));
-            adifReader.ReadHeader();
-            AdifFileReader.Record record;
-            while ((record = adifReader.ReadRecord()) != null)
-            {
-                if (CheckExistingContact(record))
-                    continue;
-
-                Contact contact = new Contact
+                string logFileLocation = m_LogFileLocation.Text;
+                if (string.IsNullOrWhiteSpace(logFileLocation))
                 {
-                    SourceId = ContactStore.SourceId,
-                    Band = BandHelper.Parse(record["band"]),
-                    Callsign = record["call"],
-                    StartTime = AdifFileReader.ParseAdifDate(record["qso_date"], record["time_on"]).Value,
-                    EndTime = AdifFileReader.ParseAdifDate(record["qso_date_off"], record["time_off"]).Value,
-                    Frequency = (long)(double.Parse(record["freq"]) * 1000000f),
-                    LocatorReceived = new Locator(record["gridsquare"]),
-                    Mode = ModeHelper.Parse(record["mode"]),
-                    Operator = record["operator"].ToUpperInvariant(),
-                    ReportReceived = record["rst_rcvd"],
-                    ReportSent = record["rst_sent"],
-                    Station = m_Station.Text,
-                };
-
-                var previousContacts = ContactStore.GetPreviousContacts(contact.Callsign);
-                bool foundContact = false;
-                foreach (var c in previousContacts)
+                    m_StatusLabel.Text = "No log file path set";
+                    return;
+                }
+                if (!File.Exists(logFileLocation))
                 {
-                    if (c.Band == contact.Band && c.Mode == contact.Mode && c.Callsign == contact.Callsign && c.SourceId == contact.SourceId &&
-                        Math.Abs((c.EndTime - contact.EndTime).TotalSeconds) < 300)
+                    m_StatusLabel.Text = "Log file not found";
+                    return;
+                }
+
+                bool addedAnyQSOs = false;
+
+                AdifFileReader adifReader = AdifFileReader.LoadFromContent(File.ReadAllText(logFileLocation));
+                adifReader.ReadHeader();
+                AdifFileReader.Record record;
+                while ((record = adifReader.ReadRecord()) != null)
+                {
+                    if (CheckExistingContact(record))
+                        continue;
+
+                    Contact contact = new Contact
                     {
-                        // Already present in the DB
-                        foundContact = true;
-                        break;
+                        SourceId = ContactStore.SourceId,
+                        Band = BandHelper.Parse(record["band"]),
+                        Callsign = record["call"],
+                        StartTime = AdifFileReader.ParseAdifDate(record["qso_date"], record["time_on"]).Value,
+                        EndTime = AdifFileReader.ParseAdifDate(record["qso_date_off"], record["time_off"]).Value,
+                        Frequency = (long)(double.Parse(record["freq"]) * 1000000f),
+                        LocatorReceived = new Locator(record["gridsquare"]),
+                        Mode = ModeHelper.Parse(record["mode"]),
+                        Operator = record["operator"].ToUpperInvariant(),
+                        ReportReceived = record["rst_rcvd"],
+                        ReportSent = record["rst_sent"],
+                        Station = m_Station.Text,
+                    };
+
+                    var previousContacts = ContactStore.GetPreviousContacts(contact.Callsign);
+                    bool foundContact = false;
+                    foreach (var c in previousContacts)
+                    {
+                        if (c.Band == contact.Band && c.Mode == contact.Mode && c.Callsign == contact.Callsign && c.SourceId == contact.SourceId &&
+                            Math.Abs((c.EndTime - contact.EndTime).TotalSeconds) < 300)
+                        {
+                            // Already present in the DB
+                            foundContact = true;
+                            break;
+                        }
+                    }
+                    if (!foundContact)
+                    {
+                        ContactStore.SaveContact(contact);
+                        m_StatusLabel.Text = "Added QSO: " + contact.Callsign;
+                        addedAnyQSOs = true;
                     }
                 }
-                if (!foundContact)
+
+                if (!addedAnyQSOs)
                 {
-                    ContactStore.SaveContact(contact);
-                    m_StatusLabel.Text = "Added QSO: " + contact.Callsign;
-                    addedAnyQSOs = true;
+                    m_StatusLabel.Text = "All QSOs uploaded at " + DateTime.Now;
                 }
             }
-
-            if (!addedAnyQSOs)
+            catch (Exception ex)
             {
-                m_StatusLabel.Text = "All QSOs uploaded at " + DateTime.Now;
+                m_StatusLabel.Text = "Error uploading: " + ex.Message;
             }
         }
 

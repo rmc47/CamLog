@@ -21,19 +21,33 @@ namespace WsjtxImport
 
         private Dictionary<string, object> ExistingContactCache = new Dictionary<string, object>();
 
-        public WsjtxImportForm()
+        public WsjtxImportForm(string initialStationName, string initialAdifLogFile)
         {
             InitializeComponent();
 
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\M0VFC\CamLog"))
             {
-                string station = key.GetValue("Station") as string;
-                if (!string.IsNullOrWhiteSpace(station))
-                    m_Station.Text = station;
+                if (!string.IsNullOrWhiteSpace(initialStationName))
+                {
+                    m_Station.Text = initialStationName;
+                }
+                else
+                {
+                    string station = key.GetValue("Station") as string;
+                    if (!string.IsNullOrWhiteSpace(station))
+                        m_Station.Text = station;
+                }
 
-                string logFileLocation = key.GetValue("WsjtxLogFileLocation") as string;
-                if (!string.IsNullOrWhiteSpace(logFileLocation))
-                    m_LogFileLocation.Text = logFileLocation;
+                if (!string.IsNullOrWhiteSpace(initialAdifLogFile))
+                {
+                    m_LogFileLocation.Text = initialAdifLogFile;
+                }
+                else
+                {
+                    string logFileLocation = key.GetValue("WsjtxLogFileLocation") as string;
+                    if (!string.IsNullOrWhiteSpace(logFileLocation))
+                        m_LogFileLocation.Text = logFileLocation;
+                }
             }
 
             using (LogonForm lf = new LogonForm())

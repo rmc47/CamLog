@@ -80,6 +80,15 @@ namespace WsjtxImport
                     if (CheckExistingContact(record))
                         continue;
 
+                    Locator locator = Locator.Unknown;
+                    if (!string.IsNullOrWhiteSpace(record["gridsquare"]))
+                    {
+                        locator = new Locator(record["gridsquare"]);
+                    }
+
+                    double freq = 0;
+                    double.TryParse(record["freq"], out freq);
+
                     Contact contact = new Contact
                     {
                         SourceId = ContactStore.SourceId,
@@ -87,13 +96,13 @@ namespace WsjtxImport
                         Callsign = record["call"],
                         StartTime = AdifFileReader.ParseAdifDate(record["qso_date"], record["time_on"]).Value,
                         EndTime = AdifFileReader.ParseAdifDate(record["qso_date_off"], record["time_off"]).Value,
-                        Frequency = (long)(double.Parse(record["freq"]) * 1000000f),
-                        LocatorReceived = new Locator(record["gridsquare"]),
+                        Frequency = (long)(freq * 1000000f),
+                        LocatorReceived = locator,
                         Mode = ModeHelper.Parse(record["mode"]),
-                        Operator = record["operator"].ToUpperInvariant(),
-                        ReportReceived = record["rst_rcvd"],
-                        ReportSent = record["rst_sent"],
-                        Station = m_Station.Text,
+                        Operator = (record["operator"] ?? "Unknown").ToUpperInvariant(),
+                        ReportReceived = record["rst_rcvd"] ?? string.Empty,
+                        ReportSent = record["rst_sent"] ?? string.Empty,
+                        Station = m_Station.Text ?? string.Empty,
                     };
 
                     var previousContacts = ContactStore.GetPreviousContacts(contact.Callsign);

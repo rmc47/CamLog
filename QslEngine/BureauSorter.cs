@@ -38,7 +38,17 @@ namespace QslEngine
         public BureauSorter(IEnumerable<string> allCallsigns)
         {
             Callsigns = allCallsigns.ToList();
-            CallsignDxccs = new BulkDxccLookup().Lookup(Callsigns.Select(c => BaseCall(c)));
+            Callsigns.Remove(string.Empty);
+            var callsignDxccs = new Dictionary<string, int>();
+            const int batchSize = 100;
+            for (int i = 0; i < Math.Ceiling((float)Callsigns.Count / batchSize); i++)
+            {
+                var lookupList = Callsigns.GetRange(i * batchSize, Math.Min(batchSize, Callsigns.Count - i * batchSize));
+                var dxccs = new BulkDxccLookup().Lookup(lookupList.Select(c => BaseCall(c)));
+                foreach (var dxcc in dxccs)
+                    callsignDxccs[dxcc.Key] = dxcc.Value;
+            }
+            CallsignDxccs = callsignDxccs;
         }
 
         public int Sort(List<Contact> contacts1, List<Contact> contacts2)

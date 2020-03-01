@@ -99,6 +99,15 @@ namespace Engine
             c.Mode = ModeHelper.Parse(record["mode"]);
             c.LastModified = DateTime.UtcNow;
 
+            if (record["gridsquare"] != null)
+            {
+                try
+                {
+                    c.LocatorReceived = new Locator(record["gridsquare"]);
+                }
+                catch { }
+            }
+
             // QSL info...
             if (record["qslrdate"] != null)
             {

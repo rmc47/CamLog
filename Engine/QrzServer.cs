@@ -91,6 +91,10 @@ namespace Engine
                         m_Session = null;
                         return LookupCallsign(callsign, false);
                     }
+                    if (errorElement.InnerText.Contains("Not found"))
+                    {
+                        return null;
+                    }
 
                     throw new InvalidDataException("QRZ.com lookup failed: " + errorElement.InnerText);
                 }

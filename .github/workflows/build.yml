@@ -10,9 +10,5 @@ jobs:
     steps:
     - uses: actions/checkout@v1
       
-    - name: Set up .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '4.7.2'      
     - name: Run build
-      run: msbuild CamLog.sln
+      run: dotnet build CamLog.sln

@@ -100,6 +100,7 @@ namespace QslManager
                 return;
             }
 
+            m_Progress.Visible = true;
             System.Threading.ThreadPool.QueueUserWorkItem(_ => UpdateVisibleContacts(m_TxtCallsign.Text, deepSearch, m_SelectedSource.SourceID));
         }
 
@@ -131,6 +132,8 @@ namespace QslManager
             // We pass in callsign here to check the callsign textbox hasn't been changed since we were called, in case lookups complete out of order
             if (m_TxtCallsign.Text != callsign)
                 return;
+
+            m_Progress.Visible = false;
 
             m_VisibleContacts = newVisibleContacts;
 

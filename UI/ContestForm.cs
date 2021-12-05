@@ -361,7 +361,8 @@ namespace UI
             using (EditForm ef = new EditForm())
             {
                 ef.Contact = m_ContactStore.LoadContact(m_ContactIds[row - 1].Key, m_ContactIds[row-1].Value);
-                DialogResult dr = ef.ShowDialog();
+                ef.StartPosition = FormStartPosition.CenterParent;
+                DialogResult dr = ef.ShowDialog(this);
                 if (dr == DialogResult.OK)
                 {
                     m_ContactStore.SaveContact(ef.Contact);
@@ -811,7 +812,16 @@ namespace UI
         {
             try
             {
-                QrzEntry qrz = m_QrzServer.LookupCallsign((string)state);
+                string targetCallsign = ((string)state).ToUpperInvariant();
+                QrzEntry qrz = m_QrzServer.LookupCallsign(targetCallsign);
+
+                // For mobile or portable stations, if we don't get a regular lookup, try again without the suffix
+                if (qrz == null && targetCallsign.Contains("/"))
+                {
+                    targetCallsign = targetCallsign.Substring(0, targetCallsign.IndexOf("/"));
+                    qrz = m_QrzServer.LookupCallsign(targetCallsign);
+                }
+
                 if (qrz != null && qrz.Locator != null)
                 {
                     Invoke(new MethodInvoker(() =>
@@ -822,8 +832,13 @@ namespace UI
                             }
                             else
                             {
-                                m_Notes.Text = "QRZ.com: Locator used (" + qrz.Locator + ") - " + qrz.Name;
-                                m_Locator.Text = qrz.Locator.ToString();
+                                m_Notes.Text = string.Format("QRZ.com: Locator for {0} ({1}): {2}", qrz.Callsign, qrz.Name, qrz.Locator);
+
+                                // Only do the lookup if we still have the same callsign as when we started
+                                if (m_Callsign.Text.Equals(targetCallsign, StringComparison.InvariantCultureIgnoreCase))
+                                {
+                                    m_Locator.Text = qrz.Locator.ToString().ToUpperInvariant();
+                                }
                             }
                         }));
                 }

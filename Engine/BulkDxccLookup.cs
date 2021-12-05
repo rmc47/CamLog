@@ -22,7 +22,7 @@ namespace Engine
             Dictionary<string, int> results = new Dictionary<string, int>();
 
             Newtonsoft.Json.JsonSerializer serializer = new Newtonsoft.Json.JsonSerializer();
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.clublog.org/bulkdxcc?api=" + m_ApiKey);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://www.clublog.org/bulkdxcc?api=" + m_ApiKey);
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded";
             var requestStream = request.GetRequestStream();
@@ -32,6 +32,7 @@ namespace Engine
                 var serializedCallsigns = JsonConvert.SerializeObject(callsigns.Select(c => new LookupCallsignRequest { Callsign = c.ToUpperInvariant(), Date = DateTime.UtcNow }), Formatting.None);
                 writer.Write(Uri.EscapeDataString(serializedCallsigns));
             }
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.SystemDefault;
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             var responseStream = response.GetResponseStream();
             string responseString;

@@ -322,7 +322,7 @@ operator, band, mode, frequency, reportTx, reportRx, locator, notes, serialSent,
                     if (!string.IsNullOrEmpty(band))
                         cmd.Parameters.AddWithValue("?bandNotes", "%" + band + "%");
                     if (!string.IsNullOrEmpty(op))
-                        cmd.Parameters.Add("?opNotes", "%" + op + "%");
+                        cmd.Parameters.AddWithValue("?opNotes", "%" + op + "%");
                     cmd.Parameters.AddWithValue("?maxToFetch", maxToFetch);
 
                     using (MySqlDataReader reader = cmd.ExecuteReader())

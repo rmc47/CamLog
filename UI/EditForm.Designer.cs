@@ -204,7 +204,7 @@ namespace UI
             this.m_Band.Location = new System.Drawing.Point(62, 4);
             this.m_Band.Name = "m_Band";
             this.m_Band.Size = new System.Drawing.Size(35, 20);
-            this.m_Band.TabIndex = 11;
+            this.m_Band.TabIndex = 1;
             this.m_Band.TabStop = false;
             this.m_Band.Text = "70cm";
             // 
@@ -214,7 +214,7 @@ namespace UI
             this.m_Time.Location = new System.Drawing.Point(62, 33);
             this.m_Time.Name = "m_Time";
             this.m_Time.Size = new System.Drawing.Size(237, 20);
-            this.m_Time.TabIndex = 12;
+            this.m_Time.TabIndex = 2;
             this.m_Time.TabStop = false;
             this.m_Time.Text = "2359";
             // 
@@ -224,7 +224,7 @@ namespace UI
             this.m_Callsign.Location = new System.Drawing.Point(62, 62);
             this.m_Callsign.Name = "m_Callsign";
             this.m_Callsign.Size = new System.Drawing.Size(92, 20);
-            this.m_Callsign.TabIndex = 13;
+            this.m_Callsign.TabIndex = 3;
             this.m_Callsign.Text = "GB100CAM/P";
             // 
             // m_RstSent
@@ -233,7 +233,7 @@ namespace UI
             this.m_RstSent.Location = new System.Drawing.Point(62, 91);
             this.m_RstSent.Name = "m_RstSent";
             this.m_RstSent.Size = new System.Drawing.Size(45, 20);
-            this.m_RstSent.TabIndex = 14;
+            this.m_RstSent.TabIndex = 4;
             this.m_RstSent.Text = "59+40";
             // 
             // m_Comments
@@ -242,7 +242,7 @@ namespace UI
             this.m_Comments.Location = new System.Drawing.Point(62, 294);
             this.m_Comments.Name = "m_Comments";
             this.m_Comments.Size = new System.Drawing.Size(359, 20);
-            this.m_Comments.TabIndex = 21;
+            this.m_Comments.TabIndex = 11;
             this.m_Comments.Text = "This was a very nice QSO";
             // 
             // m_Beam
@@ -251,7 +251,7 @@ namespace UI
             this.m_Beam.Location = new System.Drawing.Point(62, 265);
             this.m_Beam.Name = "m_Beam";
             this.m_Beam.Size = new System.Drawing.Size(35, 20);
-            this.m_Beam.TabIndex = 20;
+            this.m_Beam.TabIndex = 10;
             this.m_Beam.TabStop = false;
             this.m_Beam.Text = "090";
             // 
@@ -261,7 +261,7 @@ namespace UI
             this.m_SerialSent.Location = new System.Drawing.Point(62, 120);
             this.m_SerialSent.Name = "m_SerialSent";
             this.m_SerialSent.Size = new System.Drawing.Size(45, 20);
-            this.m_SerialSent.TabIndex = 15;
+            this.m_SerialSent.TabIndex = 5;
             this.m_SerialSent.TabStop = false;
             this.m_SerialSent.Text = "1234";
             // 
@@ -271,7 +271,7 @@ namespace UI
             this.m_Distance.Location = new System.Drawing.Point(62, 236);
             this.m_Distance.Name = "m_Distance";
             this.m_Distance.Size = new System.Drawing.Size(47, 20);
-            this.m_Distance.TabIndex = 19;
+            this.m_Distance.TabIndex = 9;
             this.m_Distance.TabStop = false;
             this.m_Distance.Text = "23km";
             // 
@@ -281,7 +281,7 @@ namespace UI
             this.m_RstReceived.Location = new System.Drawing.Point(62, 149);
             this.m_RstReceived.Name = "m_RstReceived";
             this.m_RstReceived.Size = new System.Drawing.Size(45, 20);
-            this.m_RstReceived.TabIndex = 16;
+            this.m_RstReceived.TabIndex = 6;
             this.m_RstReceived.Text = "59+40";
             // 
             // m_SerialReceived
@@ -290,7 +290,7 @@ namespace UI
             this.m_SerialReceived.Location = new System.Drawing.Point(62, 178);
             this.m_SerialReceived.Name = "m_SerialReceived";
             this.m_SerialReceived.Size = new System.Drawing.Size(45, 20);
-            this.m_SerialReceived.TabIndex = 17;
+            this.m_SerialReceived.TabIndex = 7;
             this.m_SerialReceived.Text = "0001";
             // 
             // m_Locator
@@ -299,15 +299,15 @@ namespace UI
             this.m_Locator.Location = new System.Drawing.Point(62, 207);
             this.m_Locator.Name = "m_Locator";
             this.m_Locator.Size = new System.Drawing.Size(55, 20);
-            this.m_Locator.TabIndex = 18;
+            this.m_Locator.TabIndex = 8;
             this.m_Locator.Text = "AB12CD";
             this.m_Locator.TextChanged += new System.EventHandler(this.m_Locator_TextChanged);
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -360,7 +360,7 @@ namespace UI
             this.m_Save.Location = new System.Drawing.Point(346, 324);
             this.m_Save.Name = "m_Save";
             this.m_Save.Size = new System.Drawing.Size(75, 23);
-            this.m_Save.TabIndex = 36;
+            this.m_Save.TabIndex = 12;
             this.m_Save.Text = "&Save";
             this.m_Save.UseVisualStyleBackColor = true;
             this.m_Save.Click += new System.EventHandler(this.m_Save_Click);
@@ -370,7 +370,7 @@ namespace UI
             this.AcceptButton = this.m_Save;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(452, 377);
+            this.ClientSize = new System.Drawing.Size(444, 365);
             this.Controls.Add(this.tableLayoutPanel1);
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(460, 404);

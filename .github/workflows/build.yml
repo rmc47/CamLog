@@ -9,6 +9,7 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-      
+    - name: Restore
+      run: dotnet restore CamLog.sln
     - name: Run build
       run: dotnet build CamLog.sln

@@ -361,7 +361,8 @@ namespace UI
             using (EditForm ef = new EditForm())
             {
                 ef.Contact = m_ContactStore.LoadContact(m_ContactIds[row - 1].Key, m_ContactIds[row-1].Value);
-                DialogResult dr = ef.ShowDialog();
+                ef.StartPosition = FormStartPosition.CenterParent;
+                DialogResult dr = ef.ShowDialog(this);
                 if (dr == DialogResult.OK)
                 {
                     m_ContactStore.SaveContact(ef.Contact);

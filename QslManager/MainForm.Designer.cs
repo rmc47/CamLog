@@ -59,6 +59,7 @@
             this.m_ImportClubLog = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.m_SelectAllUnsent = new System.Windows.Forms.Button();
+            this.m_Progress = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.m_ContactsGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_LabelOffset)).BeginInit();
             this.SuspendLayout();
@@ -365,12 +366,22 @@
             this.m_SelectAllUnsent.UseVisualStyleBackColor = true;
             this.m_SelectAllUnsent.Click += new System.EventHandler(this.m_SelectAllUnsent_Click);
             // 
+            // m_Progress
+            // 
+            this.m_Progress.Location = new System.Drawing.Point(215, 90);
+            this.m_Progress.Name = "m_Progress";
+            this.m_Progress.Size = new System.Drawing.Size(100, 23);
+            this.m_Progress.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.m_Progress.TabIndex = 23;
+            this.m_Progress.Visible = false;
+            // 
             // MainForm
             // 
             this.AcceptButton = this.m_MarkSelectedAsReceived;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(694, 454);
+            this.Controls.Add(this.m_Progress);
             this.Controls.Add(this.m_SelectAllUnsent);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.m_ImportClubLog);
@@ -436,6 +447,7 @@
         private System.Windows.Forms.Button m_ImportClubLog;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button m_SelectAllUnsent;
+        private System.Windows.Forms.ProgressBar m_Progress;
     }
 }
 

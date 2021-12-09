@@ -14,12 +14,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.csproj" />
+    <ProjectReference Include="..\RigCAT.NET\RigCAT.NET.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="RigCAT.NET">
-      <HintPath>..\Referenced Dlls\RigCAT.NET.dll</HintPath>
-    </Reference>
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
 

@@ -20,12 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="RigCAT.NET">
-      <HintPath>..\Referenced Dlls\RigCAT.NET.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="DBMigrations\MySQL\2.sql" />
     <EmbeddedResource Include="DBMigrations\MySQL\3.sql" />
     <EmbeddedResource Include="DBMigrations\MySQL\4.sql" />
@@ -33,6 +27,10 @@
     <EmbeddedResource Include="DBMigrations\MySQL\6.sql" />
     <EmbeddedResource Include="DBMigrations\MySQL\7.sql" />
     <EmbeddedResource Include="DBMigrations\MySQL\8.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RigCAT.NET\RigCAT.NET.csproj" />
   </ItemGroup>
 
   <ItemGroup>

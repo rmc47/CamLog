@@ -15,5 +15,5 @@ jobs:
       run: dotnet build -p:Version=1.0.0.${{ github.run_number }} CamLog.sln 
     - uses: actions/upload-artifact@v2
       with:
-        name: CamLog
+        name: CamLog-1.0.0.${{ github.run_number }}
         path: UI/bin/Debug/net472/* # or path/to/artifact

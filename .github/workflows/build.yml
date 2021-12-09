@@ -12,8 +12,8 @@ jobs:
     - name: Restore
       run: dotnet restore CamLog.sln
     - name: Run build
-      run: dotnet build CamLog.sln
+      run: dotnet build CamLog.sln /p:Version 1.0.0.${{ github.run_id }}
     - uses: actions/upload-artifact@v2
       with:
-        name: CamLog
+        name: CamLog-1.0.0.${{ github.run_id }}
         path: UI/bin/Debug/net472/* # or path/to/artifact

@@ -280,6 +280,16 @@ namespace UI
             string performQRZLookupsObj = (string)Settings.Get("PerformQRZLookups", "True");
             bool.TryParse(performQRZLookupsObj, out performQRZLookups);
             m_PerformQRZLookups.Checked = performQRZLookups;
+
+            m_Callsign.KeyPress += UppercaseKeypress;
+            m_Locator.KeyPress += UppercaseKeypress;
+            m_OurOperator.KeyPress += UppercaseKeypress;
+        }
+
+        private void UppercaseKeypress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar >= 'a' && e.KeyChar <= 'z')
+                e.KeyChar = e.KeyChar.ToString().ToUpper()[0];
         }
 
         void m_CivServer_FrequencyChanged(object sender, EventArgs e)

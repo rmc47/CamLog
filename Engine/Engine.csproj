@@ -5,6 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="DBMigrations\MySQL\2.sql" />
+    <None Remove="DBMigrations\MySQL\3.sql" />
+    <None Remove="DBMigrations\MySQL\4.sql" />
+    <None Remove="DBMigrations\MySQL\5.sql" />
+    <None Remove="DBMigrations\MySQL\6.sql" />
+    <None Remove="DBMigrations\MySQL\7.sql" />
+    <None Remove="DBMigrations\MySQL\8.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MySql.Data" Version="8.0.27" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
@@ -13,6 +23,22 @@
     <Reference Include="RigCAT.NET">
       <HintPath>..\Referenced Dlls\RigCAT.NET.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="DBMigrations\MySQL\2.sql" />
+    <EmbeddedResource Include="DBMigrations\MySQL\3.sql" />
+    <EmbeddedResource Include="DBMigrations\MySQL\4.sql" />
+    <EmbeddedResource Include="DBMigrations\MySQL\5.sql" />
+    <EmbeddedResource Include="DBMigrations\MySQL\6.sql" />
+    <EmbeddedResource Include="DBMigrations\MySQL\7.sql" />
+    <EmbeddedResource Include="DBMigrations\MySQL\8.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="cty.xml.gz">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

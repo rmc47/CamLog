@@ -23,6 +23,7 @@ namespace UI
             InitializeComponent();
             m_CmbContest.Items.Add("RSGB AFS - Club Calls");
             m_CmbContest.Items.Add("RSGB AFS - 80m SSB/CW");
+            m_CmbContest.Items.Add("RSGB AFS - 6m");
             m_CmbContest.Items.Add("RSGB UKAC");
         }
 

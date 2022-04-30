@@ -12,6 +12,7 @@
     <None Remove="DBMigrations\MySQL\6.sql" />
     <None Remove="DBMigrations\MySQL\7.sql" />
     <None Remove="DBMigrations\MySQL\8.sql" />
+    <None Remove="DBSchema.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +28,7 @@
     <EmbeddedResource Include="DBMigrations\MySQL\6.sql" />
     <EmbeddedResource Include="DBMigrations\MySQL\7.sql" />
     <EmbeddedResource Include="DBMigrations\MySQL\8.sql" />
+    <EmbeddedResource Include="DBSchema.sql" />
   </ItemGroup>
 
   <ItemGroup>

@@ -16,4 +16,6 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: CamLog-1.0.0.${{ github.run_number }}
-        path: UI/bin/Debug/net472/* # or path/to/artifact
+        path: |
+          UI/bin/Debug/net472/* # or path/to/artifact
+          WsjtxImport/bin/Debug/net472/*

@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="iTextSharp" Version="5.5.13.2" />
-    <PackageReference Include="MySql.Data" Version="8.0.27" />
+    <PackageReference Include="MySql.Data" Version="8.0.29" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 

@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31605.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{06985513-7F57-4221-A495-3D63DCD927F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine", "Engine\Engine.csproj", "{06985513-7F57-4221-A495-3D63DCD927F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{BCEAC4DB-5FF9-4702-AC01-5AEEFE6CBBAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI", "UI\UI.csproj", "{BCEAC4DB-5FF9-4702-AC01-5AEEFE6CBBAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QslEngine", "QslEngine\QslEngine.csproj", "{7977BF02-6C43-4FD1-84F0-6AB01D77A2E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QslEngine", "QslEngine\QslEngine.csproj", "{7977BF02-6C43-4FD1-84F0-6AB01D77A2E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QslManager", "QslManager\QslManager.csproj", "{AE0D2999-FB89-4DE7-AC68-CC8339723429}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QslManager", "QslManager\QslManager.csproj", "{AE0D2999-FB89-4DE7-AC68-CC8339723429}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WsjtxImport", "WsjtxImport\WsjtxImport.csproj", "{03ACDA7C-2427-4240-ABEC-8483F0447AF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WsjtxImport", "WsjtxImport\WsjtxImport.csproj", "{03ACDA7C-2427-4240-ABEC-8483F0447AF2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E9141905-5AE9-4400-AACF-F3E7086041B9}"
 	ProjectSection(SolutionItems) = preProject
@@ -61,8 +61,8 @@ Global
 		{7977BF02-6C43-4FD1-84F0-6AB01D77A2E4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7977BF02-6C43-4FD1-84F0-6AB01D77A2E4}.Release|x86.ActiveCfg = Release|Any CPU
 		{AE0D2999-FB89-4DE7-AC68-CC8339723429}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{AE0D2999-FB89-4DE7-AC68-CC8339723429}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{AE0D2999-FB89-4DE7-AC68-CC8339723429}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{AE0D2999-FB89-4DE7-AC68-CC8339723429}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AE0D2999-FB89-4DE7-AC68-CC8339723429}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{AE0D2999-FB89-4DE7-AC68-CC8339723429}.Debug|x86.ActiveCfg = Debug|x86
 		{AE0D2999-FB89-4DE7-AC68-CC8339723429}.Debug|x86.Build.0 = Debug|x86
 		{AE0D2999-FB89-4DE7-AC68-CC8339723429}.Release|Any CPU.ActiveCfg = Release|x86

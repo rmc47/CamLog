@@ -158,7 +158,8 @@ namespace UI
             this.m_SatelliteMode.Items.AddRange(new object[] {
             "",
             "U/V",
-            "V/U"});
+            "V/U",
+            "SX"});
             this.m_SatelliteMode.Location = new System.Drawing.Point(294, 106);
             this.m_SatelliteMode.Name = "m_SatelliteMode";
             this.m_SatelliteMode.Size = new System.Drawing.Size(81, 21);
@@ -186,6 +187,7 @@ namespace UI
             "IO-86",
             "LILACSAT-2",
             "NO-84",
+            "QO-100",
             "SO-50",
             "UKube-1",
             "XW-2A",

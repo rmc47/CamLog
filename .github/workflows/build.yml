@@ -19,3 +19,9 @@ jobs:
         path: |
           UI/bin/Debug/net472/*
           WsjtxImport/bin/Debug/net472/*
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          UI/bin/Debug/net472/*
+          WsjtxImport/bin/Debug/net472/*

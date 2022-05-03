@@ -30,6 +30,7 @@ namespace UI
         private bool m_LocatorSetManually;
         private bool m_Online = true;
         private string m_lastComment;
+        private bool m_ESMEnabled = false;
         
         public ContestForm()
         {
@@ -344,8 +345,25 @@ namespace UI
                     }
                     ClearContactRow(false);
                 }
+                // If we've ESM enabled and focussed in the callsign box, CQ or send report
+                else if (m_ESMEnabled && m_Callsign.Focused)
+                {
+                    if (m_Callsign.TextLength == 0)
+                    {
+                        ContestForm_KeyDown(this, new KeyEventArgs(Keys.F1));
+                    }
+                    else
+                    {
+                        ContestForm_KeyDown(this, new KeyEventArgs(Keys.F2));
+                    }
+                }
                 else if (OnlineStatus && ValidateContact())
                 {
+                    if (m_ESMEnabled)
+                    {
+                        ContestForm_KeyDown(this, new KeyEventArgs(Keys.F3));
+                    }
+
                     try
                     {
                         e.SuppressKeyPress = true;
@@ -707,7 +725,14 @@ namespace UI
 
         private void m_OurMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            m_RstSent.Text = m_RstReceived.Text = ModeHelper.GetDefaultReport(ModeHelper.Parse(m_OurMode.Text));
+            Mode m = ModeHelper.Parse(m_OurMode.Text);
+            m_RstSent.Text = m_RstReceived.Text = ModeHelper.GetDefaultReport(m);
+
+            // If ESM is active and we've moved away from CW, turn it off
+            if (m != Mode.CW && m_ESMEnabled)
+            {
+                enableESMToolStripMenuItem.PerformClick();
+            }
         }
 
         private void m_Export_Click(object sender, EventArgs e)
@@ -901,6 +926,12 @@ namespace UI
                     {
                         MessageBox.Show("Error sending CW macro: " + ex.Message);
                     }
+
+                    // If we're in CW, ESM is off, we have a valid contact, then simulate an enter so we log it as part of the TU message
+                    if (e.KeyCode == Keys.F3 && !m_ESMEnabled && ValidateContact())
+                    {
+                        CurrentQSOKeyDown(this, new KeyEventArgs(Keys.Enter));
+                    }
                 }
                 else
                 {
@@ -1012,6 +1043,13 @@ namespace UI
                     return;
                 m_TransverterOffsetMHz = tvo.Offset;
             }
+        }
+
+        private void EnableESM(object sender, EventArgs e)
+        {
+            m_ESMEnabled = !m_ESMEnabled;
+            m_ESMActive.Visible = m_ESMEnabled;
+            enableESMToolStripMenuItem.Checked = m_ESMEnabled;
         }
     }
 }

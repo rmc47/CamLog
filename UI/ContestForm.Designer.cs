@@ -100,6 +100,8 @@ namespace UI
             this.QrzUserSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.transverterOffisetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wipeQSOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableESMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_ESMActive = new System.Windows.Forms.Label();
             groupBox1 = new System.Windows.Forms.GroupBox();
             label8 = new System.Windows.Forms.Label();
             label6 = new System.Windows.Forms.Label();
@@ -742,28 +744,28 @@ namespace UI
             // aDIFToolStripMenuItem
             // 
             this.aDIFToolStripMenuItem.Name = "aDIFToolStripMenuItem";
-            this.aDIFToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.aDIFToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.aDIFToolStripMenuItem.Text = "&ADIF...";
             this.aDIFToolStripMenuItem.Click += new System.EventHandler(this.ExportAdif);
             // 
             // cabrilloToolStripMenuItem
             // 
             this.cabrilloToolStripMenuItem.Name = "cabrilloToolStripMenuItem";
-            this.cabrilloToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.cabrilloToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.cabrilloToolStripMenuItem.Text = "&Cabrillo...";
             this.cabrilloToolStripMenuItem.Click += new System.EventHandler(this.ExportCabrillo);
             // 
             // rEG1TESTToolStripMenuItem
             // 
             this.rEG1TESTToolStripMenuItem.Name = "rEG1TESTToolStripMenuItem";
-            this.rEG1TESTToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.rEG1TESTToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.rEG1TESTToolStripMenuItem.Text = "&REG1TEST...";
             this.rEG1TESTToolStripMenuItem.Click += new System.EventHandler(this.m_Export_Click);
             // 
             // multipleToolStripMenuItem
             // 
             this.multipleToolStripMenuItem.Name = "multipleToolStripMenuItem";
-            this.multipleToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.multipleToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.multipleToolStripMenuItem.Text = "Multiple...";
             this.multipleToolStripMenuItem.Click += new System.EventHandler(this.ExportMultiple);
             // 
@@ -779,7 +781,7 @@ namespace UI
             // m_OnlyMyQSOs
             // 
             this.m_OnlyMyQSOs.Name = "m_OnlyMyQSOs";
-            this.m_OnlyMyQSOs.Size = new System.Drawing.Size(169, 22);
+            this.m_OnlyMyQSOs.Size = new System.Drawing.Size(180, 22);
             this.m_OnlyMyQSOs.Text = "Only my QSOs";
             this.m_OnlyMyQSOs.Click += new System.EventHandler(this.OnlyMyQSOsClicked);
             // 
@@ -787,7 +789,7 @@ namespace UI
             // 
             this.m_PerformQRZLookups.CheckOnClick = true;
             this.m_PerformQRZLookups.Name = "m_PerformQRZLookups";
-            this.m_PerformQRZLookups.Size = new System.Drawing.Size(169, 22);
+            this.m_PerformQRZLookups.Size = new System.Drawing.Size(180, 22);
             this.m_PerformQRZLookups.Text = "QRZ.com lookups";
             this.m_PerformQRZLookups.CheckedChanged += new System.EventHandler(this.m_PerformQRZLookups_CheckedChanged);
             // 
@@ -797,7 +799,8 @@ namespace UI
             this.winKeyToolStripMenuItem,
             this.rigControlToolStripMenuItem,
             this.QrzUserSetupToolStripMenuItem,
-            this.transverterOffisetToolStripMenuItem});
+            this.transverterOffisetToolStripMenuItem,
+            this.enableESMToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "&Options";
@@ -835,11 +838,31 @@ namespace UI
             this.wipeQSOToolStripMenuItem.Text = "&Wipe QSO";
             this.wipeQSOToolStripMenuItem.Click += new System.EventHandler(this.WipeQSOClicked);
             // 
+            // enableESMToolStripMenuItem
+            // 
+            this.enableESMToolStripMenuItem.Name = "enableESMToolStripMenuItem";
+            this.enableESMToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.enableESMToolStripMenuItem.Text = "Enable ESM";
+            this.enableESMToolStripMenuItem.Click += new System.EventHandler(this.EnableESM);
+            // 
+            // m_ESMActive
+            // 
+            this.m_ESMActive.BackColor = System.Drawing.Color.PaleGreen;
+            this.m_ESMActive.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.m_ESMActive.Location = new System.Drawing.Point(456, 0);
+            this.m_ESMActive.Name = "m_ESMActive";
+            this.m_ESMActive.Size = new System.Drawing.Size(165, 24);
+            this.m_ESMActive.TabIndex = 16;
+            this.m_ESMActive.Text = "ESM active";
+            this.m_ESMActive.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.m_ESMActive.Visible = false;
+            // 
             // ContestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(796, 423);
+            this.Controls.Add(this.m_ESMActive);
             this.Controls.Add(this.m_OnlineStatus);
             this.Controls.Add(this.m_ContactTable);
             this.Controls.Add(groupBox2);
@@ -914,6 +937,8 @@ namespace UI
         private System.Windows.Forms.ComboBox m_SatelliteMode;
         private System.Windows.Forms.ComboBox m_SatelliteName;
         private System.Windows.Forms.ToolStripMenuItem transverterOffisetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enableESMToolStripMenuItem;
+        private System.Windows.Forms.Label m_ESMActive;
         //private System.Windows.Forms.DataGridView m_QSOGrid;
         //private System.Windows.Forms.DataGridViewTextBoxColumn m_QBand;
         //private System.Windows.Forms.DataGridViewTextBoxColumn m_QTime;

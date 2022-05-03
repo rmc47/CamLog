@@ -13,16 +13,20 @@ jobs:
       run: dotnet restore CamLog.sln
     - name: Run build
       run: dotnet build -p:Version=1.0.0.${{ github.run_number }} CamLog.sln 
-    - uses: actions/upload-artifact@v3
+    - name: Zip for release
+      uses: thedoctor0/zip-release@master
       with:
-        name: CamLog-1.0.0.${{ github.run_number }}
+        type: 'zip'
+        filename: CamLog-1.0.0.${{ github.run_number }}.zip
         path: |
           UI/bin/Debug/net472/*
           WsjtxImport/bin/Debug/net472/*
+    - uses: actions/upload-artifact@v3
+      with:
+        name: CamLog-1.0.0.${{ github.run_number }}
+        path: CamLog-1.0.0.${{ github.run_number }}.zip
     - name: Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: |
-          UI/bin/Debug/net472/*
-          WsjtxImport/bin/Debug/net472/*
+        files: CamLog-1.0.0.${{ github.run_number }}.zip

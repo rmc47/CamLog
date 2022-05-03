@@ -48,6 +48,11 @@ namespace Engine
             WriteField("rst_rcvd", contact.ReportReceived, writer);
             WriteField("srx", contact.SerialReceived.ToString(), writer);
             WriteField("gridsquare", contact.LocatorReceivedString, writer);
+            if (!string.IsNullOrWhiteSpace(contact.SatelliteName))
+            {
+                WriteField("prop_mode", "SAT", writer);
+                WriteField("sat_name", contact.SatelliteName, writer);
+            }
             writer.WriteLine("<EOR>");
             writer.WriteLine("");
         }
@@ -92,7 +97,11 @@ namespace Engine
 
             c.Band = BandHelper.Parse(record["band"]);
             if (record["freq"] != null)
+            {
                 c.Frequency = (long)(decimal.Parse(record["freq"]) * 1000000);
+                if (c.Band == Band.Unknown)
+                    c.Band = BandHelper.FromFrequency(c.Frequency);
+            }
             c.ReportReceived = record["rst_rcvd"];
             c.ReportSent = record["rst_sent"];
             c.Operator = record["operator"];

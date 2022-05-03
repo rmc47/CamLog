@@ -23,7 +23,6 @@ jobs:
           WsjtxImport/bin/Debug/net472/*
     - uses: actions/upload-artifact@v3
       with:
-        name: CamLog-1.0.0.${{ github.run_number }}
         path: CamLog-1.0.0.${{ github.run_number }}.zip
     - name: Release
       uses: softprops/action-gh-release@v1

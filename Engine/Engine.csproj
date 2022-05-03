@@ -27,7 +27,7 @@
     <EmbeddedResource Include="DBMigrations\MySQL\5.sql" />
     <EmbeddedResource Include="DBMigrations\MySQL\6.sql" />
     <EmbeddedResource Include="DBMigrations\MySQL\7.sql" />
-    <EmbeddedResource Include="DBMigrations\MySQL\8.sql" />
+    <EmbeddedResource Include="DBMigrations\MySQL\9.sql" />
     <EmbeddedResource Include="DBSchema.sql" />
   </ItemGroup>
 

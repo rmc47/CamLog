@@ -165,7 +165,7 @@ namespace UI
             {
                 try
                 {
-                    Locator theirLocator = new Locator(m_Locator.Text);
+                     Locator theirLocator = new Locator(m_Locator.Text);
                     if (theirLocator.IsValid)
                     {
                         m_Beam.Text = Geographics.BeamHeading(m_OurLocatorValue, theirLocator).ToString();
@@ -918,7 +918,7 @@ namespace UI
                     {
                         Controller.CWMacro.SendMacro(e.KeyCode - Keys.F1, new Dictionary<string, string> { 
                         { "HISCALL", m_Callsign.Text },
-                        { "MYCALL", "GS3PYE/P" },
+                        { "MYCALL", "GB4SWR" },
                         { "EXCHTX", m_RstSent.Text.Replace("9", "N").Replace("0", "T") }
                     });
                     }

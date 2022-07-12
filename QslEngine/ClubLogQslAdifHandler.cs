@@ -1,4 +1,5 @@
-﻿using Engine;
+﻿using DymoSDK.Implementations;
+using Engine;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -69,6 +70,7 @@ namespace QslEngine
                         continue;
                     if (requestedMethod == QslMethod.Bureau) // If this request is for bureau and we've sent via bureau, skip
                         continue;
+                    matchedContact.QslTxDate = null; // Reset the QSL TX date, because this is an "upgrade" request
                 }
 
                 //// Do we have a location?
@@ -85,6 +87,22 @@ namespace QslEngine
                     if (!addressesToPrint.ContainsKey(matchedContact.Callsign))
                     {
                         string addressText = currentRecord["ADDRESS"];
+
+                        // Work around UTF8 character vs byte count
+                        if (addressText.IndexOf("<") > 0)
+                        {
+                            string probablyExtraneousText = addressText.Substring(addressText.IndexOf("<"));
+                            if ("<NOTES".StartsWith(probablyExtraneousText.Substring(0, Math.Min(probablyExtraneousText.Length, "<NOTES".Length))))
+                            {
+                                addressText = addressText.Substring(0, addressText.IndexOf("<"));
+                            }
+                            else
+                            {
+                                // We've got a < but it's not the notes field. Where did it come from? Make it XML-safe just in case
+                                addressText = addressText.Replace("<", "(").Replace(">", ")");
+                            }
+                        }
+                        
                         string[] addressLines = addressText.Split(',');
 
                         Address address = new Address
@@ -122,8 +140,14 @@ namespace QslEngine
             List<Address> addresses = addressesToPrint.Values.ToList();
             addresses.Sort((a1, a2) => (a1.FirstContactID.CompareTo(a2.FirstContactID)));
 
-            foreach (Address a in addresses)
-                m_PdfEngine.AddAddressLabel(a);
+            if (addresses.Count > 0)
+            {
+                DymoEngine dymo = new DymoEngine();
+                foreach (Address a in addresses)
+                {
+                    dymo.PrintAddress(a);
+                }
+            }
 
             return addresses.Count;
         }

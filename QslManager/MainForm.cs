@@ -35,7 +35,7 @@ namespace QslManager
             m_Layouts.Items.Clear();
             m_Layouts.Items.Add(new LayoutAvery7160());
             m_Layouts.Items.Add(new LayoutAvery7162());
-            m_Layouts.SelectedIndex = 0;
+            m_Layouts.SelectedIndex = 1;
             m_Layouts.ValueMember = "Name";
             m_Layouts.EndUpdate();
         }
@@ -357,7 +357,7 @@ namespace QslManager
                 labelsToPrint = adifHandler.ProcessFile(importPath);
 
             if (labelsToPrint > 0)
-                addressLabelEngine.PrintDocument(Path.Combine(m_OutputPath.Text, string.Format("Address-{0}-{1}.pdf", m_OurCallsign.Text.Replace('/', '_'), DateTime.UtcNow.ToString("yyyy-MM-dd-HHmm"))));
+                ;// printed via Dymo now // addressLabelEngine.PrintDocument(Path.Combine(m_OutputPath.Text, string.Format("Address-{0}-{1}.pdf", m_OurCallsign.Text.Replace('/', '_'), DateTime.UtcNow.ToString("yyyy-MM-dd-HHmm"))));
             else
                 MessageBox.Show("No address labels to print");
 

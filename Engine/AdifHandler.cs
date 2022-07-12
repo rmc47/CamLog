@@ -116,6 +116,12 @@ namespace Engine
                 }
                 catch { }
             }
+            int stx;
+            if(int.TryParse(record["stx"], out stx))
+                c.SerialSent = stx;
+            int srx;
+            if (int.TryParse(record["srx"], out srx))
+                c.SerialReceived = srx;
 
             // QSL info...
             if (record["qslrdate"] != null)

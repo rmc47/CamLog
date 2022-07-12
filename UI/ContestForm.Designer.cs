@@ -185,7 +185,7 @@ namespace UI
             "EO-88",
             "FO-29",
             "FS3",
-            "ISS",
+            "ARISS",
             "IO-86",
             "LILACSAT-2",
             "NO-84",

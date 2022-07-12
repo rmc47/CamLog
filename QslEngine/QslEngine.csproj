@@ -5,14 +5,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DYMO.Connect.SDK" Version="1.3.1.115" />
-    <PackageReference Include="iTextSharp" Version="5.5.13.2" />
+    <None Remove="99012-Address-Connect.dymo" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DYMO.Connect.SDK" Version="1.4.3.37" />
+    <PackageReference Include="iTextSharp" Version="5.5.13.3" />
     <PackageReference Include="MySql.Data" Version="8.0.29" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="99012-Address-Connect.dymo" />
   </ItemGroup>
 
 </Project>

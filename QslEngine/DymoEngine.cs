@@ -19,7 +19,7 @@ namespace QslEngine
 
         public DymoEngine()
         {
-            label = new DymoLabel();
+            label = (DymoLabel)(DymoLabel.Instance);
 
             Assembly asm = Assembly.GetExecutingAssembly();
             string[] resources = asm.GetManifestResourceNames();

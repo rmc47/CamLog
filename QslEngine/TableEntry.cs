@@ -14,7 +14,14 @@ namespace QslEngine
 
         public TableEntry(Contact c)
         {
-            Band = BandHelper.ToMHzString(c.Band);
+            if (!string.IsNullOrEmpty(c.SatelliteName))
+            {
+                Band = c.SatelliteName;
+            }
+            else
+            {
+                Band = BandHelper.ToMHzString(c.Band);
+            }
             Mode = ModeHelper.ToString(c.Mode);
             Rst = c.ReportSent;
             UtcTime = c.StartTime;

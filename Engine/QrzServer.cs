@@ -74,7 +74,7 @@ namespace Engine
             {
                 QrzEntry entry = new QrzEntry();
                 entry.Callsign = callsignElement["call"].InnerText;
-                if (callsignElement["grid"] != null)
+                if (callsignElement["grid"] != null && callsignElement["grid"].InnerText != "IO91vl") // QRZ.com seems to have filled everyone's locator with IO91vl if they don't have one...
                     entry.Locator = new Locator(callsignElement["grid"].InnerText);
                 if (callsignElement["fname"] != null && callsignElement["name"] != null)
                     entry.Name = callsignElement["fname"].InnerText + " " + callsignElement["name"].InnerText;
@@ -90,6 +90,10 @@ namespace Engine
                     {
                         m_Session = null;
                         return LookupCallsign(callsign, false);
+                    }
+                    if (errorElement.InnerText.Contains("Not found"))
+                    {
+                        return null;
                     }
 
                     throw new InvalidDataException("QRZ.com lookup failed: " + errorElement.InnerText);

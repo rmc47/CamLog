@@ -30,6 +30,7 @@ namespace UI
         private bool m_LocatorSetManually;
         private bool m_Online = true;
         private string m_lastComment;
+        private bool m_ESMEnabled = false;
         
         public ContestForm()
         {
@@ -164,7 +165,7 @@ namespace UI
             {
                 try
                 {
-                    Locator theirLocator = new Locator(m_Locator.Text);
+                     Locator theirLocator = new Locator(m_Locator.Text);
                     if (theirLocator.IsValid)
                     {
                         m_Beam.Text = Geographics.BeamHeading(m_OurLocatorValue, theirLocator).ToString();
@@ -280,6 +281,16 @@ namespace UI
             string performQRZLookupsObj = (string)Settings.Get("PerformQRZLookups", "True");
             bool.TryParse(performQRZLookupsObj, out performQRZLookups);
             m_PerformQRZLookups.Checked = performQRZLookups;
+
+            m_Callsign.KeyPress += UppercaseKeypress;
+            m_Locator.KeyPress += UppercaseKeypress;
+            m_OurOperator.KeyPress += UppercaseKeypress;
+        }
+
+        private void UppercaseKeypress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar >= 'a' && e.KeyChar <= 'z')
+                e.KeyChar = e.KeyChar.ToString().ToUpper()[0];
         }
 
         void m_CivServer_FrequencyChanged(object sender, EventArgs e)
@@ -334,8 +345,25 @@ namespace UI
                     }
                     ClearContactRow(false);
                 }
+                // If we've ESM enabled and focussed in the callsign box, CQ or send report
+                else if (m_ESMEnabled && m_Callsign.Focused)
+                {
+                    if (m_Callsign.TextLength == 0)
+                    {
+                        ContestForm_KeyDown(this, new KeyEventArgs(Keys.F1));
+                    }
+                    else
+                    {
+                        ContestForm_KeyDown(this, new KeyEventArgs(Keys.F2));
+                    }
+                }
                 else if (OnlineStatus && ValidateContact())
                 {
+                    if (m_ESMEnabled)
+                    {
+                        ContestForm_KeyDown(this, new KeyEventArgs(Keys.F3));
+                    }
+
                     try
                     {
                         e.SuppressKeyPress = true;
@@ -361,7 +389,8 @@ namespace UI
             using (EditForm ef = new EditForm())
             {
                 ef.Contact = m_ContactStore.LoadContact(m_ContactIds[row - 1].Key, m_ContactIds[row-1].Value);
-                DialogResult dr = ef.ShowDialog();
+                ef.StartPosition = FormStartPosition.CenterParent;
+                DialogResult dr = ef.ShowDialog(this);
                 if (dr == DialogResult.OK)
                 {
                     m_ContactStore.SaveContact(ef.Contact);
@@ -696,7 +725,14 @@ namespace UI
 
         private void m_OurMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            m_RstSent.Text = m_RstReceived.Text = ModeHelper.GetDefaultReport(ModeHelper.Parse(m_OurMode.Text));
+            Mode m = ModeHelper.Parse(m_OurMode.Text);
+            m_RstSent.Text = m_RstReceived.Text = ModeHelper.GetDefaultReport(m);
+
+            // If ESM is active and we've moved away from CW, turn it off
+            if (m != Mode.CW && m_ESMEnabled)
+            {
+                enableESMToolStripMenuItem.PerformClick();
+            }
         }
 
         private void m_Export_Click(object sender, EventArgs e)
@@ -811,7 +847,16 @@ namespace UI
         {
             try
             {
-                QrzEntry qrz = m_QrzServer.LookupCallsign((string)state);
+                string targetCallsign = ((string)state).ToUpperInvariant();
+                QrzEntry qrz = m_QrzServer.LookupCallsign(targetCallsign);
+
+                // For mobile or portable stations, if we don't get a regular lookup, try again without the suffix
+                if (qrz == null && targetCallsign.Contains("/"))
+                {
+                    targetCallsign = targetCallsign.Substring(0, targetCallsign.IndexOf("/"));
+                    qrz = m_QrzServer.LookupCallsign(targetCallsign);
+                }
+
                 if (qrz != null && qrz.Locator != null)
                 {
                     Invoke(new MethodInvoker(() =>
@@ -822,8 +867,13 @@ namespace UI
                             }
                             else
                             {
-                                m_Notes.Text = "QRZ.com: Locator used (" + qrz.Locator + ") - " + qrz.Name;
-                                m_Locator.Text = qrz.Locator.ToString();
+                                m_Notes.Text = string.Format("QRZ.com: Locator for {0} ({1}): {2}", qrz.Callsign, qrz.Name, qrz.Locator);
+
+                                // Only do the lookup if we still have the same callsign as when we started
+                                if (m_Callsign.Text.Equals(targetCallsign, StringComparison.InvariantCultureIgnoreCase))
+                                {
+                                    m_Locator.Text = qrz.Locator.ToString().ToUpperInvariant();
+                                }
                             }
                         }));
                 }
@@ -868,13 +918,19 @@ namespace UI
                     {
                         Controller.CWMacro.SendMacro(e.KeyCode - Keys.F1, new Dictionary<string, string> { 
                         { "HISCALL", m_Callsign.Text },
-                        { "MYCALL", "GT3PYE/P" },
+                        { "MYCALL", "GB4SWR" },
                         { "EXCHTX", m_RstSent.Text.Replace("9", "N").Replace("0", "T") }
                     });
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show("Error sending CW macro: " + ex.Message);
+                    }
+
+                    // If we're in CW, ESM is off, we have a valid contact, then simulate an enter so we log it as part of the TU message
+                    if (e.KeyCode == Keys.F3 && !m_ESMEnabled && ValidateContact())
+                    {
+                        CurrentQSOKeyDown(this, new KeyEventArgs(Keys.Enter));
                     }
                 }
                 else
@@ -987,6 +1043,13 @@ namespace UI
                     return;
                 m_TransverterOffsetMHz = tvo.Offset;
             }
+        }
+
+        private void EnableESM(object sender, EventArgs e)
+        {
+            m_ESMEnabled = !m_ESMEnabled;
+            m_ESMActive.Visible = m_ESMEnabled;
+            enableESMToolStripMenuItem.Checked = m_ESMEnabled;
         }
     }
 }

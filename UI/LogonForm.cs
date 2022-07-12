@@ -33,6 +33,7 @@ namespace UI
                     //csb.Database = Database;
                     csb.UserID = Username;
                     csb.Password = Password;
+                    csb.CharacterSet = "utf8mb4";
                     conn.ConnectionString = csb.ConnectionString;
                     conn.Open();
                     conn.Close();

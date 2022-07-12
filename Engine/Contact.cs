@@ -230,7 +230,18 @@ namespace Engine
 
             val = c1.Mode.CompareTo(c2.Mode);
             if (val != 0)
-                return val;
+            {
+                // We only care about differences in mode if it's SSB or CW
+                // Datamodes are too differently logged to care.
+                switch (c1.Mode)
+                {
+                    case Mode.SSB:
+                    case Mode.CW:
+                        return val;
+                    default:
+                        break;
+                }
+            }
 
             // Pretty sure we don't care about the station...
             //val = c1.Station.CompareTo(c2.Station);

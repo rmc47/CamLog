@@ -119,6 +119,10 @@ namespace WsjtxImport
                         Station = m_Station.Text ?? string.Empty,
                     };
 
+                    // Never import QSOs earlier than a week before now - they're almost guaranteed to be previous operations' logs!
+                    if (contact.StartTime < DateTime.UtcNow.AddDays(-7) && contact.EndTime < DateTime.UtcNow.AddDays(-7))
+                        continue;
+
                     var previousContacts = ContactStore.GetPreviousContacts(contact.Callsign);
                     bool foundContact = false;
                     foreach (var c in previousContacts)

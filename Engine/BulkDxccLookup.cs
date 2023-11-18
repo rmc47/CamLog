@@ -22,7 +22,7 @@ namespace Engine
             Dictionary<string, int> results = new Dictionary<string, int>();
 
             Newtonsoft.Json.JsonSerializer serializer = new Newtonsoft.Json.JsonSerializer();
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://www.clublog.org/bulkdxcc?api=" + m_ApiKey);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://clublog.org/bulkdxcc?api=" + m_ApiKey);
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded";
             var requestStream = request.GetRequestStream();

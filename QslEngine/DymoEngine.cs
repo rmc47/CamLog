@@ -19,6 +19,7 @@ namespace QslEngine
 
         public DymoEngine()
         {
+            DymoSDK.App.Init();
             label = (DymoLabel)(DymoLabel.Instance);
 
             Assembly asm = Assembly.GetExecutingAssembly();
@@ -31,7 +32,7 @@ namespace QslEngine
                 }
             }
 
-			printer = DymoPrinter.Instance.GetPrinters().FirstOrDefault();
+			printer = DymoPrinter.Instance.GetPrinters().Result.FirstOrDefault();
         }
 
         public void PrintAddress(Address a)

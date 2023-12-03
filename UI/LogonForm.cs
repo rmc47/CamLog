@@ -160,6 +160,7 @@ namespace UI
             m_DTR.Checked = civDtr;
             m_RadioModel.SelectedText = (string)Settings.Get("RadioModel", string.Empty);
             m_Speed.Text = (string)Settings.Get("CivSpeed", "19200");
+            m_OurCallsign.Text = (string)Settings.Get("OurCallsign", "G3PYE/P");
         }
 
         private void DatabaseDroppedDown(object sender, EventArgs e)

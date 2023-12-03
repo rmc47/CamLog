@@ -12,6 +12,7 @@ using RigCAT.NET;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Linq;
 
 namespace UI
 {
@@ -970,7 +971,7 @@ namespace UI
                     {
                         Controller.CWMacro.SendMacro(e.KeyCode - Keys.F1, new Dictionary<string, string> { 
                         { "HISCALL", m_Callsign.Text },
-                        { "MYCALL", "GS3PYE" },
+                        { "MYCALL", m_ContactStore.GetSources().FirstOrDefault().Callsign },
                         { "EXCHTX", m_RstSent.Text.Replace("9", "N").Replace("0", "T") }
                     });
                     }

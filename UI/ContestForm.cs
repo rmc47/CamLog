@@ -10,6 +10,8 @@ using Microsoft.Win32;
 using System.Threading;
 using RigCAT.NET;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace UI
 {
@@ -32,6 +34,11 @@ namespace UI
         private string m_lastComment;
         private bool m_ESMEnabled = false;
         
+        [DllImport("user32", SetLastError = true)]
+        private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
+        [DllImport("user32", SetLastError = true)]
+        private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+
         public ContestForm()
         {
             Controller = Program.Controller;
@@ -39,6 +46,51 @@ namespace UI
 
             Controller.ContactStoreChanged += new EventHandler(ContactStoreChanged);
             Controller.CivServerChanged += new EventHandler(CivServerChanged);
+            HandleCreated += ContestForm_HandleCreated;
+            FormClosing += ContestForm_FormClosing;
+        }
+
+        private void ContestForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                UnregisterHotKey(this.Handle, 0);
+                UnregisterHotKey(this.Handle, 1);
+                UnregisterHotKey(this.Handle, 2);
+                UnregisterHotKey(this.Handle, 3);
+            }
+            catch (Exception ex)
+            {
+                Debug.Write(ex);
+            }
+        }
+
+        private void ContestForm_HandleCreated(object sender, EventArgs e)
+        {
+            try
+            {
+                RegisterHotKey(this.Handle, 0, 0x0, (uint)Keys.F1);
+                RegisterHotKey(this.Handle, 1, 0x0, (uint)Keys.F2);
+                RegisterHotKey(this.Handle, 2, 0x0, (uint)Keys.F3);
+                RegisterHotKey(this.Handle, 3, 0x0, (uint)Keys.F4);
+            }
+            catch (Exception ex)
+            {
+                Debug.Write(ex);
+            }
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            // Handle global hotkeys and make them look like they were pressed on this form...
+            if (m.Msg == 0x312)
+            {
+                // WM_HOTKEY
+                Keys key = (Keys)((uint)m.LParam >> 16);
+                Debug.WriteLine("Hotkey: {0}", key);
+                OnKeyDown(new KeyEventArgs(key));
+            }
+            base.WndProc(ref m);
         }
 
         private void CivServerChanged(object sender, EventArgs e)

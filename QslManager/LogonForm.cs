@@ -35,7 +35,7 @@ namespace QslManager
                         return;
 
                     // OK, so try and create the new DB...
-                    ContactStore = ContactStore.Create(Server, Database, Username, Password);
+                    ContactStore = ContactStore.Create(Server, Database, Username, Password, "--TODO--");
                 }
 
                 if (ContactStore != null)

@@ -36,6 +36,7 @@ namespace UI
             System.Windows.Forms.Label label4;
             System.Windows.Forms.Label label3;
             System.Windows.Forms.Label label2;
+            System.Windows.Forms.Label label8;
             this.m_Server = new System.Windows.Forms.TextBox();
             this.m_Connect = new System.Windows.Forms.Button();
             this.m_SerialPort = new System.Windows.Forms.ComboBox();
@@ -47,6 +48,7 @@ namespace UI
             this.m_Username = new System.Windows.Forms.TextBox();
             this.m_Password = new System.Windows.Forms.TextBox();
             this.m_Database = new System.Windows.Forms.ComboBox();
+            this.m_OurCallsign = new System.Windows.Forms.TextBox();
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             label1 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
@@ -55,6 +57,7 @@ namespace UI
             label4 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
+            label8 = new System.Windows.Forms.Label();
             tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -69,7 +72,7 @@ namespace UI
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             tableLayoutPanel1.Controls.Add(this.m_Server, 1, 0);
             tableLayoutPanel1.Controls.Add(label1, 0, 0);
-            tableLayoutPanel1.Controls.Add(this.m_Connect, 1, 8);
+            tableLayoutPanel1.Controls.Add(this.m_Connect, 1, 9);
             tableLayoutPanel1.Controls.Add(label5, 0, 4);
             tableLayoutPanel1.Controls.Add(this.m_SerialPort, 1, 4);
             tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 5);
@@ -83,25 +86,28 @@ namespace UI
             tableLayoutPanel1.Controls.Add(this.m_Password, 1, 2);
             tableLayoutPanel1.Controls.Add(label2, 0, 3);
             tableLayoutPanel1.Controls.Add(this.m_Database, 1, 3);
+            tableLayoutPanel1.Controls.Add(label8, 0, 8);
+            tableLayoutPanel1.Controls.Add(this.m_OurCallsign, 1, 8);
             tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 9;
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
-            tableLayoutPanel1.Size = new System.Drawing.Size(328, 282);
+            tableLayoutPanel1.RowCount = 10;
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.0001F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.0001F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.0001F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.0001F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.0001F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.0001F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.0001F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.0001F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.999102F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.0001F));
+            tableLayoutPanel1.Size = new System.Drawing.Size(328, 332);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // m_Server
             // 
             this.m_Server.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_Server.Location = new System.Drawing.Point(167, 5);
+            this.m_Server.Location = new System.Drawing.Point(167, 6);
             this.m_Server.Name = "m_Server";
             this.m_Server.Size = new System.Drawing.Size(158, 20);
             this.m_Server.TabIndex = 1;
@@ -110,7 +116,7 @@ namespace UI
             // 
             label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(3, 9);
+            label1.Location = new System.Drawing.Point(3, 10);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(41, 13);
             label1.TabIndex = 0;
@@ -119,7 +125,7 @@ namespace UI
             // m_Connect
             // 
             this.m_Connect.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.m_Connect.Location = new System.Drawing.Point(250, 255);
+            this.m_Connect.Location = new System.Drawing.Point(250, 305);
             this.m_Connect.Name = "m_Connect";
             this.m_Connect.Size = new System.Drawing.Size(75, 19);
             this.m_Connect.TabIndex = 14;
@@ -131,7 +137,7 @@ namespace UI
             // 
             label5.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label5.AutoSize = true;
-            label5.Location = new System.Drawing.Point(3, 133);
+            label5.Location = new System.Drawing.Point(3, 142);
             label5.Name = "label5";
             label5.Size = new System.Drawing.Size(81, 13);
             label5.TabIndex = 8;
@@ -141,7 +147,7 @@ namespace UI
             // 
             this.m_SerialPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.m_SerialPort.FormattingEnabled = true;
-            this.m_SerialPort.Location = new System.Drawing.Point(167, 129);
+            this.m_SerialPort.Location = new System.Drawing.Point(167, 138);
             this.m_SerialPort.Name = "m_SerialPort";
             this.m_SerialPort.Size = new System.Drawing.Size(158, 21);
             this.m_SerialPort.TabIndex = 9;
@@ -152,7 +158,7 @@ namespace UI
             this.flowLayoutPanel1.AutoSize = true;
             this.flowLayoutPanel1.Controls.Add(this.m_DTR);
             this.flowLayoutPanel1.Controls.Add(this.m_RTS);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(164, 159);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(164, 170);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(109, 23);
@@ -184,7 +190,7 @@ namespace UI
             // 
             this.m_RadioModel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.m_RadioModel.FormattingEnabled = true;
-            this.m_RadioModel.Location = new System.Drawing.Point(167, 191);
+            this.m_RadioModel.Location = new System.Drawing.Point(167, 204);
             this.m_RadioModel.Name = "m_RadioModel";
             this.m_RadioModel.Size = new System.Drawing.Size(158, 21);
             this.m_RadioModel.TabIndex = 11;
@@ -193,7 +199,7 @@ namespace UI
             // 
             label6.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label6.AutoSize = true;
-            label6.Location = new System.Drawing.Point(3, 195);
+            label6.Location = new System.Drawing.Point(3, 208);
             label6.Name = "label6";
             label6.Size = new System.Drawing.Size(61, 13);
             label6.TabIndex = 10;
@@ -203,7 +209,7 @@ namespace UI
             // 
             label7.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label7.AutoSize = true;
-            label7.Location = new System.Drawing.Point(3, 226);
+            label7.Location = new System.Drawing.Point(3, 241);
             label7.Name = "label7";
             label7.Size = new System.Drawing.Size(68, 13);
             label7.TabIndex = 12;
@@ -212,7 +218,7 @@ namespace UI
             // m_Speed
             // 
             this.m_Speed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_Speed.Location = new System.Drawing.Point(167, 222);
+            this.m_Speed.Location = new System.Drawing.Point(167, 237);
             this.m_Speed.Name = "m_Speed";
             this.m_Speed.Size = new System.Drawing.Size(158, 20);
             this.m_Speed.TabIndex = 13;
@@ -221,7 +227,7 @@ namespace UI
             // 
             label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label4.AutoSize = true;
-            label4.Location = new System.Drawing.Point(3, 40);
+            label4.Location = new System.Drawing.Point(3, 43);
             label4.Name = "label4";
             label4.Size = new System.Drawing.Size(58, 13);
             label4.TabIndex = 2;
@@ -230,7 +236,7 @@ namespace UI
             // m_Username
             // 
             this.m_Username.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_Username.Location = new System.Drawing.Point(167, 36);
+            this.m_Username.Location = new System.Drawing.Point(167, 39);
             this.m_Username.Name = "m_Username";
             this.m_Username.Size = new System.Drawing.Size(158, 20);
             this.m_Username.TabIndex = 3;
@@ -239,7 +245,7 @@ namespace UI
             // 
             label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label3.AutoSize = true;
-            label3.Location = new System.Drawing.Point(3, 71);
+            label3.Location = new System.Drawing.Point(3, 76);
             label3.Name = "label3";
             label3.Size = new System.Drawing.Size(56, 13);
             label3.TabIndex = 4;
@@ -248,7 +254,7 @@ namespace UI
             // m_Password
             // 
             this.m_Password.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_Password.Location = new System.Drawing.Point(167, 67);
+            this.m_Password.Location = new System.Drawing.Point(167, 72);
             this.m_Password.Name = "m_Password";
             this.m_Password.PasswordChar = '*';
             this.m_Password.Size = new System.Drawing.Size(158, 20);
@@ -258,7 +264,7 @@ namespace UI
             // 
             label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(3, 102);
+            label2.Location = new System.Drawing.Point(3, 109);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(56, 13);
             label2.TabIndex = 6;
@@ -268,18 +274,36 @@ namespace UI
             // 
             this.m_Database.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.m_Database.FormattingEnabled = true;
-            this.m_Database.Location = new System.Drawing.Point(167, 98);
+            this.m_Database.Location = new System.Drawing.Point(167, 105);
             this.m_Database.Name = "m_Database";
             this.m_Database.Size = new System.Drawing.Size(158, 21);
             this.m_Database.TabIndex = 7;
             this.m_Database.DropDown += new System.EventHandler(this.DatabaseDroppedDown);
+            // 
+            // label8
+            // 
+            label8.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            label8.AutoSize = true;
+            label8.Location = new System.Drawing.Point(3, 274);
+            label8.Name = "label8";
+            label8.Size = new System.Drawing.Size(46, 13);
+            label8.TabIndex = 15;
+            label8.Text = "Callsign:";
+            // 
+            // m_OurCallsign
+            // 
+            this.m_OurCallsign.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_OurCallsign.Location = new System.Drawing.Point(167, 270);
+            this.m_OurCallsign.Name = "m_OurCallsign";
+            this.m_OurCallsign.Size = new System.Drawing.Size(158, 20);
+            this.m_OurCallsign.TabIndex = 16;
             // 
             // LogonForm
             // 
             this.AcceptButton = this.m_Connect;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(352, 306);
+            this.ClientSize = new System.Drawing.Size(352, 356);
             this.Controls.Add(tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -309,5 +333,6 @@ namespace UI
         private System.Windows.Forms.ComboBox m_RadioModel;
         private System.Windows.Forms.TextBox m_Speed;
         private System.Windows.Forms.ComboBox m_Database;
+        private System.Windows.Forms.TextBox m_OurCallsign;
     }
 }

@@ -36,7 +36,7 @@ namespace Engine
             }
         }
 
-        public static ContactStore Create(string server, string database, string username, string password)
+        public static ContactStore Create(string server, string database, string username, string password, string ourCallsign)
         {
             MySqlConnectionStringBuilder csb = new MySqlConnectionStringBuilder();
             csb.Server = server;
@@ -79,6 +79,14 @@ namespace Engine
                             cmd.CommandText = dbSchema;
                             cmd.ExecuteNonQuery();
                         }
+                    }
+                    using (MySqlCommand cmd = schemaSetupConnection.CreateCommand())
+                    {
+                        int sourceId = new Random().Next();
+                        cmd.CommandText = "INSERT INTO sources (id, callsign, `default`) VALUES (?id, ?callsign, 1);";
+                        cmd.Parameters.AddWithValue("?id", sourceId);
+                        cmd.Parameters.AddWithValue("?callsign", ourCallsign);
+                        cmd.ExecuteNonQuery();
                     }
                 }
             }

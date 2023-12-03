@@ -50,6 +50,7 @@ namespace UI
                     Settings.Set("CivRts", CivRts.ToString());
                     Settings.Set("CivSpeed", m_Speed.Text);
                     Settings.Set("RadioModel", m_RadioModel.Text);
+                    Settings.Set("OurCallsign", m_OurCallsign.Text);
                 }
 
                 try
@@ -63,7 +64,7 @@ namespace UI
                         return;
 
                     // OK, so try and create the new DB...
-                    ContactStore = ContactStore.Create(Server, Database, Username, Password);
+                    ContactStore = ContactStore.Create(Server, Database, Username, Password, m_OurCallsign.Text);
                 }
                 DialogResult = DialogResult.OK;
                 Close();

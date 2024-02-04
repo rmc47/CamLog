@@ -34,7 +34,8 @@ namespace UI
         private bool m_Online = true;
         private string m_lastComment;
         private bool m_ESMEnabled = false;
-        
+        private QARSender m_QarSender = new QARSender();
+
         [DllImport("user32", SetLastError = true)]
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
         [DllImport("user32", SetLastError = true)]
@@ -114,6 +115,10 @@ namespace UI
 
             m_RedrawTimer.Enabled = true;
             m_SerialSent.Text = m_ContactStore.GetSerial(Band.Unknown).ToString().PadLeft(3, '0');
+            foreach (var contact in m_ContactStore.GetAllContacts(null).Where(c => c.EndTime > DateTime.UtcNow.AddDays(-2)))
+            {
+                m_QarSender.SendQso(contact);
+            }
         }
 
         private void ClearContactRow(bool newSerial)
@@ -421,6 +426,7 @@ namespace UI
                     {
                         e.SuppressKeyPress = true;
                         m_ContactStore.SaveContact(Contact);
+                        m_QarSender.SendQso(Contact);
                         ClearContactRow(true);
                         PopulatePreviousContactsGrid();
                     }

@@ -55,6 +55,7 @@ namespace UI
             System.Windows.Forms.Label label30;
             System.Windows.Forms.Label label31;
             System.Windows.Forms.Label label32;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContestForm));
             this.m_SatelliteMode = new System.Windows.Forms.ComboBox();
             this.m_SatelliteName = new System.Windows.Forms.ComboBox();
             this.m_Frequency = new System.Windows.Forms.TextBox();
@@ -99,8 +100,8 @@ namespace UI
             this.rigControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.QrzUserSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.transverterOffisetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.wipeQSOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enableESMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.wipeQSOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.m_ESMActive = new System.Windows.Forms.Label();
             groupBox1 = new System.Windows.Forms.GroupBox();
             label8 = new System.Windows.Forms.Label();
@@ -781,7 +782,7 @@ namespace UI
             // m_OnlyMyQSOs
             // 
             this.m_OnlyMyQSOs.Name = "m_OnlyMyQSOs";
-            this.m_OnlyMyQSOs.Size = new System.Drawing.Size(180, 22);
+            this.m_OnlyMyQSOs.Size = new System.Drawing.Size(169, 22);
             this.m_OnlyMyQSOs.Text = "Only my QSOs";
             this.m_OnlyMyQSOs.Click += new System.EventHandler(this.OnlyMyQSOsClicked);
             // 
@@ -789,7 +790,7 @@ namespace UI
             // 
             this.m_PerformQRZLookups.CheckOnClick = true;
             this.m_PerformQRZLookups.Name = "m_PerformQRZLookups";
-            this.m_PerformQRZLookups.Size = new System.Drawing.Size(180, 22);
+            this.m_PerformQRZLookups.Size = new System.Drawing.Size(169, 22);
             this.m_PerformQRZLookups.Text = "QRZ.com lookups";
             this.m_PerformQRZLookups.CheckedChanged += new System.EventHandler(this.m_PerformQRZLookups_CheckedChanged);
             // 
@@ -831,19 +832,19 @@ namespace UI
             this.transverterOffisetToolStripMenuItem.Text = "Transverter offiset...";
             this.transverterOffisetToolStripMenuItem.Click += new System.EventHandler(this.SetTransverterOffset);
             // 
-            // wipeQSOToolStripMenuItem
-            // 
-            this.wipeQSOToolStripMenuItem.Name = "wipeQSOToolStripMenuItem";
-            this.wipeQSOToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
-            this.wipeQSOToolStripMenuItem.Text = "&Wipe QSO";
-            this.wipeQSOToolStripMenuItem.Click += new System.EventHandler(this.WipeQSOClicked);
-            // 
             // enableESMToolStripMenuItem
             // 
             this.enableESMToolStripMenuItem.Name = "enableESMToolStripMenuItem";
             this.enableESMToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.enableESMToolStripMenuItem.Text = "Enable ESM";
             this.enableESMToolStripMenuItem.Click += new System.EventHandler(this.EnableESM);
+            // 
+            // wipeQSOToolStripMenuItem
+            // 
+            this.wipeQSOToolStripMenuItem.Name = "wipeQSOToolStripMenuItem";
+            this.wipeQSOToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
+            this.wipeQSOToolStripMenuItem.Text = "&Wipe QSO";
+            this.wipeQSOToolStripMenuItem.Click += new System.EventHandler(this.WipeQSOClicked);
             // 
             // m_ESMActive
             // 
@@ -870,6 +871,7 @@ namespace UI
             this.Controls.Add(groupBox1);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;

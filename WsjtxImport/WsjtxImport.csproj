@@ -2,10 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
-    <ApplicationIcon />
+    <ApplicationIcon>importicon.ico</ApplicationIcon>
     <OutputType>WinExe</OutputType>
     <StartupObject>WsjtxImport.Program</StartupObject>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="importicon.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MySqlConnector" Version="2.3.7" />

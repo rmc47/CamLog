@@ -5,6 +5,7 @@
     <ApplicationIcon>logicon.ico</ApplicationIcon>
     <OutputType>WinExe</OutputType>
     <StartupObject>UI.Program</StartupObject>
+    <GenerateResourceUsePreserializedResources>false</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
 
   <ItemGroup>

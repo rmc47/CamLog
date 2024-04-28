@@ -5,6 +5,7 @@
     <ApplicationIcon>importicon.ico</ApplicationIcon>
     <OutputType>WinExe</OutputType>
     <StartupObject>WsjtxImport.Program</StartupObject>
+	<GenerateResourceUsePreserializedResources>false</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
 
   <ItemGroup>

@@ -41,7 +41,10 @@ namespace Engine
             WriteField("call", contact.Callsign, writer);
             WriteField("qso_date", contact.StartTime.ToString("yyyyMMdd"), writer);
             WriteField("time_on", contact.StartTime.ToString("HHmm"), writer);
-            WriteField("mode", ModeHelper.ToString(contact.Mode), writer);
+            string submode;
+            WriteField("mode", ModeHelper.ToAdifString(contact.Mode, out submode), writer);
+            if (submode != null)
+                WriteField("submode", submode, writer);
             WriteField("band", BandHelper.ToString(contact.Band), writer);
             WriteField("rst_sent", contact.ReportSent, writer);
             WriteField("stx", contact.ReportSent, writer);
@@ -105,7 +108,7 @@ namespace Engine
             c.ReportReceived = record["rst_rcvd"];
             c.ReportSent = record["rst_sent"];
             c.Operator = record["operator"];
-            c.Mode = ModeHelper.Parse(record["mode"]);
+            c.Mode = ModeHelper.Parse(record["mode"], record["submode"]);
             c.LastModified = DateTime.UtcNow;
 
             if (record["gridsquare"] != null)

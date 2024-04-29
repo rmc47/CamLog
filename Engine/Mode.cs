@@ -73,6 +73,41 @@ namespace Engine
             }
         }
 
+        public static string ToAdifString(Mode m, out string submode)
+        {
+            submode = null;
+            switch (m)
+            {
+                case Mode.CW: return "CW";
+                case Mode.SSB: return "SSB";
+                case Mode.FM: return "FM";
+                case Mode.AM: return "AM";
+                case Mode.JT6m: return "JT6m";
+                case Mode.JT65: return "JT65";
+                case Mode.JT65b: return "JT65b";
+                case Mode.JT65c: return "JT65c";
+                case Mode.JT4Other: return "JT4*";
+                case Mode.PSK31: return "PSK31";
+                case Mode.PSK63: return "PSK63";
+                case Mode.PSK125: return "PSK125";
+                case Mode.FSK441: return "FSK441";
+                case Mode.RTTY: return "RTTY";
+                case Mode.DStar: return "D-STAR";
+                case Mode.SSTV: return "SSTV";
+                case Mode.ISCAT: return "ISCAT";
+                case Mode.MSK144: return "MSK144";
+                case Mode.FSK315: return "FSK315";
+                case Mode.FT8: return "FT8";
+                case Mode.Hell: return "HELL";
+                case Mode.Thrbx: return "THRBX";
+                case Mode.Domino: return "DOMINO";
+                case Mode.Thor: return "THOR";
+                case Mode.FT4: submode = "FT4"; return "MFSK";
+                case Mode.DATV: return "DATV";
+                default: return "Unknown";
+            }
+        }
+
         public static string ToString(OperatingMode m)
         {
             switch (m)
@@ -113,11 +148,11 @@ namespace Engine
             }
         }
         
-        public static Mode Parse(string val)
+        public static Mode Parse(string modeVal, string submodeVal = null)
         {
-            if (val == null) return Mode.Unknown;
+            if (modeVal == null) return Mode.Unknown;
 
-            switch (val.Trim().ToUpperInvariant())
+            switch (modeVal.Trim().ToUpperInvariant())
             {
                 case "CW": return Mode.CW;
                 case "SSB": return Mode.SSB;
@@ -146,6 +181,12 @@ namespace Engine
                 case "THOR": return Mode.Thor;
                 case "FT4": return Mode.FT4;
                 case "DATV": return Mode.DATV;
+                case "MFSK":
+                    switch ((submodeVal ?? "").Trim().ToUpperInvariant())
+                    {
+                        case "FT4": return Mode.FT4;
+                        default: return Mode.Unknown;
+                    }
                 default: return Mode.Unknown;
             }
         }

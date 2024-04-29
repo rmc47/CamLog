@@ -436,6 +436,20 @@ namespace UI
                     }
                 }
             }
+            else if (Control.ModifierKeys == Keys.Control && e.KeyCode == Keys.Oemplus && m_ESMEnabled)
+            {
+                try 
+                {
+                    m_ContactStore.SaveContact(Contact);
+                    m_QarSender.SendQso(Contact);
+                    ClearContactRow(true);
+                    PopulatePreviousContactsGrid();
+                }
+                catch
+                {
+                    OnlineStatus = false;
+                }
+            }
         }
 
         private void EditLabel_Click(object sender, EventArgs args)

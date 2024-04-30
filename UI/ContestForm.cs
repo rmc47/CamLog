@@ -436,10 +436,11 @@ namespace UI
                     }
                 }
             }
-            else if (Control.ModifierKeys == Keys.Control && e.KeyCode == Keys.Oemplus && m_ESMEnabled)
+            else if (ModifierKeys == Keys.Control && e.KeyCode == Keys.Oemplus && m_ESMEnabled && OnlineStatus && ValidateContact())
             {
                 try 
                 {
+                    e.SuppressKeyPress = true;
                     m_ContactStore.SaveContact(Contact);
                     m_QarSender.SendQso(Contact);
                     ClearContactRow(true);

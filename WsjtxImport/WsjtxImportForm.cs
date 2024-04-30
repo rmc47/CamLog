@@ -112,7 +112,7 @@ namespace WsjtxImport
                         EndTime = AdifFileReader.ParseAdifDate(record["qso_date_off"], record["time_off"]).Value,
                         Frequency = (long)(freq * 1000000f),
                         LocatorReceived = locator,
-                        Mode = ModeHelper.Parse(record["mode"]),
+                        Mode = ModeHelper.Parse(record["mode"], record["submode"]),
                         Operator = (record["operator"] ?? "Unknown").ToUpperInvariant(),
                         ReportReceived = record["rst_rcvd"] ?? string.Empty,
                         ReportSent = record["rst_sent"] ?? string.Empty,

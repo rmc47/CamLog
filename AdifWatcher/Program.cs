@@ -74,7 +74,7 @@ while(true)
                 {
                     // Not yet in the log
                     cs.SaveContact(contact);
-                    Console.WriteLine("Imported new contact: {0} by {1}", contact.Callsign, contact.Operator);
+                    Console.WriteLine("Imported new contact: {0}", contact);
                 }
                 importedContacts[r] = 0;
             }

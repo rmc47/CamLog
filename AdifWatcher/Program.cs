@@ -32,6 +32,12 @@ foreach (string arg in args)
     }
 }
 
+if (host == null || user == null || db == null || station == null)
+{
+    Console.WriteLine("Usage: AdifWatcher.exe --host=<MariaDB hostname> --user=<DB user> --pass=<DB password> --db=<DB name> --station=HF1 [--operator=M0VFC] [--satname=QO-100] [--satmode=SX] [--transverteroffset=1967500000] <path to ADIF>[,<path to ADIF>...]");
+    return;
+}
+
 ContactStore cs = new ContactStore(host, db, user, pass);
 
 Dictionary<AdifFileReader.Record, int> importedContacts = new Dictionary<AdifFileReader.Record, int>();

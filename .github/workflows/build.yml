@@ -21,6 +21,7 @@ jobs:
         path: |
           UI/bin/Debug/net472/*
           WsjtxImport/bin/Debug/net472/*
+          AdifWatcher/bin/Debug/net8.0/*
     - uses: actions/upload-artifact@v3
       with:
         path: CamLog-1.0.0.${{ github.run_number }}.zip

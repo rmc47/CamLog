@@ -12,9 +12,10 @@ namespace Engine
     {
         private string m_ApiKey;
 
-        public BulkDxccLookup()
+        public BulkDxccLookup(string clublogApiKey)
         {
-            m_ApiKey = RegistryHelper.GetString(RegistryValue.ClublogApiKey, string.Empty);
+            if (string.IsNullOrWhiteSpace(clublogApiKey))
+                throw new ArgumentNullException("BulkDxccLookup requires Club Log API key");
         }
 
         public Dictionary<string, int> Lookup(IEnumerable<string> callsigns)
@@ -32,7 +33,7 @@ namespace Engine
                 var serializedCallsigns = JsonConvert.SerializeObject(callsigns.Select(c => new LookupCallsignRequest { Callsign = c.ToUpperInvariant(), Date = DateTime.UtcNow }), Formatting.None);
                 writer.Write(Uri.EscapeDataString(serializedCallsigns));
             }
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.SystemDefault;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             var responseStream = response.GetResponseStream();
             string responseString;

@@ -19,9 +19,6 @@ namespace QslManager
         {
             ContactStore = contactStore;
             InitializeComponent();
-
-            m_Username.Text = RegistryHelper.GetString(RegistryValue.ClublogUsername, string.Empty);
-            m_Password.Text = RegistryHelper.GetString(RegistryValue.ClublogPassword, string.Empty);
         }
 
         public string Callsign
@@ -37,9 +34,6 @@ namespace QslManager
                 var api = new ClubLogApi();
                 api.Login(m_Username.Text, m_Password.Text);
                 string log = api.DownloadLog(m_Callsign.Text);
-
-                RegistryHelper.Set(RegistryValue.ClublogUsername, m_Username.Text);
-                RegistryHelper.Set(RegistryValue.ClublogPassword, m_Password.Text);
 
                 List<Contact> contacts = AdifHandler.ImportAdif(log, "IMPORT", ContactStore.SourceId, m_Callsign.Text);
                 int contactsAdded = ContactStore.Import(contacts);

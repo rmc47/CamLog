@@ -44,7 +44,7 @@ namespace QslEngine
             for (int i = 0; i < Math.Ceiling((float)Callsigns.Count / batchSize); i++)
             {
                 var lookupList = Callsigns.GetRange(i * batchSize, Math.Min(batchSize, Callsigns.Count - i * batchSize));
-                var dxccs = new BulkDxccLookup().Lookup(lookupList.Select(c => BaseCall(c)));
+                var dxccs = new BulkDxccLookup("").Lookup(lookupList.Select(c => BaseCall(c)));
                 foreach (var dxcc in dxccs)
                     callsignDxccs[dxcc.Key] = dxcc.Value;
             }

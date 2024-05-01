@@ -105,12 +105,17 @@ namespace Engine
             public int DataLength { get; set; }
             public string DataType { get; set; }
             public string Data { get; set; }
+
+            public override int GetHashCode()
+            {
+                return Tag.GetHashCode() ^ Data.GetHashCode();
+            }
         }
 
         public class Record
         {
             public List<Field> Fields { get; set; }
-
+            
             public string this[string key]
             {
                 get
@@ -121,6 +126,22 @@ namespace Engine
                     else
                         return field.Data;
                 }
+            }
+
+            public override int GetHashCode()
+            {
+                int hashcode = 0;
+                Fields.ForEach(f => hashcode ^= f.GetHashCode());
+                return hashcode;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (obj is AdifFileReader.Record)
+                {
+                    return ((Record)obj).GetHashCode() == GetHashCode();
+                }
+                return base.Equals(obj);
             }
         }
 

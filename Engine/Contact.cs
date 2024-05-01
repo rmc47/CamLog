@@ -25,7 +25,7 @@ namespace Engine
 
         private int m_SerialSent;
         private int m_SerialReceived;
-        private string m_IotaRef;        
+        private string m_IotaRef;
         private int m_Points;
 
         private DateTime? m_QslRxDate;
@@ -62,8 +62,8 @@ namespace Engine
 
         public DateTime StartTime
         {
-            get { return m_StartTime;}
-            set { m_StartTime = value;}
+            get { return m_StartTime; }
+            set { m_StartTime = value; }
         }
 
         public DateTime EndTime
@@ -175,7 +175,7 @@ namespace Engine
 
         public string QslMethod
         {
-            get { return m_QslMethod;}
+            get { return m_QslMethod; }
             set { m_QslMethod = value; }
         }
 
@@ -265,6 +265,19 @@ namespace Engine
             public int Compare(Contact x, Contact y)
             {
                 return QsoMatchCompare(x, y);
+            }
+        }
+
+        public class QsoMatchEqualityComparer : IEqualityComparer<Contact>
+        {
+            public bool Equals(Contact x, Contact y)
+            {
+                return QsoMatchEquals(x, y);
+            }
+
+            public int GetHashCode(Contact obj)
+            {
+                throw new NotImplementedException();
             }
         }
     }

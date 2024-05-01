@@ -143,6 +143,16 @@ namespace Engine
                 c.QslTxDate = AdifFileReader.ParseAdifDate(record["qslsdate"], null);
             }
 
+            // Satellite stuff
+            if (!string.IsNullOrWhiteSpace(record["sat_name"]))
+            {
+                c.SatelliteName = record["sat_name"].Trim();
+            }
+            if (!string.IsNullOrWhiteSpace(record["sat_mode"]))
+            {
+                c.SatelliteMode = record["sat_mode"].Trim();
+            }
+
             return c;
         }
     }
